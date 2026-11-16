@@ -1,0 +1,4162 @@
+{
+  "version": 1,
+  "style": "batida",
+  "records": [
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Erycox",
+        "song": "Dovic a Moda",
+        "label": "Point Records",
+        "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ec/d1/96/ecd1963c-4392-a493-2b23-cd67a098da15/mzaf_1620648501686154774.plus.aac.p.m4a",
+        "cover_art_url": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/da/3e/cd/da3ecd62-afa2-79bb-811a-707643573680/0.jpg/100x100bb.jpg",
+        "release_date": "2021-07-01",
+        "duration_sec": "174",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://pan-african-music.com/en/dj-erycox-dovic-a-moda/",
+        "source_url": "https://music.apple.com/us/album/dovic-a-moda/1567842315?i=1567842317",
+        "recording_id": "apple_music:1567842317",
+        "itunes_country": "us",
+        "source_tags": "reviewed_recording_style_v27;recording_identity_verified;audio_browser_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_apple_publisher_recordings_v470_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Erycox",
+        "song": "Dovic a Moda",
+        "recordingUrl": "https://music.apple.com/us/album/dovic-a-moda/1567842315?i=1567842317",
+        "evidenceUrl": "https://pan-african-music.com/en/dj-erycox-dovic-a-moda/",
+        "recordingId": "apple_music:1567842317",
+        "provider": "apple_music",
+        "evidenceLabel": "Pan African Music / DJ Erycox · Batida — evidência desta gravação",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/ec/d1/96/ecd1963c-4392-a493-2b23-cd67a098da15/mzaf_1620648501686154774.plus.aac.p.m4a",
+        "itunesCountry": "us",
+        "appleTrackId": "1567842317",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Firmeza",
+        "song": "Alma Do Meu Pai",
+        "label": "Príncipe",
+        "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/a3/0b/90/a30b908f-7893-75ba-06ea-257cfa6a9442/mzaf_1462519281344294016.plus.aac.p.m4a",
+        "cover_art_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/cf/9d/21/cf9d21f1-44b6-4290-0e01-8500877e48a2/634457445802.jpg/100x100bb.jpg",
+        "duration_sec": "390",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/alma-do-meu-pai",
+        "source_url": "https://music.apple.com/us/album/alma-do-meu-pai/1348713421?i=1348713422",
+        "recording_id": "apple_music:1348713422",
+        "itunes_country": "us",
+        "source_tags": "reviewed_recording_style_v27;recording_identity_verified;audio_browser_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_principe_v50_20261111"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Firmeza",
+        "song": "Alma Do Meu Pai",
+        "recordingUrl": "https://music.apple.com/us/album/alma-do-meu-pai/1348713421?i=1348713422",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/alma-do-meu-pai",
+        "recordingId": "apple_music:1348713422",
+        "provider": "apple_music",
+        "evidenceLabel": "Apple Music · Batida",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/a3/0b/90/a30b908f-7893-75ba-06ea-257cfa6a9442/mzaf_1462519281344294016.plus.aac.p.m4a",
+        "itunesCountry": "us",
+        "appleTrackId": "1348713422",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Dj Helviofox",
+        "song": "Capucho do Xaboy",
+        "label": "Príncipe",
+        "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/de/ea/b4deeaf5-0b5f-7426-b5e9-72e059c201de/mzaf_16191384693777605273.plus.aac.p.m4a",
+        "cover_art_url": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/6b/26/4c6b269c-ed09-0706-b4cc-61855e024f4b/880918278476.jpg/100x100bb.jpg",
+        "release_date": "2025-11-26",
+        "duration_sec": "280",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://www.flur.pt/pt/collections/portugal/products/dj-helviofox-rodeado-de-batida-p065",
+        "source_url": "https://music.apple.com/us/album/capucho-do-xaboy/1851049459?i=1851049462",
+        "recording_id": "apple_music:1851049462",
+        "itunes_country": "us",
+        "source_tags": "reviewed_recording_style_v27;recording_identity_verified;audio_browser_verified;bpm_unknown;vocals_source_verified",
+        "vocals": "light_vocals",
+        "source": "batida_principe_v50_20261111"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Dj Helviofox",
+        "song": "Capucho do Xaboy",
+        "recordingUrl": "https://music.apple.com/us/album/capucho-do-xaboy/1851049459?i=1851049462",
+        "evidenceUrl": "https://www.flur.pt/pt/collections/portugal/products/dj-helviofox-rodeado-de-batida-p065",
+        "recordingId": "apple_music:1851049462",
+        "provider": "apple_music",
+        "evidenceLabel": "Apple Music · Batida",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b4/de/ea/b4deeaf5-0b5f-7426-b5e9-72e059c201de/mzaf_16191384693777605273.plus.aac.p.m4a",
+        "itunesCountry": "us",
+        "appleTrackId": "1851049462",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Lycox",
+        "song": "Contemporaneo",
+        "label": "Príncipe",
+        "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/11/b3/39/11b339a9-79cf-327f-64ad-024c4c5b8b3d/mzaf_5183836112097643521.plus.aac.p.m4a",
+        "cover_art_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c6/b9/ac/c6b9acf8-581a-7f76-2e25-964b5e27c384/8447053173459.jpg/100x100bb.jpg",
+        "release_date": "2024-10-25",
+        "duration_sec": "188",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/guetto-star?t=1",
+        "source_url": "https://music.apple.com/us/album/contemporaneo/1773823812?i=1773824217",
+        "recording_id": "apple_music:1773824217",
+        "itunes_country": "us",
+        "source_tags": "reviewed_recording_style_v27;recording_identity_verified;audio_browser_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_lisbon_originals_v51_20261112"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Lycox",
+        "song": "Contemporaneo",
+        "recordingUrl": "https://music.apple.com/us/album/contemporaneo/1773823812?i=1773824217",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/guetto-star?t=1",
+        "recordingId": "apple_music:1773824217",
+        "provider": "apple_music",
+        "evidenceLabel": "Apple Music · Batida",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/11/b3/39/11b339a9-79cf-327f-64ad-024c4c5b8b3d/mzaf_5183836112097643521.plus.aac.p.m4a",
+        "itunesCountry": "us",
+        "appleTrackId": "1773824217",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Marfox",
+        "song": "Urban Adn",
+        "label": "Enchufada",
+        "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/0a/91/de0a9169-fac3-e373-1483-e8cfa218de09/mzaf_10874627737203765379.plus.aac.p.m4a",
+        "cover_art_url": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ed/bf/d2/edbfd291-b89a-bc3a-fce6-81996e6d9e01/4062548137347.png/100x100bb.jpg",
+        "release_date": "2012-02-25",
+        "duration_sec": "206",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://djmag.com/reviews/va-enchufada-lisbon-club-story",
+        "source_url": "https://music.apple.com/us/album/urban-adn/1879869793?i=1879869804",
+        "recording_id": "apple_music:1879869804",
+        "itunes_country": "us",
+        "source_tags": "reviewed_recording_style_v27;recording_identity_verified;audio_browser_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_lisbon_originals_v51_20261112"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Marfox",
+        "song": "Urban Adn",
+        "recordingUrl": "https://music.apple.com/us/album/urban-adn/1879869793?i=1879869804",
+        "evidenceUrl": "https://djmag.com/reviews/va-enchufada-lisbon-club-story",
+        "recordingId": "apple_music:1879869804",
+        "provider": "apple_music",
+        "evidenceLabel": "Apple Music · Batida",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/de/0a/91/de0a9169-fac3-e373-1483-e8cfa218de09/mzaf_10874627737203765379.plus.aac.p.m4a",
+        "itunesCountry": "us",
+        "appleTrackId": "1879869804",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Nidia",
+        "song": "É da Banda",
+        "label": "Príncipe",
+        "preview_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9d/1d/92/9d1d924c-08b1-0f86-f0e6-6b7554ca2b97/mzaf_1620920429753863218.plus.aac.p.m4a",
+        "cover_art_url": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/0d/2e/10/0d2e1081-2b60-6e5b-51d2-0dc4e27e9a0e/8445162409605.jpg/100x100bb.jpg",
+        "release_date": "2017-06-30",
+        "duration_sec": "181",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/n-dia-m-n-dia-fudida",
+        "source_url": "https://music.apple.com/pt/album/%C3%A9-da-banda/1596164904?i=1596165059",
+        "recording_id": "apple_music:1596165059",
+        "itunes_country": "pt",
+        "source_tags": "reviewed_recording_style_v27;recording_identity_verified;audio_browser_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_apple_publisher_recordings_v470_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Nidia",
+        "song": "É da Banda",
+        "recordingUrl": "https://music.apple.com/pt/album/%C3%A9-da-banda/1596164904?i=1596165059",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/n-dia-m-n-dia-fudida",
+        "recordingId": "apple_music:1596165059",
+        "provider": "apple_music",
+        "evidenceLabel": "Príncipe · Batida — evidência desta gravação",
+        "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/9d/1d/92/9d1d924c-08b1-0f86-f0e6-6b7554ca2b97/mzaf_1620920429753863218.plus.aac.p.m4a",
+        "itunesCountry": "pt",
+        "appleTrackId": "1596165059",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Bubas Produçoes",
+        "song": "Padjinha Part 3",
+        "label": "Club Yeke",
+        "bpm": "130",
+        "bandcamp_track_url": "https://bubasproducoes.bandcamp.com/track/padjinha-part-3",
+        "bandcamp_track_id": "2003778730",
+        "cover_art_url": "https://f4.bcbits.com/img/a0159597844_5.jpg",
+        "release_date": "2020-06-05",
+        "duration_sec": "160",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/best-club-music/the-best-club-music-on-bandcamp-june-2020",
+        "source_url": "https://bubasproducoes.bandcamp.com/track/padjinha-part-3",
+        "recording_id": "bandcamp:2003778730",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_verified;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Bubas Produçoes",
+        "song": "Padjinha Part 3",
+        "recordingUrl": "https://bubasproducoes.bandcamp.com/track/padjinha-part-3",
+        "evidenceUrl": "https://daily.bandcamp.com/best-club-music/the-best-club-music-on-bandcamp-june-2020",
+        "recordingId": "bandcamp:2003778730",
+        "provider": "bandcamp",
+        "evidenceLabel": "Club Yeke · batida",
+        "bandcampTrackId": "2003778730",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "bpmExact": 130
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "dkay.wav",
+        "song": "1.5 LITROS ft Zino",
+        "label": "Patterns Music",
+        "bpm": "130",
+        "bandcamp_track_url": "https://dkaywav.bandcamp.com/track/15-litros-ft-zino",
+        "bandcamp_track_id": "3113344786",
+        "cover_art_url": "https://f4.bcbits.com/img/a0600758922_5.jpg",
+        "release_date": "2026-09-04",
+        "duration_sec": "246",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://dkaywav.bandcamp.com/album/pat002-dkay-estrago",
+        "source_url": "https://dkaywav.bandcamp.com/track/15-litros-ft-zino",
+        "recording_id": "bandcamp:3113344786",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_verified;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v469_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "dkay.wav",
+        "song": "1.5 LITROS ft Zino",
+        "recordingUrl": "https://dkaywav.bandcamp.com/track/15-litros-ft-zino",
+        "evidenceUrl": "https://dkaywav.bandcamp.com/album/pat002-dkay-estrago",
+        "recordingId": "bandcamp:3113344786",
+        "provider": "bandcamp",
+        "evidenceLabel": "Patterns Music · batida",
+        "bandcampTrackId": "3113344786",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "bpmExact": 130,
+        "participants": [
+          "Zino",
+          "Prodzino"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Mano Jio",
+        "song": "Cara De Bruxa",
+        "label": "Moonshine",
+        "bpm": "130",
+        "bandcamp_track_url": "https://moonshinemu.bandcamp.com/track/cara-de-bruxa",
+        "bandcamp_track_id": "2271897625",
+        "cover_art_url": "https://f4.bcbits.com/img/a0716290494_5.jpg",
+        "release_date": "2024-09-13",
+        "duration_sec": "214",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://moonshinemu.bandcamp.com/track/cara-de-bruxa",
+        "recording_id": "bandcamp:2271897625",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_verified;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v469_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Mano Jio",
+        "song": "Cara De Bruxa",
+        "recordingUrl": "https://moonshinemu.bandcamp.com/track/cara-de-bruxa",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:2271897625",
+        "provider": "bandcamp",
+        "evidenceLabel": "Moonshine · batida",
+        "bandcampTrackId": "2271897625",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "bpmExact": 130
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "WULFFLUW XCIV",
+        "song": "TBT Batida | 140BPM",
+        "label": "WULFFLUW XCIV (self-released)",
+        "bpm": "140",
+        "bandcamp_track_url": "https://wulffluwxciv.bandcamp.com/track/tbt-batida-140bpm",
+        "bandcamp_track_id": "2187332916",
+        "cover_art_url": "https://f4.bcbits.com/img/a0966230781_5.jpg",
+        "release_date": "2026-10-25",
+        "duration_sec": "173",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://wulffluwxciv.bandcamp.com/track/tbt-batida-140bpm",
+        "source_url": "https://wulffluwxciv.bandcamp.com/track/tbt-batida-140bpm",
+        "recording_id": "bandcamp:2187332916",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_verified;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "WULFFLUW XCIV",
+        "song": "TBT Batida | 140BPM",
+        "recordingUrl": "https://wulffluwxciv.bandcamp.com/track/tbt-batida-140bpm",
+        "evidenceUrl": "https://wulffluwxciv.bandcamp.com/track/tbt-batida-140bpm",
+        "recordingId": "bandcamp:2187332916",
+        "provider": "bandcamp",
+        "evidenceLabel": "WULFFLUW XCIV (self-released) · batida",
+        "bandcampTrackId": "2187332916",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "bpmExact": 140,
+        "participants": [
+          "MC Mayah"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "||ALA|MEDA||",
+        "song": "dom os (feat. Marek Pospieszalski)",
+        "label": "Brutality Garden",
+        "bandcamp_track_url": "https://brutalitygarden.bandcamp.com/track/dom-os-feat-marek-pospieszalski",
+        "bandcamp_track_id": "3896282604",
+        "cover_art_url": "https://f4.bcbits.com/img/a0828548121_5.jpg",
+        "release_date": "2024-04-19",
+        "duration_sec": "520",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://thequietus.com/quietus-reviews/album-of-the-week/ala-meda-spectra-volume-2-review/",
+        "source_url": "https://brutalitygarden.bandcamp.com/track/dom-os-feat-marek-pospieszalski",
+        "recording_id": "bandcamp:3896282604",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "||ALA|MEDA||",
+        "song": "dom os (feat. Marek Pospieszalski)",
+        "recordingUrl": "https://brutalitygarden.bandcamp.com/track/dom-os-feat-marek-pospieszalski",
+        "evidenceUrl": "https://thequietus.com/quietus-reviews/album-of-the-week/ala-meda-spectra-volume-2-review/",
+        "recordingId": "bandcamp:3896282604",
+        "provider": "bandcamp",
+        "evidenceLabel": "Brutality Garden · batida",
+        "bandcampTrackId": "3896282604",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Marek Pospieszalski",
+          "Jakub Ziołek",
+          "Łukasz Jędrzejczak",
+          "Jacek Buhl",
+          "Rafał Iwański",
+          "Piotr Michalski"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "A.k.Adrix",
+        "song": "Positividades",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/positividades",
+        "bandcamp_track_id": "458397995",
+        "cover_art_url": "https://f4.bcbits.com/img/a2297234913_5.jpg",
+        "release_date": "2020-11-13",
+        "duration_sec": "162",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/c-digo-de-barras",
+        "source_url": "https://principediscos.bandcamp.com/track/positividades",
+        "recording_id": "bandcamp:458397995",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "A.k.Adrix",
+        "song": "Positividades",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/positividades",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/c-digo-de-barras",
+        "recordingId": "bandcamp:458397995",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "458397995",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "ALBERFOX",
+        "song": "O D'LUXO",
+        "label": "Love In The Endz",
+        "bandcamp_track_url": "https://loveintheendz.bandcamp.com/track/alberfox-o-dluxo",
+        "bandcamp_track_id": "4285441434",
+        "cover_art_url": "https://f4.bcbits.com/img/a0686095129_5.jpg",
+        "release_date": "2026-04-02",
+        "duration_sec": "129",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "source_url": "https://loveintheendz.bandcamp.com/track/alberfox-o-dluxo",
+        "recording_id": "bandcamp:4285441434",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "ALBERFOX",
+        "song": "O D'LUXO",
+        "recordingUrl": "https://loveintheendz.bandcamp.com/track/alberfox-o-dluxo",
+        "evidenceUrl": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "recordingId": "bandcamp:4285441434",
+        "provider": "bandcamp",
+        "evidenceLabel": "Love In The Endz · batida",
+        "bandcampTrackId": "4285441434",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "B I L L Y G",
+        "song": "Mad kid, good city",
+        "label": "B I L L Y G (self-released)",
+        "bandcamp_track_url": "https://billygprod.bandcamp.com/track/mad-kid-good-city",
+        "bandcamp_track_id": "3263252967",
+        "cover_art_url": "https://f4.bcbits.com/img/a2517289984_5.jpg",
+        "release_date": "2026-06-26",
+        "duration_sec": "176",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://www.byte.fm/sendungen/duftorgel/2026-07-11/22/zwischen-luftschleuse-und-kuechenstillstand/",
+        "source_url": "https://billygprod.bandcamp.com/track/mad-kid-good-city",
+        "recording_id": "bandcamp:3263252967",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v473_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "B I L L Y G",
+        "song": "Mad kid, good city",
+        "recordingUrl": "https://billygprod.bandcamp.com/track/mad-kid-good-city",
+        "evidenceUrl": "https://www.byte.fm/sendungen/duftorgel/2026-07-11/22/zwischen-luftschleuse-und-kuechenstillstand/",
+        "recordingId": "bandcamp:3263252967",
+        "provider": "bandcamp",
+        "evidenceLabel": "B I L L Y G (self-released) · batida",
+        "bandcampTrackId": "3263252967",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Bate1 Prod",
+        "song": "Lambreta",
+        "label": "Club Yeke",
+        "bandcamp_track_url": "https://bate1.bandcamp.com/track/lambreta",
+        "bandcamp_track_id": "1195277937",
+        "cover_art_url": "https://f4.bcbits.com/img/a1556479347_5.jpg",
+        "release_date": "2023-11-03",
+        "duration_sec": "139",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://ra.co/reviews/35862",
+        "source_url": "https://bate1.bandcamp.com/track/lambreta",
+        "recording_id": "bandcamp:1195277937",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Bate1 Prod",
+        "song": "Lambreta",
+        "recordingUrl": "https://bate1.bandcamp.com/track/lambreta",
+        "evidenceUrl": "https://ra.co/reviews/35862",
+        "recordingId": "bandcamp:1195277937",
+        "provider": "bandcamp",
+        "evidenceLabel": "Club Yeke · batida",
+        "bandcampTrackId": "1195277937",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "DJ Doraemon",
+          "Lokowat"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Blacksea Não Maya",
+        "song": "Prala",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/prala",
+        "bandcamp_track_id": "2265812455",
+        "cover_art_url": "https://f4.bcbits.com/img/a0332379044_5.jpg",
+        "release_date": "2025-01-17",
+        "duration_sec": "191",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/essential-releases/essential-releases-january-24-2025",
+        "source_url": "https://principediscos.bandcamp.com/track/prala",
+        "recording_id": "bandcamp:2265812455",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v469_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Blacksea Não Maya",
+        "song": "Prala",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/prala",
+        "evidenceUrl": "https://daily.bandcamp.com/essential-releases/essential-releases-january-24-2025",
+        "recordingId": "bandcamp:2265812455",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "2265812455",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "DJ Kolt"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "BMBZ",
+        "song": "DO GOO GOO",
+        "label": "KUBICO",
+        "bandcamp_track_url": "https://kubico.bandcamp.com/track/do-goo-goo",
+        "bandcamp_track_id": "483228196",
+        "cover_art_url": "https://f4.bcbits.com/img/a2497584201_5.jpg",
+        "release_date": "2023-12-08",
+        "duration_sec": "185",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://kubico.bandcamp.com/track/do-goo-goo",
+        "source_url": "https://kubico.bandcamp.com/track/do-goo-goo",
+        "recording_id": "bandcamp:483228196",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "BMBZ",
+        "song": "DO GOO GOO",
+        "recordingUrl": "https://kubico.bandcamp.com/track/do-goo-goo",
+        "evidenceUrl": "https://kubico.bandcamp.com/track/do-goo-goo",
+        "recordingId": "bandcamp:483228196",
+        "provider": "bandcamp",
+        "evidenceLabel": "KUBICO · batida",
+        "bandcampTrackId": "483228196",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DARIIOFOX",
+        "song": "KAMBODJA",
+        "label": "DARIIOFOX",
+        "bandcamp_track_url": "https://dariiofox.bandcamp.com/track/kambodja",
+        "bandcamp_track_id": "1756616362",
+        "cover_art_url": "https://f4.bcbits.com/img/a1517029479_5.jpg",
+        "release_date": "2023-11-01",
+        "duration_sec": "206",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://dariiofox.bandcamp.com/track/kambodja",
+        "recording_id": "bandcamp:1756616362",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DARIIOFOX",
+        "song": "KAMBODJA",
+        "recordingUrl": "https://dariiofox.bandcamp.com/track/kambodja",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:1756616362",
+        "provider": "bandcamp",
+        "evidenceLabel": "DARIIOFOX · batida",
+        "bandcampTrackId": "1756616362",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Deejay Veiga",
+        "song": "Tudo é no Guetto",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/tudo-no-guetto",
+        "bandcamp_track_id": "3679923290",
+        "cover_art_url": "https://f4.bcbits.com/img/a1911773573_5.jpg",
+        "release_date": "2024-06-20",
+        "duration_sec": "240",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://www.flur.pt/pt/products/deejay-veiga-tudo-e-no-guetto-p054",
+        "source_url": "https://principediscos.bandcamp.com/track/tudo-no-guetto",
+        "recording_id": "bandcamp:3679923290",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Deejay Veiga",
+        "song": "Tudo é no Guetto",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/tudo-no-guetto",
+        "evidenceUrl": "https://www.flur.pt/pt/products/deejay-veiga-tudo-e-no-guetto-p054",
+        "recordingId": "bandcamp:3679923290",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "3679923290",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DEKKAPA",
+        "song": "TANJIRŌ KAMADO",
+        "label": "B2BO: Been To Berlin Once",
+        "bandcamp_track_url": "https://b2bo.bandcamp.com/track/b2b006-dekkapa-tanjir-kamado",
+        "bandcamp_track_id": "2815370441",
+        "cover_art_url": "https://f4.bcbits.com/img/a1469667307_5.jpg",
+        "release_date": "2023-12-05",
+        "duration_sec": "209",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://b2bo.bandcamp.com/track/b2b006-dekkapa-tanjir-kamado",
+        "recording_id": "bandcamp:2815370441",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DEKKAPA",
+        "song": "TANJIRŌ KAMADO",
+        "recordingUrl": "https://b2bo.bandcamp.com/track/b2b006-dekkapa-tanjir-kamado",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:2815370441",
+        "provider": "bandcamp",
+        "evidenceLabel": "B2BO: Been To Berlin Once · batida",
+        "bandcampTrackId": "2815370441",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DIIONYG",
+        "song": "MADJAS",
+        "label": "Love In The Endz",
+        "bandcamp_track_url": "https://loveintheendz.bandcamp.com/track/diionyg-madjas",
+        "bandcamp_track_id": "4212448519",
+        "cover_art_url": "https://f4.bcbits.com/img/a0686095129_5.jpg",
+        "release_date": "2026-04-02",
+        "duration_sec": "189",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "source_url": "https://loveintheendz.bandcamp.com/track/diionyg-madjas",
+        "recording_id": "bandcamp:4212448519",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DIIONYG",
+        "song": "MADJAS",
+        "recordingUrl": "https://loveintheendz.bandcamp.com/track/diionyg-madjas",
+        "evidenceUrl": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "recordingId": "bandcamp:4212448519",
+        "provider": "bandcamp",
+        "evidenceLabel": "Love In The Endz · batida",
+        "bandcampTrackId": "4212448519",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ ADAMM",
+        "song": "SILLY",
+        "label": "B2BO: Been To Berlin Once",
+        "bandcamp_track_url": "https://b2bo.bandcamp.com/track/silly",
+        "bandcamp_track_id": "2735129508",
+        "cover_art_url": "https://f4.bcbits.com/img/a2816875819_5.jpg",
+        "release_date": "2022-01-27",
+        "duration_sec": "219",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://b2bo.bandcamp.com/track/silly",
+        "recording_id": "bandcamp:2735129508",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ ADAMM",
+        "song": "SILLY",
+        "recordingUrl": "https://b2bo.bandcamp.com/track/silly",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:2735129508",
+        "provider": "bandcamp",
+        "evidenceLabel": "B2BO: Been To Berlin Once · batida",
+        "bandcampTrackId": "2735129508",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ B.Boy",
+        "song": "Kuribotas",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/kuribotas",
+        "bandcamp_track_id": "860709170",
+        "cover_art_url": "https://f4.bcbits.com/img/a1374388923_5.jpg",
+        "release_date": "2020-12-11",
+        "duration_sec": "176",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/lei-da-tia-maria",
+        "source_url": "https://principediscos.bandcamp.com/track/kuribotas",
+        "recording_id": "bandcamp:860709170",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ B.Boy",
+        "song": "Kuribotas",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/kuribotas",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/lei-da-tia-maria",
+        "recordingId": "bandcamp:860709170",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "860709170",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Bebedera",
+        "song": "Guitarra Do Guetto",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/guitarra-do-guetto",
+        "bandcamp_track_id": "3855466899",
+        "cover_art_url": "https://f4.bcbits.com/img/a4254647432_5.jpg",
+        "release_date": "2025-07-04",
+        "duration_sec": "179",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://boomkat.com/artists/dj-bebedera/releases/cj1q1m49/classico",
+        "source_url": "https://principediscos.bandcamp.com/track/guitarra-do-guetto",
+        "recording_id": "bandcamp:3855466899",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Bebedera",
+        "song": "Guitarra Do Guetto",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/guitarra-do-guetto",
+        "evidenceUrl": "https://boomkat.com/artists/dj-bebedera/releases/cj1q1m49/classico",
+        "recordingId": "bandcamp:3855466899",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "3855466899",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ CiroFox",
+        "song": "Moments",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/moments",
+        "bandcamp_track_id": "1017595279",
+        "cover_art_url": "https://f4.bcbits.com/img/a0963213989_5.jpg",
+        "release_date": "2016-07-20",
+        "duration_sec": "254",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/album-of-the-day/various-artists-mambos-levis-doutro-mundo-review",
+        "source_url": "https://principediscos.bandcamp.com/track/moments",
+        "recording_id": "bandcamp:1017595279",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ CiroFox",
+        "song": "Moments",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/moments",
+        "evidenceUrl": "https://daily.bandcamp.com/album-of-the-day/various-artists-mambos-levis-doutro-mundo-review",
+        "recordingId": "bandcamp:1017595279",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "1017595279",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Danifox",
+        "song": "Robert Johnson",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/robert-johnson",
+        "bandcamp_track_id": "2796192198",
+        "cover_art_url": "https://f4.bcbits.com/img/a2017712773_5.jpg",
+        "release_date": "2023-04-28",
+        "duration_sec": "164",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/ansiedade",
+        "source_url": "https://principediscos.bandcamp.com/track/robert-johnson",
+        "recording_id": "bandcamp:2796192198",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_verified",
+        "vocals": "vocal",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Danifox",
+        "song": "Robert Johnson",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/robert-johnson",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/ansiedade",
+        "recordingId": "bandcamp:2796192198",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "2796192198",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Fofuxo",
+        "song": "Isto é Kazu Bite",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/isto-kazu-bite",
+        "bandcamp_track_id": "108882790",
+        "cover_art_url": "https://f4.bcbits.com/img/a0504942659_5.jpg",
+        "release_date": "2023-08-04",
+        "duration_sec": "225",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://www.ableton.com/en/blog/henrique-j-paris-rs-producoes-mapping-batidas-heritage/",
+        "source_url": "https://principediscos.bandcamp.com/track/isto-kazu-bite",
+        "recording_id": "bandcamp:108882790",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Fofuxo",
+        "song": "Isto é Kazu Bite",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/isto-kazu-bite",
+        "evidenceUrl": "https://www.ableton.com/en/blog/henrique-j-paris-rs-producoes-mapping-batidas-heritage/",
+        "recordingId": "bandcamp:108882790",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "108882790",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ LILOCOX & DJ MABOKU",
+        "song": "CDM A Comandar",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/cdm-a-comandar",
+        "bandcamp_track_id": "321006509",
+        "cover_art_url": "https://f4.bcbits.com/img/a2452775466_5.jpg",
+        "release_date": "2015-02-24",
+        "duration_sec": "133",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/malucos-de-raiz",
+        "source_url": "https://principediscos.bandcamp.com/track/cdm-a-comandar",
+        "recording_id": "bandcamp:321006509",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ LILOCOX & DJ MABOKU",
+        "song": "CDM A Comandar",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/cdm-a-comandar",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/malucos-de-raiz",
+        "recordingId": "bandcamp:321006509",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "321006509",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Nigga Fox",
+        "song": "Karma",
+        "label": "Warp Records",
+        "bandcamp_track_url": "https://dj-nigga-fox.bandcamp.com/track/karma",
+        "bandcamp_track_id": "2976255737",
+        "cover_art_url": "https://f4.bcbits.com/img/a3796196023_5.jpg",
+        "release_date": "2018-03-09",
+        "duration_sec": "194",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://dj-nigga-fox.bandcamp.com/track/karma",
+        "recording_id": "bandcamp:2976255737",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Nigga Fox",
+        "song": "Karma",
+        "recordingUrl": "https://dj-nigga-fox.bandcamp.com/track/karma",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:2976255737",
+        "provider": "bandcamp",
+        "evidenceLabel": "Warp Records · batida",
+        "bandcampTrackId": "2976255737",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ PERIGOSO",
+        "song": "MacoBayou",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/macobayou",
+        "bandcamp_track_id": "2768138209",
+        "cover_art_url": "https://f4.bcbits.com/img/a1479145771_5.jpg",
+        "release_date": "2015-12-11",
+        "duration_sec": "197",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/calor-no-frioo-2",
+        "source_url": "https://principediscos.bandcamp.com/track/macobayou",
+        "recording_id": "bandcamp:2768138209",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ PERIGOSO",
+        "song": "MacoBayou",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/macobayou",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/calor-no-frioo-2",
+        "recordingId": "bandcamp:2768138209",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "2768138209",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Doussala Demba",
+        "song": "Flautas Do Demo",
+        "label": "Golden Mist Records",
+        "bandcamp_track_url": "https://goldenmistrecords.bandcamp.com/track/flautas-do-demo",
+        "bandcamp_track_id": "851662178",
+        "cover_art_url": "https://f4.bcbits.com/img/a3529184970_5.jpg",
+        "release_date": "2023-05-17",
+        "duration_sec": "148",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://goldenmistrecords.bandcamp.com/track/flautas-do-demo",
+        "recording_id": "bandcamp:851662178",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Doussala Demba",
+        "song": "Flautas Do Demo",
+        "recordingUrl": "https://goldenmistrecords.bandcamp.com/track/flautas-do-demo",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:851662178",
+        "provider": "bandcamp",
+        "evidenceLabel": "Golden Mist Records · batida",
+        "bandcampTrackId": "851662178",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "E8PROD",
+        "song": "SENTENÇA MAXIMA",
+        "label": "Love In The Endz",
+        "bandcamp_track_url": "https://loveintheendz.bandcamp.com/track/e8prod-senten-a-maxima",
+        "bandcamp_track_id": "3946793623",
+        "cover_art_url": "https://f4.bcbits.com/img/a0686095129_5.jpg",
+        "release_date": "2026-04-02",
+        "duration_sec": "176",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "source_url": "https://loveintheendz.bandcamp.com/track/e8prod-senten-a-maxima",
+        "recording_id": "bandcamp:3946793623",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "E8PROD",
+        "song": "SENTENÇA MAXIMA",
+        "recordingUrl": "https://loveintheendz.bandcamp.com/track/e8prod-senten-a-maxima",
+        "evidenceUrl": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "recordingId": "bandcamp:3946793623",
+        "provider": "bandcamp",
+        "evidenceLabel": "Love In The Endz · batida",
+        "bandcampTrackId": "3946793623",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "GRCA.",
+        "song": "CANAL 26",
+        "label": "GRCA. (self-released)",
+        "bandcamp_track_url": "https://graca.bandcamp.com/track/canal-26",
+        "bandcamp_track_id": "3861993046",
+        "cover_art_url": "https://f4.bcbits.com/img/a4036401379_5.jpg",
+        "release_date": "2026-06-05",
+        "duration_sec": "182",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://graca.bandcamp.com/track/canal-26",
+        "source_url": "https://graca.bandcamp.com/track/canal-26",
+        "recording_id": "bandcamp:3861993046",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "GRCA.",
+        "song": "CANAL 26",
+        "recordingUrl": "https://graca.bandcamp.com/track/canal-26",
+        "evidenceUrl": "https://graca.bandcamp.com/track/canal-26",
+        "recordingId": "bandcamp:3861993046",
+        "provider": "bandcamp",
+        "evidenceLabel": "GRCA. (self-released) · batida",
+        "bandcampTrackId": "3861993046",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "GUGAS",
+        "song": "REBENTA COLUNA",
+        "label": "Love In The Endz",
+        "bandcamp_track_url": "https://loveintheendz.bandcamp.com/track/gugas-rebenta-coluna",
+        "bandcamp_track_id": "864315820",
+        "cover_art_url": "https://f4.bcbits.com/img/a0686095129_5.jpg",
+        "release_date": "2026-04-02",
+        "duration_sec": "145",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "source_url": "https://loveintheendz.bandcamp.com/track/gugas-rebenta-coluna",
+        "recording_id": "bandcamp:864315820",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "GUGAS",
+        "song": "REBENTA COLUNA",
+        "recordingUrl": "https://loveintheendz.bandcamp.com/track/gugas-rebenta-coluna",
+        "evidenceUrl": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "recordingId": "bandcamp:864315820",
+        "provider": "bandcamp",
+        "evidenceLabel": "Love In The Endz · batida",
+        "bandcampTrackId": "864315820",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "K30",
+        "song": "Melodias do K30",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/melodias-do-k30",
+        "bandcamp_track_id": "1350649270",
+        "cover_art_url": "https://f4.bcbits.com/img/a1145144777_5.jpg",
+        "release_date": "2017-06-16",
+        "duration_sec": "126",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/firma-do-txiga",
+        "source_url": "https://principediscos.bandcamp.com/track/melodias-do-k30",
+        "recording_id": "bandcamp:1350649270",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "K30",
+        "song": "Melodias do K30",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/melodias-do-k30",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/firma-do-txiga",
+        "recordingId": "bandcamp:1350649270",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "1350649270",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "KWAME",
+        "song": "INVEJOSO",
+        "label": "Love In The Endz",
+        "bandcamp_track_url": "https://loveintheendz.bandcamp.com/track/kwame-invejoso",
+        "bandcamp_track_id": "1939399380",
+        "cover_art_url": "https://f4.bcbits.com/img/a0686095129_5.jpg",
+        "release_date": "2026-04-02",
+        "duration_sec": "164",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "source_url": "https://loveintheendz.bandcamp.com/track/kwame-invejoso",
+        "recording_id": "bandcamp:1939399380",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v472_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "KWAME",
+        "song": "INVEJOSO",
+        "recordingUrl": "https://loveintheendz.bandcamp.com/track/kwame-invejoso",
+        "evidenceUrl": "https://loveintheendz.bandcamp.com/album/lite039-tls-produc-es-ghetto-style",
+        "recordingId": "bandcamp:1939399380",
+        "provider": "bandcamp",
+        "evidenceLabel": "Love In The Endz · batida",
+        "bandcampTrackId": "1939399380",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Lorkestra & Mr. Meyz",
+        "song": "KALIMBAZ",
+        "label": "Love In The Endz",
+        "bandcamp_track_url": "https://loveintheendz.bandcamp.com/track/lorkestra-mr-meyz-kalimbaz",
+        "bandcamp_track_id": "275532277",
+        "cover_art_url": "https://f4.bcbits.com/img/a3005324510_5.jpg",
+        "release_date": "2022-07-01",
+        "duration_sec": "117",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://pan-african-music.com/en/love-in-the-endz-amor-na-endz-2/",
+        "source_url": "https://loveintheendz.bandcamp.com/track/lorkestra-mr-meyz-kalimbaz",
+        "recording_id": "bandcamp:275532277",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v471_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Lorkestra & Mr. Meyz",
+        "song": "KALIMBAZ",
+        "recordingUrl": "https://loveintheendz.bandcamp.com/track/lorkestra-mr-meyz-kalimbaz",
+        "evidenceUrl": "https://pan-african-music.com/en/love-in-the-endz-amor-na-endz-2/",
+        "recordingId": "bandcamp:275532277",
+        "provider": "bandcamp",
+        "evidenceLabel": "Love In The Endz · batida",
+        "bandcampTrackId": "275532277",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Lorkestra",
+          "Mr. Meyz"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Marla Kether",
+        "song": "Blessing (feat. Mez)",
+        "label": "Marla Kether",
+        "bandcamp_track_url": "https://marlakether.bandcamp.com/track/blessing-feat-mez",
+        "bandcamp_track_id": "1890925054",
+        "cover_art_url": "https://f4.bcbits.com/img/a1512396140_5.jpg",
+        "release_date": "2026-10-16",
+        "duration_sec": "234",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://marlakether.bandcamp.com/album/luso",
+        "source_url": "https://marlakether.bandcamp.com/track/blessing-feat-mez",
+        "recording_id": "bandcamp:1890925054",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_verified",
+        "vocals": "vocal",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Marla Kether",
+        "song": "Blessing (feat. Mez)",
+        "recordingUrl": "https://marlakether.bandcamp.com/track/blessing-feat-mez",
+        "evidenceUrl": "https://marlakether.bandcamp.com/album/luso",
+        "recordingId": "bandcamp:1890925054",
+        "provider": "bandcamp",
+        "evidenceLabel": "Marla Kether · batida",
+        "bandcampTrackId": "1890925054",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Mez"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Mixbwé",
+        "song": "Beat 2",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/beat-2",
+        "bandcamp_track_id": "173641300",
+        "cover_art_url": "https://f4.bcbits.com/img/a2342244279_5.jpg",
+        "release_date": "2025-05-30",
+        "duration_sec": "156",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/album-of-the-day/various-artists-nao-estragou-nada-review",
+        "source_url": "https://principediscos.bandcamp.com/track/beat-2",
+        "recording_id": "bandcamp:173641300",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Mixbwé",
+        "song": "Beat 2",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/beat-2",
+        "evidenceUrl": "https://daily.bandcamp.com/album-of-the-day/various-artists-nao-estragou-nada-review",
+        "recordingId": "bandcamp:173641300",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "173641300",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "NegoO",
+        "song": "No Piano",
+        "label": "Moonshine",
+        "bandcamp_track_url": "https://moonshinemu.bandcamp.com/track/no-piano-2",
+        "bandcamp_track_id": "3586773156",
+        "cover_art_url": "https://f4.bcbits.com/img/a1102628689_5.jpg",
+        "release_date": "2024-07-12",
+        "duration_sec": "165",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://moonshinemu.bandcamp.com/track/no-piano-2",
+        "recording_id": "bandcamp:3586773156",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "NegoO",
+        "song": "No Piano",
+        "recordingUrl": "https://moonshinemu.bandcamp.com/track/no-piano-2",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:3586773156",
+        "provider": "bandcamp",
+        "evidenceLabel": "Moonshine · batida",
+        "bandcampTrackId": "3586773156",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Normal Nada the Krakmaxter",
+        "song": "Batida 31",
+        "label": "Nyege Nyege Tapes",
+        "bandcamp_track_url": "https://nyegenyegetapes.bandcamp.com/track/batida-31",
+        "bandcamp_track_id": "93955217",
+        "cover_art_url": "https://f4.bcbits.com/img/a3549430887_5.jpg",
+        "release_date": "2024-02-14",
+        "duration_sec": "198",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://nyegenyegetapes.bandcamp.com/album/tubo-de-ensaio",
+        "source_url": "https://nyegenyegetapes.bandcamp.com/track/batida-31",
+        "recording_id": "bandcamp:93955217",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Normal Nada the Krakmaxter",
+        "song": "Batida 31",
+        "recordingUrl": "https://nyegenyegetapes.bandcamp.com/track/batida-31",
+        "evidenceUrl": "https://nyegenyegetapes.bandcamp.com/album/tubo-de-ensaio",
+        "recordingId": "bandcamp:93955217",
+        "provider": "bandcamp",
+        "evidenceLabel": "Nyege Nyege Tapes · batida",
+        "bandcampTrackId": "93955217",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "PT Musik",
+        "song": "No Fim Da Noite",
+        "label": "Naivety",
+        "bandcamp_track_url": "https://naivetytrax.bandcamp.com/track/pt-musik-no-fim-da-noite",
+        "bandcamp_track_id": "1146373718",
+        "cover_art_url": "https://f4.bcbits.com/img/a2012884306_5.jpg",
+        "release_date": "2022-01-21",
+        "duration_sec": "201",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://boomkat.com/products/el-mundo-oscuro",
+        "source_url": "https://naivetytrax.bandcamp.com/track/pt-musik-no-fim-da-noite",
+        "recording_id": "bandcamp:1146373718",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v469_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "PT Musik",
+        "song": "No Fim Da Noite",
+        "recordingUrl": "https://naivetytrax.bandcamp.com/track/pt-musik-no-fim-da-noite",
+        "evidenceUrl": "https://boomkat.com/products/el-mundo-oscuro",
+        "recordingId": "bandcamp:1146373718",
+        "provider": "bandcamp",
+        "evidenceLabel": "Naivety · batida",
+        "bandcampTrackId": "1146373718",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Puto Anderson",
+        "song": "Gritos do Infinito",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/gritos-do-infinito",
+        "bandcamp_track_id": "3001492977",
+        "cover_art_url": "https://f4.bcbits.com/img/a1145144777_5.jpg",
+        "release_date": "2017-06-16",
+        "duration_sec": "241",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/firma-do-txiga",
+        "source_url": "https://principediscos.bandcamp.com/track/gritos-do-infinito",
+        "recording_id": "bandcamp:3001492977",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Puto Anderson",
+        "song": "Gritos do Infinito",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/gritos-do-infinito",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/firma-do-txiga",
+        "recordingId": "bandcamp:3001492977",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "3001492977",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Puto Márcio",
+        "song": "Coisas da Vida",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/coisas-da-vida",
+        "bandcamp_track_id": "4026881937",
+        "cover_art_url": "https://f4.bcbits.com/img/a1374388923_5.jpg",
+        "release_date": "2020-12-11",
+        "duration_sec": "249",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/lei-da-tia-maria",
+        "source_url": "https://principediscos.bandcamp.com/track/coisas-da-vida",
+        "recording_id": "bandcamp:4026881937",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Puto Márcio",
+        "song": "Coisas da Vida",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/coisas-da-vida",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/lei-da-tia-maria",
+        "recordingId": "bandcamp:4026881937",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "4026881937",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "RS PRODUÇÕES",
+        "song": "Caipirinha",
+        "label": "Príncipe",
+        "bandcamp_track_url": "https://principediscos.bandcamp.com/track/caipirinha",
+        "bandcamp_track_id": "1935018940",
+        "cover_art_url": "https://f4.bcbits.com/img/a1942628023_5.jpg",
+        "release_date": "2018-11-16",
+        "duration_sec": "160",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://principediscos.bandcamp.com/album/bagdad-style",
+        "source_url": "https://principediscos.bandcamp.com/track/caipirinha",
+        "recording_id": "bandcamp:1935018940",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v467_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "RS PRODUÇÕES",
+        "song": "Caipirinha",
+        "recordingUrl": "https://principediscos.bandcamp.com/track/caipirinha",
+        "evidenceUrl": "https://principediscos.bandcamp.com/album/bagdad-style",
+        "recordingId": "bandcamp:1935018940",
+        "provider": "bandcamp",
+        "evidenceLabel": "Príncipe · batida",
+        "bandcampTrackId": "1935018940",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "DJ Narciso",
+          "Nuno Beats"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "SAY3",
+        "song": "Tomah",
+        "label": "SAYE",
+        "bandcamp_track_url": "https://say3.bandcamp.com/track/tomah",
+        "bandcamp_track_id": "3606478134",
+        "cover_art_url": "https://f4.bcbits.com/img/a1632120117_5.jpg",
+        "release_date": "2024-12-25",
+        "duration_sec": "156",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://say3.bandcamp.com/track/tomah",
+        "recording_id": "bandcamp:3606478134",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "SAY3",
+        "song": "Tomah",
+        "recordingUrl": "https://say3.bandcamp.com/track/tomah",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:3606478134",
+        "provider": "bandcamp",
+        "evidenceLabel": "SAYE · batida",
+        "bandcampTrackId": "3606478134",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Utility, DJ Plead",
+        "song": "Flooot - DJ Plead Rework",
+        "label": "SUMAC",
+        "bandcamp_track_url": "https://sumactrac.bandcamp.com/track/flooot-dj-plead-rework",
+        "bandcamp_track_id": "822547541",
+        "cover_art_url": "https://f4.bcbits.com/img/a2074826280_5.jpg",
+        "release_date": "2022-08-08",
+        "duration_sec": "343",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://pan-african-music.com/en/afro-club-roundup-09-2022/",
+        "source_url": "https://sumactrac.bandcamp.com/track/flooot-dj-plead-rework",
+        "recording_id": "bandcamp:822547541",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v471_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Utility, DJ Plead",
+        "song": "Flooot - DJ Plead Rework",
+        "recordingUrl": "https://sumactrac.bandcamp.com/track/flooot-dj-plead-rework",
+        "evidenceUrl": "https://pan-african-music.com/en/afro-club-roundup-09-2022/",
+        "recordingId": "bandcamp:822547541",
+        "provider": "bandcamp",
+        "evidenceLabel": "SUMAC · batida",
+        "bandcampTrackId": "822547541",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Utility",
+          "DJ Plead"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Vanyfox",
+        "song": "Tcha Tcha",
+        "label": "BOUKAN RECORDS",
+        "bandcamp_track_url": "https://boukanrecords.bandcamp.com/track/vanyfox-tcha-tcha",
+        "bandcamp_track_id": "2678569475",
+        "cover_art_url": "https://f4.bcbits.com/img/a1131968967_5.jpg",
+        "release_date": "2023-04-07",
+        "duration_sec": "192",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "source_url": "https://boukanrecords.bandcamp.com/track/vanyfox-tcha-tcha",
+        "recording_id": "bandcamp:2678569475",
+        "source_tags": "recording_identity_verified;audio_browser_verified;publisher_recording_genre_verified;reviewed_recording_style_v27;publisher_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_bandcamp_publisher_recordings_v468_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Vanyfox",
+        "song": "Tcha Tcha",
+        "recordingUrl": "https://boukanrecords.bandcamp.com/track/vanyfox-tcha-tcha",
+        "evidenceUrl": "https://daily.bandcamp.com/lists/batida-kuduro-artists-guide",
+        "recordingId": "bandcamp:2678569475",
+        "provider": "bandcamp",
+        "evidenceLabel": "BOUKAN RECORDS · batida",
+        "bandcampTrackId": "2678569475",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "$hneaky",
+        "song": "Whole Lotta Choppas (Batida Remix)",
+        "label": "$hneaky (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/shneaky-productions/sada-baby-whole-lotta-1",
+        "soundcloud_track_id": "2359606217",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-DLoSjSt5qKZa760z-k1405w-large.jpg",
+        "duration_sec": "154",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/shneaky-productions/sada-baby-whole-lotta-1",
+        "source_url": "https://soundcloud.com/shneaky-productions/sada-baby-whole-lotta-1",
+        "recording_id": "soundcloud:2359606217",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v474_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "$hneaky",
+        "song": "Whole Lotta Choppas (Batida Remix)",
+        "recordingUrl": "https://soundcloud.com/shneaky-productions/sada-baby-whole-lotta-1",
+        "evidenceUrl": "https://soundcloud.com/shneaky-productions/sada-baby-whole-lotta-1",
+        "recordingId": "soundcloud:2359606217",
+        "provider": "soundcloud",
+        "evidenceLabel": "$hneaky · batida",
+        "soundcloudTrackId": "2359606217",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Sada Baby"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "2AD",
+        "song": "Sensual Seduction (2AD Batida Flip)",
+        "label": "2AD (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/2adbeats/sensual-seduction-2ad-batida",
+        "soundcloud_track_id": "2324709314",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-bwyzqWtUPwUiQCku-OqDWRw-large.jpg",
+        "duration_sec": "245",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/2adbeats/sensual-seduction-2ad-batida",
+        "source_url": "https://soundcloud.com/2adbeats/sensual-seduction-2ad-batida",
+        "recording_id": "soundcloud:2324709314",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "2AD",
+        "song": "Sensual Seduction (2AD Batida Flip)",
+        "recordingUrl": "https://soundcloud.com/2adbeats/sensual-seduction-2ad-batida",
+        "evidenceUrl": "https://soundcloud.com/2adbeats/sensual-seduction-2ad-batida",
+        "recordingId": "soundcloud:2324709314",
+        "provider": "soundcloud",
+        "evidenceLabel": "2AD · batida",
+        "soundcloudTrackId": "2324709314",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "akamillyboy",
+        "song": "INCÓGNITO",
+        "label": "akamillyboy (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/miltonmilly47/akamillyboy-incognito-master",
+        "soundcloud_track_id": "2319455198",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-K6jDzlze9HaEP5FU-ivbTkA-large.jpg",
+        "duration_sec": "148",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/miltonmilly47/akamillyboy-incognito-master",
+        "source_url": "https://soundcloud.com/miltonmilly47/akamillyboy-incognito-master",
+        "recording_id": "soundcloud:2319455198",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "akamillyboy",
+        "song": "INCÓGNITO",
+        "recordingUrl": "https://soundcloud.com/miltonmilly47/akamillyboy-incognito-master",
+        "evidenceUrl": "https://soundcloud.com/miltonmilly47/akamillyboy-incognito-master",
+        "recordingId": "soundcloud:2319455198",
+        "provider": "soundcloud",
+        "evidenceLabel": "akamillyboy · batida",
+        "soundcloudTrackId": "2319455198",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Allas G",
+        "song": "Clone",
+        "label": "Allas G (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/theeallaasg/clone",
+        "soundcloud_track_id": "2298734837",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-YPODYBXUU3oiXayf-Bcuh3w-large.jpg",
+        "duration_sec": "156",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/theeallaasg/clone",
+        "source_url": "https://soundcloud.com/theeallaasg/clone",
+        "recording_id": "soundcloud:2298734837",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Allas G",
+        "song": "Clone",
+        "recordingUrl": "https://soundcloud.com/theeallaasg/clone",
+        "evidenceUrl": "https://soundcloud.com/theeallaasg/clone",
+        "recordingId": "soundcloud:2298734837",
+        "provider": "soundcloud",
+        "evidenceLabel": "Allas G · batida",
+        "soundcloudTrackId": "2298734837",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "BCHNN",
+        "song": "DRKLAA (Original Guetto)",
+        "label": "BCHNN (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/bchnn/bchnn-santoss_2-1",
+        "soundcloud_track_id": "2264032358",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-CxlZtuyA67cySN8C-RFGHDw-large.jpg",
+        "duration_sec": "165",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/bchnn/bchnn-santoss_2-1",
+        "source_url": "https://soundcloud.com/bchnn/bchnn-santoss_2-1",
+        "recording_id": "soundcloud:2264032358",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "BCHNN",
+        "song": "DRKLAA (Original Guetto)",
+        "recordingUrl": "https://soundcloud.com/bchnn/bchnn-santoss_2-1",
+        "evidenceUrl": "https://soundcloud.com/bchnn/bchnn-santoss_2-1",
+        "recordingId": "soundcloud:2264032358",
+        "provider": "soundcloud",
+        "evidenceLabel": "BCHNN · batida",
+        "soundcloudTrackId": "2264032358",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "BradFlash",
+        "song": "Batida Do Momento",
+        "label": "BradFlash (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/brad-flash-music/bradflash-batida-do-momento-be-magiik-2014",
+        "soundcloud_track_id": "159823225",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000085922342-516i37-large.jpg",
+        "duration_sec": "198",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/brad-flash-music/bradflash-batida-do-momento-be-magiik-2014",
+        "source_url": "https://soundcloud.com/brad-flash-music/bradflash-batida-do-momento-be-magiik-2014",
+        "recording_id": "soundcloud:159823225",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "BradFlash",
+        "song": "Batida Do Momento",
+        "recordingUrl": "https://soundcloud.com/brad-flash-music/bradflash-batida-do-momento-be-magiik-2014",
+        "evidenceUrl": "https://soundcloud.com/brad-flash-music/bradflash-batida-do-momento-be-magiik-2014",
+        "recordingId": "soundcloud:159823225",
+        "provider": "soundcloud",
+        "evidenceLabel": "BradFlash · batida",
+        "soundcloudTrackId": "159823225",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "BROWNSUGVR",
+        "song": "KWANZA",
+        "label": "BROWNSUGVR (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/brownsugvr/brownsugvr-kwanza-1",
+        "soundcloud_track_id": "2418399468",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-w63qEFWD9rBUdZnD-Syv3kw-large.jpg",
+        "duration_sec": "97",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/brownsugvr/brownsugvr-kwanza-1",
+        "source_url": "https://soundcloud.com/brownsugvr/brownsugvr-kwanza-1",
+        "recording_id": "soundcloud:2418399468",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "BROWNSUGVR",
+        "song": "KWANZA",
+        "recordingUrl": "https://soundcloud.com/brownsugvr/brownsugvr-kwanza-1",
+        "evidenceUrl": "https://soundcloud.com/brownsugvr/brownsugvr-kwanza-1",
+        "recordingId": "soundcloud:2418399468",
+        "provider": "soundcloud",
+        "evidenceLabel": "BROWNSUGVR · batida",
+        "soundcloudTrackId": "2418399468",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "BW_Producer",
+        "song": "Dama Na Fassi Fama (Batida Flip)",
+        "label": "BW_Producer (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/black-weedz/mc-tchabaco-dama-na-fassi-fama-batida-flip",
+        "soundcloud_track_id": "2186265953",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-UHJk2t5PMaoL00Na-PfayPw-large.jpg",
+        "duration_sec": "103",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/black-weedz/mc-tchabaco-dama-na-fassi-fama-batida-flip",
+        "source_url": "https://soundcloud.com/black-weedz/mc-tchabaco-dama-na-fassi-fama-batida-flip",
+        "recording_id": "soundcloud:2186265953",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "BW_Producer",
+        "song": "Dama Na Fassi Fama (Batida Flip)",
+        "recordingUrl": "https://soundcloud.com/black-weedz/mc-tchabaco-dama-na-fassi-fama-batida-flip",
+        "evidenceUrl": "https://soundcloud.com/black-weedz/mc-tchabaco-dama-na-fassi-fama-batida-flip",
+        "recordingId": "soundcloud:2186265953",
+        "provider": "soundcloud",
+        "evidenceLabel": "BW_Producer · batida",
+        "soundcloudTrackId": "2186265953",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "MC Tchabaco"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Bxcks & Miimii KDS",
+        "song": "Sé Miimii x ZAGGA DAT (Batida Edit)",
+        "label": "Xotic",
+        "soundcloud_track_url": "https://soundcloud.com/xotic-global/se-miimii-x-zagga-dat-bxcks-1",
+        "soundcloud_track_id": "2343123863",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-tgG6Bje0robd7sLC-yWGBQw-large.jpg",
+        "duration_sec": "191",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/xotic-global/se-miimii-x-zagga-dat-bxcks-1",
+        "source_url": "https://soundcloud.com/xotic-global/se-miimii-x-zagga-dat-bxcks-1",
+        "recording_id": "soundcloud:2343123863",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Bxcks & Miimii KDS",
+        "song": "Sé Miimii x ZAGGA DAT (Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/xotic-global/se-miimii-x-zagga-dat-bxcks-1",
+        "evidenceUrl": "https://soundcloud.com/xotic-global/se-miimii-x-zagga-dat-bxcks-1",
+        "recordingId": "soundcloud:2343123863",
+        "provider": "soundcloud",
+        "evidenceLabel": "Xotic · batida",
+        "soundcloudTrackId": "2343123863",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "DJ SKYCEE"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Cheetah!",
+        "song": "MULTIPLY (Batida edit by Cheetah)",
+        "label": "Cheetah! (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/cheetah369/ap-multiply-batida-edit-by-cheetah",
+        "soundcloud_track_id": "2193090583",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-oGLewWhFYc8OTobg-JyTziA-large.png",
+        "duration_sec": "112",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/cheetah369/ap-multiply-batida-edit-by-cheetah",
+        "source_url": "https://soundcloud.com/cheetah369/ap-multiply-batida-edit-by-cheetah",
+        "recording_id": "soundcloud:2193090583",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Cheetah!",
+        "song": "MULTIPLY (Batida edit by Cheetah)",
+        "recordingUrl": "https://soundcloud.com/cheetah369/ap-multiply-batida-edit-by-cheetah",
+        "evidenceUrl": "https://soundcloud.com/cheetah369/ap-multiply-batida-edit-by-cheetah",
+        "recordingId": "soundcloud:2193090583",
+        "provider": "soundcloud",
+        "evidenceLabel": "Cheetah! · batida",
+        "soundcloudTrackId": "2193090583",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "A$AP Rocky",
+          "Juicy J"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Dann SSV",
+        "song": "SOME COMMAS (Future) Batida Edit",
+        "label": "Dann SSV (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/dannssv/dann-ssv-some-commas-future",
+        "soundcloud_track_id": "2086138374",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-QbD319BLaHv94PjY-sfXEfw-large.png",
+        "release_date": "2025-04-27",
+        "duration_sec": "160",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/dannssv/dann-ssv-some-commas-future",
+        "source_url": "https://soundcloud.com/dannssv/dann-ssv-some-commas-future",
+        "recording_id": "soundcloud:2086138374",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Dann SSV",
+        "song": "SOME COMMAS (Future) Batida Edit",
+        "recordingUrl": "https://soundcloud.com/dannssv/dann-ssv-some-commas-future",
+        "evidenceUrl": "https://soundcloud.com/dannssv/dann-ssv-some-commas-future",
+        "recordingId": "soundcloud:2086138374",
+        "provider": "soundcloud",
+        "evidenceLabel": "Dann SSV · batida",
+        "soundcloudTrackId": "2086138374",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Future"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Deejay J3",
+        "song": "DEJA VU (Batida)",
+        "label": "Deejay J3 (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/deejay_j3/deejay-j3-deja-vu-batida",
+        "soundcloud_track_id": "2413884483",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-RRw7HSwKMdUVvnM1-u6QYvQ-large.jpg",
+        "duration_sec": "215",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/deejay_j3/deejay-j3-deja-vu-batida",
+        "source_url": "https://soundcloud.com/deejay_j3/deejay-j3-deja-vu-batida",
+        "recording_id": "soundcloud:2413884483",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Deejay J3",
+        "song": "DEJA VU (Batida)",
+        "recordingUrl": "https://soundcloud.com/deejay_j3/deejay-j3-deja-vu-batida",
+        "evidenceUrl": "https://soundcloud.com/deejay_j3/deejay-j3-deja-vu-batida",
+        "recordingId": "soundcloud:2413884483",
+        "provider": "soundcloud",
+        "evidenceLabel": "Deejay J3 · batida",
+        "soundcloudTrackId": "2413884483",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Deejay WE",
+        "song": "Batida do Guetto (2016)",
+        "label": "Deejay WE (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/whiteeristoff/white-eristoff-minha-queen-2016",
+        "soundcloud_track_id": "262191716",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000161108786-mynof1-large.jpg",
+        "duration_sec": "111",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/whiteeristoff/white-eristoff-minha-queen-2016",
+        "source_url": "https://soundcloud.com/whiteeristoff/white-eristoff-minha-queen-2016",
+        "recording_id": "soundcloud:262191716",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v474_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Deejay WE",
+        "song": "Batida do Guetto (2016)",
+        "recordingUrl": "https://soundcloud.com/whiteeristoff/white-eristoff-minha-queen-2016",
+        "evidenceUrl": "https://soundcloud.com/whiteeristoff/white-eristoff-minha-queen-2016",
+        "recordingId": "soundcloud:262191716",
+        "provider": "soundcloud",
+        "evidenceLabel": "Deejay WE · batida",
+        "soundcloudTrackId": "262191716",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Deejay Zulox",
+        "song": "Armadilha Do Guetto 2016",
+        "label": "Deejay Zulox (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/dj-zulox/deejay-zulox-armadilha-do-guetto-2016",
+        "soundcloud_track_id": "243616278",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000144443218-ias0qj-large.jpg",
+        "duration_sec": "136",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/dj-zulox/deejay-zulox-armadilha-do-guetto-2016",
+        "source_url": "https://soundcloud.com/dj-zulox/deejay-zulox-armadilha-do-guetto-2016",
+        "recording_id": "soundcloud:243616278",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Deejay Zulox",
+        "song": "Armadilha Do Guetto 2016",
+        "recordingUrl": "https://soundcloud.com/dj-zulox/deejay-zulox-armadilha-do-guetto-2016",
+        "evidenceUrl": "https://soundcloud.com/dj-zulox/deejay-zulox-armadilha-do-guetto-2016",
+        "recordingId": "soundcloud:243616278",
+        "provider": "soundcloud",
+        "evidenceLabel": "Deejay Zulox · batida",
+        "soundcloudTrackId": "243616278",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Dimension[Klub]",
+        "song": "Fashion Designa (Batida Remix)",
+        "label": "Dimension[Klub] (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/dimension-klub/fashion-designa-batida-remix",
+        "soundcloud_track_id": "2293410503",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-KqAkzK6NyTmrhlXA-Pc0iww-large.jpg",
+        "duration_sec": "196",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/dimension-klub/fashion-designa-batida-remix",
+        "source_url": "https://soundcloud.com/dimension-klub/fashion-designa-batida-remix",
+        "recording_id": "soundcloud:2293410503",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Dimension[Klub]",
+        "song": "Fashion Designa (Batida Remix)",
+        "recordingUrl": "https://soundcloud.com/dimension-klub/fashion-designa-batida-remix",
+        "evidenceUrl": "https://soundcloud.com/dimension-klub/fashion-designa-batida-remix",
+        "recordingId": "soundcloud:2293410503",
+        "provider": "soundcloud",
+        "evidenceLabel": "Dimension[Klub] · batida",
+        "soundcloudTrackId": "2293410503",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Theodora"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Dj Cabos",
+        "song": "Halem Bate (Harlem Shake remix Batida)",
+        "label": "Dj Cabos (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/dj_cabos/dj-cabos-halem-bate",
+        "soundcloud_track_id": "82384639",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000042468622-e1wqd8-large.jpg",
+        "duration_sec": "195",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/dj_cabos/dj-cabos-halem-bate",
+        "source_url": "https://soundcloud.com/dj_cabos/dj-cabos-halem-bate",
+        "recording_id": "soundcloud:82384639",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Dj Cabos",
+        "song": "Halem Bate (Harlem Shake remix Batida)",
+        "recordingUrl": "https://soundcloud.com/dj_cabos/dj-cabos-halem-bate",
+        "evidenceUrl": "https://soundcloud.com/dj_cabos/dj-cabos-halem-bate",
+        "recordingId": "soundcloud:82384639",
+        "provider": "soundcloud",
+        "evidenceLabel": "Dj Cabos · batida",
+        "soundcloudTrackId": "82384639",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Baauer"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ LB",
+        "song": "DJA NU DANA REMIX (Batida)",
+        "label": "DJ LB (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/lb-goncalves/dj-lb-dja-nu-dana-remix-batida",
+        "soundcloud_track_id": "2055120312",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-iq8nONd8fiU4qSyQ-tletyA-large.png",
+        "release_date": "2025-03-15",
+        "duration_sec": "134",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://www.nts.live/shows/kampire/episodes/kampire-15th-august-2025",
+        "source_url": "https://soundcloud.com/lb-goncalves/dj-lb-dja-nu-dana-remix-batida",
+        "recording_id": "soundcloud:2055120312",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ LB",
+        "song": "DJA NU DANA REMIX (Batida)",
+        "recordingUrl": "https://soundcloud.com/lb-goncalves/dj-lb-dja-nu-dana-remix-batida",
+        "evidenceUrl": "https://www.nts.live/shows/kampire/episodes/kampire-15th-august-2025",
+        "recordingId": "soundcloud:2055120312",
+        "provider": "soundcloud",
+        "evidenceLabel": "DJ LB · batida",
+        "soundcloudTrackId": "2055120312",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Michel (RM FAMILY)",
+        "song": "Soukouss Batida Remix",
+        "label": "DJ Michel (RM FAMILY) (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/djmichel-2/04-dj-michel-soukouss-batida",
+        "soundcloud_track_id": "169351369",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000108766649-txmg6p-large.jpg",
+        "duration_sec": "375",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://www.nts.live/shows/kampire/episodes/kampire-15th-august-2025",
+        "source_url": "https://soundcloud.com/djmichel-2/04-dj-michel-soukouss-batida",
+        "recording_id": "soundcloud:169351369",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v474_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Michel (RM FAMILY)",
+        "song": "Soukouss Batida Remix",
+        "recordingUrl": "https://soundcloud.com/djmichel-2/04-dj-michel-soukouss-batida",
+        "evidenceUrl": "https://www.nts.live/shows/kampire/episodes/kampire-15th-august-2025",
+        "recordingId": "soundcloud:169351369",
+        "provider": "soundcloud",
+        "evidenceLabel": "DJ Michel (RM FAMILY) · batida",
+        "soundcloudTrackId": "169351369",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Mith [mali]",
+        "song": "Carnaval (Original Mix)",
+        "label": "DJ Mith [mali] (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/dj_mith/dj-mithmali-carnaval-estudio-g-2017",
+        "soundcloud_track_id": "321811312",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-yTouUZbINWQ1bZsd-tXJXHg-large.png",
+        "duration_sec": "217",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/dj_mith/dj-mithmali-carnaval-estudio-g-2017",
+        "source_url": "https://soundcloud.com/dj_mith/dj-mithmali-carnaval-estudio-g-2017",
+        "recording_id": "soundcloud:321811312",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Mith [mali]",
+        "song": "Carnaval (Original Mix)",
+        "recordingUrl": "https://soundcloud.com/dj_mith/dj-mithmali-carnaval-estudio-g-2017",
+        "evidenceUrl": "https://soundcloud.com/dj_mith/dj-mithmali-carnaval-estudio-g-2017",
+        "recordingId": "soundcloud:321811312",
+        "provider": "soundcloud",
+        "evidenceLabel": "DJ Mith [mali] · batida",
+        "soundcloudTrackId": "321811312",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ N.K. & DJ Pausas",
+        "song": "Intro Di Guetto",
+        "label": "Príncipe",
+        "soundcloud_track_url": "https://soundcloud.com/principepromos/pr001-cd-1-dj-s-di-guetto-13",
+        "soundcloud_track_id": "84433279",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000043599950-n42gnn-large.jpg",
+        "duration_sec": "332",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://www.bloomsbury.com/us/various-artists-djs-do-guetto-9781501357862/",
+        "source_url": "https://soundcloud.com/principepromos/pr001-cd-1-dj-s-di-guetto-13",
+        "recording_id": "soundcloud:84433279",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ N.K. & DJ Pausas",
+        "song": "Intro Di Guetto",
+        "recordingUrl": "https://soundcloud.com/principepromos/pr001-cd-1-dj-s-di-guetto-13",
+        "evidenceUrl": "https://www.bloomsbury.com/us/various-artists-djs-do-guetto-9781501357862/",
+        "recordingId": "soundcloud:84433279",
+        "provider": "soundcloud",
+        "evidenceLabel": "Príncipe · batida",
+        "soundcloudTrackId": "84433279",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "DJ N.K.",
+          "DJ Pausas"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Widjam",
+        "song": "Terrora Beat (2017)",
+        "label": "Jack's Prod",
+        "soundcloud_track_url": "https://soundcloud.com/jack-williams-tavares/terrora-beat-batida-2017-by-dj-widjam-jacks-prod",
+        "soundcloud_track_id": "344276160",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000244552721-jdxx8a-large.jpg",
+        "duration_sec": "132",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/jack-williams-tavares/terrora-beat-batida-2017-by-dj-widjam-jacks-prod",
+        "source_url": "https://soundcloud.com/jack-williams-tavares/terrora-beat-batida-2017-by-dj-widjam-jacks-prod",
+        "recording_id": "soundcloud:344276160",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Widjam",
+        "song": "Terrora Beat (2017)",
+        "recordingUrl": "https://soundcloud.com/jack-williams-tavares/terrora-beat-batida-2017-by-dj-widjam-jacks-prod",
+        "evidenceUrl": "https://soundcloud.com/jack-williams-tavares/terrora-beat-batida-2017-by-dj-widjam-jacks-prod",
+        "recordingId": "soundcloud:344276160",
+        "provider": "soundcloud",
+        "evidenceLabel": "Jack's Prod · batida",
+        "soundcloudTrackId": "344276160",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ XuPeTa",
+        "song": "É Du Guetto",
+        "label": "DJ XuPeTa (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/xupeta_kb/dj-xupeta-animacao-e-du-guetto-2k18",
+        "soundcloud_track_id": "473822079",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000376291164-djegoy-large.jpg",
+        "duration_sec": "93",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/xupeta_kb/dj-xupeta-animacao-e-du-guetto-2k18",
+        "source_url": "https://soundcloud.com/xupeta_kb/dj-xupeta-animacao-e-du-guetto-2k18",
+        "recording_id": "soundcloud:473822079",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v474_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ XuPeTa",
+        "song": "É Du Guetto",
+        "recordingUrl": "https://soundcloud.com/xupeta_kb/dj-xupeta-animacao-e-du-guetto-2k18",
+        "evidenceUrl": "https://soundcloud.com/xupeta_kb/dj-xupeta-animacao-e-du-guetto-2k18",
+        "recordingId": "soundcloud:473822079",
+        "provider": "soundcloud",
+        "evidenceLabel": "DJ XuPeTa · batida",
+        "soundcloudTrackId": "473822079",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Zont",
+        "song": "IN DA CLUB (BATIDA EDIT)",
+        "label": "DJ Zont (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/electronin-official/indaclubbatida",
+        "soundcloud_track_id": "2326603928",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-nwaWBG13BvIoyVro-aOZInA-large.png",
+        "duration_sec": "125",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/electronin-official/indaclubbatida",
+        "source_url": "https://soundcloud.com/electronin-official/indaclubbatida",
+        "recording_id": "soundcloud:2326603928",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Zont",
+        "song": "IN DA CLUB (BATIDA EDIT)",
+        "recordingUrl": "https://soundcloud.com/electronin-official/indaclubbatida",
+        "evidenceUrl": "https://soundcloud.com/electronin-official/indaclubbatida",
+        "recordingId": "soundcloud:2326603928",
+        "provider": "soundcloud",
+        "evidenceLabel": "DJ Zont · batida",
+        "soundcloudTrackId": "2326603928",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Timati",
+          "DJ Dlee"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ1300",
+        "song": "2 MUCH BATIDA EDIT",
+        "label": "DJ1300 (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/dj1300/dj1300-2-much-batida-edit-1",
+        "soundcloud_track_id": "2273669471",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-JdcAsuBPyamQlElY-yyGahg-large.png",
+        "duration_sec": "243",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/dj1300/dj1300-2-much-batida-edit-1",
+        "source_url": "https://soundcloud.com/dj1300/dj1300-2-much-batida-edit-1",
+        "recording_id": "soundcloud:2273669471",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ1300",
+        "song": "2 MUCH BATIDA EDIT",
+        "recordingUrl": "https://soundcloud.com/dj1300/dj1300-2-much-batida-edit-1",
+        "evidenceUrl": "https://soundcloud.com/dj1300/dj1300-2-much-batida-edit-1",
+        "recordingId": "soundcloud:2273669471",
+        "provider": "soundcloud",
+        "evidenceLabel": "DJ1300 · batida",
+        "soundcloudTrackId": "2273669471",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Don Koff",
+        "song": "Batida Verde",
+        "label": "Paprika Records",
+        "soundcloud_track_url": "https://soundcloud.com/paprika_records/don-koff-batida-verde-2",
+        "soundcloud_track_id": "2199498067",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-HVQ1dEvwMuNbajrJ-8CvX1Q-large.png",
+        "duration_sec": "128",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/paprika_records/don-koff-batida-verde-2",
+        "source_url": "https://soundcloud.com/paprika_records/don-koff-batida-verde-2",
+        "recording_id": "soundcloud:2199498067",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Don Koff",
+        "song": "Batida Verde",
+        "recordingUrl": "https://soundcloud.com/paprika_records/don-koff-batida-verde-2",
+        "evidenceUrl": "https://soundcloud.com/paprika_records/don-koff-batida-verde-2",
+        "recordingId": "soundcloud:2199498067",
+        "provider": "soundcloud",
+        "evidenceLabel": "Paprika Records · batida",
+        "soundcloudTrackId": "2199498067",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "FRAN G",
+        "song": "Depois Do Eclipse (FRAN G Batida Edit)",
+        "label": "FRAN G (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/fr4ng/shaka-lion-singularis-despois",
+        "soundcloud_track_id": "2121414771",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-OT3Kn1jNhdzcnY1z-DZk0mA-large.png",
+        "duration_sec": "180",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/fr4ng/shaka-lion-singularis-despois",
+        "source_url": "https://soundcloud.com/fr4ng/shaka-lion-singularis-despois",
+        "recording_id": "soundcloud:2121414771",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "FRAN G",
+        "song": "Depois Do Eclipse (FRAN G Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/fr4ng/shaka-lion-singularis-despois",
+        "evidenceUrl": "https://soundcloud.com/fr4ng/shaka-lion-singularis-despois",
+        "recordingId": "soundcloud:2121414771",
+        "provider": "soundcloud",
+        "evidenceLabel": "FRAN G · batida",
+        "soundcloudTrackId": "2121414771",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Shaka Lion",
+          "Singularis"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "GRIZZY",
+        "song": "Folded (Grizzy Batida Edit)",
+        "label": "GRIZZY (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/grizzyyy/kehlani-folded-grizzy-batida",
+        "soundcloud_track_id": "2202623711",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-YBzHA8Zm3dyE6zFY-99e8gg-large.jpg",
+        "duration_sec": "197",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://grizzyyy.bandcamp.com/track/grz003-folded-grizzy-batida-edit",
+        "source_url": "https://soundcloud.com/grizzyyy/kehlani-folded-grizzy-batida",
+        "recording_id": "soundcloud:2202623711",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "GRIZZY",
+        "song": "Folded (Grizzy Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/grizzyyy/kehlani-folded-grizzy-batida",
+        "evidenceUrl": "https://grizzyyy.bandcamp.com/track/grz003-folded-grizzy-batida-edit",
+        "recordingId": "soundcloud:2202623711",
+        "provider": "soundcloud",
+        "evidenceLabel": "GRIZZY · batida",
+        "soundcloudTrackId": "2202623711",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Kehlani"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "herlander",
+        "song": "Party B4 the Party (Afro Batida Remix)",
+        "label": "herlander (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/herlanthere/saint-satine-party-b4-the-1",
+        "soundcloud_track_id": "2329298945",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-VVbwCYO9q2Z5rgvQ-s9DuPA-large.png",
+        "duration_sec": "151",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/herlanthere/saint-satine-party-b4-the-1",
+        "source_url": "https://soundcloud.com/herlanthere/saint-satine-party-b4-the-1",
+        "recording_id": "soundcloud:2329298945",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "herlander",
+        "song": "Party B4 the Party (Afro Batida Remix)",
+        "recordingUrl": "https://soundcloud.com/herlanthere/saint-satine-party-b4-the-1",
+        "evidenceUrl": "https://soundcloud.com/herlanthere/saint-satine-party-b4-the-1",
+        "recordingId": "soundcloud:2329298945",
+        "provider": "soundcloud",
+        "evidenceLabel": "herlander · batida",
+        "soundcloudTrackId": "2329298945",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Jota M",
+        "song": "WOMAN REMIX",
+        "label": "Jota M (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/user-497162244/jota-m-woman-remix",
+        "soundcloud_track_id": "1916725193",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-8wsB5uLXTkRWX8CG-9aHCyg-large.png",
+        "release_date": "2024-09-14",
+        "duration_sec": "142",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/user-497162244/jota-m-woman-remix",
+        "source_url": "https://soundcloud.com/user-497162244/jota-m-woman-remix",
+        "recording_id": "soundcloud:1916725193",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Jota M",
+        "song": "WOMAN REMIX",
+        "recordingUrl": "https://soundcloud.com/user-497162244/jota-m-woman-remix",
+        "evidenceUrl": "https://soundcloud.com/user-497162244/jota-m-woman-remix",
+        "recordingId": "soundcloud:1916725193",
+        "provider": "soundcloud",
+        "evidenceLabel": "Jota M · batida",
+        "soundcloudTrackId": "1916725193",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "KIING",
+        "song": "Candy Shop (KIING Batida Remix)",
+        "label": "KIING (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/kiingarthur/cancandyshopkiingbatidaremix",
+        "soundcloud_track_id": "2412607113",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-60txkmVKWVtURmDM-YzZ5Qw-large.jpg",
+        "duration_sec": "139",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/kiingarthur/cancandyshopkiingbatidaremix",
+        "source_url": "https://soundcloud.com/kiingarthur/cancandyshopkiingbatidaremix",
+        "recording_id": "soundcloud:2412607113",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "KIING",
+        "song": "Candy Shop (KIING Batida Remix)",
+        "recordingUrl": "https://soundcloud.com/kiingarthur/cancandyshopkiingbatidaremix",
+        "evidenceUrl": "https://soundcloud.com/kiingarthur/cancandyshopkiingbatidaremix",
+        "recordingId": "soundcloud:2412607113",
+        "provider": "soundcloud",
+        "evidenceLabel": "KIING · batida",
+        "soundcloudTrackId": "2412607113",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "50 Cent",
+          "Olivia"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "love ave.",
+        "song": "poppin (Batida Edit)",
+        "label": "Up. Records",
+        "soundcloud_track_url": "https://soundcloud.com/uprecords2/love-ave-poppin-batida-edit",
+        "soundcloud_track_id": "2092985766",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-cPR9i0KLv6lyqJrm-qW4fFQ-large.png",
+        "duration_sec": "135",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/uprecords2/love-ave-poppin-batida-edit",
+        "source_url": "https://soundcloud.com/uprecords2/love-ave-poppin-batida-edit",
+        "recording_id": "soundcloud:2092985766",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "love ave.",
+        "song": "poppin (Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/uprecords2/love-ave-poppin-batida-edit",
+        "evidenceUrl": "https://soundcloud.com/uprecords2/love-ave-poppin-batida-edit",
+        "recordingId": "soundcloud:2092985766",
+        "provider": "soundcloud",
+        "evidenceLabel": "Up. Records · batida",
+        "soundcloudTrackId": "2092985766",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Maxvll",
+        "song": "Cannonball [Maxvll Batida Edit]",
+        "label": "Maxvll (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/maxvllofficial/cannonball-maxvll-batida-edit",
+        "soundcloud_track_id": "2231231540",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-pa04Gy5VnUdauR61-I89rlA-large.png",
+        "release_date": "2025-12-17",
+        "duration_sec": "182",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/maxvllofficial/cannonball-maxvll-batida-edit",
+        "source_url": "https://soundcloud.com/maxvllofficial/cannonball-maxvll-batida-edit",
+        "recording_id": "soundcloud:2231231540",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Maxvll",
+        "song": "Cannonball [Maxvll Batida Edit]",
+        "recordingUrl": "https://soundcloud.com/maxvllofficial/cannonball-maxvll-batida-edit",
+        "evidenceUrl": "https://soundcloud.com/maxvllofficial/cannonball-maxvll-batida-edit",
+        "recordingId": "soundcloud:2231231540",
+        "provider": "soundcloud",
+        "evidenceLabel": "Maxvll · batida",
+        "soundcloudTrackId": "2231231540",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Lithe",
+          "Don Toliver"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Moody!",
+        "song": "Kakalika (Batida Edit)",
+        "label": "Moody! (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/moodyyyyy/dopenation-kakalika-batida-edit-3",
+        "soundcloud_track_id": "2334006038",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-FlyIG8VNE7mr0dTo-jdHetA-large.png",
+        "duration_sec": "182",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/moodyyyyy/dopenation-kakalika-batida-edit-3",
+        "source_url": "https://soundcloud.com/moodyyyyy/dopenation-kakalika-batida-edit-3",
+        "recording_id": "soundcloud:2334006038",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Moody!",
+        "song": "Kakalika (Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/moodyyyyy/dopenation-kakalika-batida-edit-3",
+        "evidenceUrl": "https://soundcloud.com/moodyyyyy/dopenation-kakalika-batida-edit-3",
+        "recordingId": "soundcloud:2334006038",
+        "provider": "soundcloud",
+        "evidenceLabel": "Moody! · batida",
+        "soundcloudTrackId": "2334006038",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "NANNZ",
+        "song": "DEIXA IR",
+        "label": "NANNZ (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/nannybeatz/nannz-deixa-ir",
+        "soundcloud_track_id": "2351986679",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-7IwcGZ84RTyWHmML-6pwvNw-large.jpg",
+        "release_date": "2026-07-02",
+        "duration_sec": "147",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/nannybeatz/nannz-deixa-ir",
+        "source_url": "https://soundcloud.com/nannybeatz/nannz-deixa-ir",
+        "recording_id": "soundcloud:2351986679",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "NANNZ",
+        "song": "DEIXA IR",
+        "recordingUrl": "https://soundcloud.com/nannybeatz/nannz-deixa-ir",
+        "evidenceUrl": "https://soundcloud.com/nannybeatz/nannz-deixa-ir",
+        "recordingId": "soundcloud:2351986679",
+        "provider": "soundcloud",
+        "evidenceLabel": "NANNZ · batida",
+        "soundcloudTrackId": "2351986679",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "NAYEH",
+        "song": "AHLELELAS (NAYEH BATIDA REMIX)",
+        "label": "NAYEH (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/nayehh/new-ahlelelas-nayeh-batida",
+        "soundcloud_track_id": "2269767143",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-Zx6GU8oFYoz13dPz-o7fLDA-large.jpg",
+        "release_date": "2026-02-19",
+        "duration_sec": "192",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/nayehh/new-ahlelelas-nayeh-batida",
+        "source_url": "https://soundcloud.com/nayehh/new-ahlelelas-nayeh-batida",
+        "recording_id": "soundcloud:2269767143",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "NAYEH",
+        "song": "AHLELELAS (NAYEH BATIDA REMIX)",
+        "recordingUrl": "https://soundcloud.com/nayehh/new-ahlelelas-nayeh-batida",
+        "evidenceUrl": "https://soundcloud.com/nayehh/new-ahlelelas-nayeh-batida",
+        "recordingId": "soundcloud:2269767143",
+        "provider": "soundcloud",
+        "evidenceLabel": "NAYEH · batida",
+        "soundcloudTrackId": "2269767143",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Vanco",
+          "AYA.SYSTEM",
+          "Kanye West"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Neïte",
+        "song": "Can I Have It Like That (Batida edit)",
+        "label": "Neïte (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/neite-labarrechoco/neite-can-i-have-it-like-that-skepta-x-pharrell-edit",
+        "soundcloud_track_id": "1892309100",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-CXbuAk4QnmoeWVF6-7yiGrg-large.jpg",
+        "duration_sec": "178",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/neite-labarrechoco/neite-can-i-have-it-like-that-skepta-x-pharrell-edit",
+        "source_url": "https://soundcloud.com/neite-labarrechoco/neite-can-i-have-it-like-that-skepta-x-pharrell-edit",
+        "recording_id": "soundcloud:1892309100",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Neïte",
+        "song": "Can I Have It Like That (Batida edit)",
+        "recordingUrl": "https://soundcloud.com/neite-labarrechoco/neite-can-i-have-it-like-that-skepta-x-pharrell-edit",
+        "evidenceUrl": "https://soundcloud.com/neite-labarrechoco/neite-can-i-have-it-like-that-skepta-x-pharrell-edit",
+        "recordingId": "soundcloud:1892309100",
+        "provider": "soundcloud",
+        "evidenceLabel": "Neïte · batida",
+        "soundcloudTrackId": "1892309100",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Skepta",
+          "Pharrell Williams",
+          "Gwen Stefani"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "ORIFURI EDITS",
+        "song": "One In A Million Batida (ORIFURI EDIT)",
+        "label": "ORIFURI EDITS (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/olliedes/one-in-a-million-batida-orifuri-edit",
+        "soundcloud_track_id": "1929737873",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-vReFiHEkANYnUyI5-5k9RzQ-large.jpg",
+        "duration_sec": "329",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/olliedes/one-in-a-million-batida-orifuri-edit",
+        "source_url": "https://soundcloud.com/olliedes/one-in-a-million-batida-orifuri-edit",
+        "recording_id": "soundcloud:1929737873",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "ORIFURI EDITS",
+        "song": "One In A Million Batida (ORIFURI EDIT)",
+        "recordingUrl": "https://soundcloud.com/olliedes/one-in-a-million-batida-orifuri-edit",
+        "evidenceUrl": "https://soundcloud.com/olliedes/one-in-a-million-batida-orifuri-edit",
+        "recordingId": "soundcloud:1929737873",
+        "provider": "soundcloud",
+        "evidenceLabel": "ORIFURI EDITS · batida",
+        "soundcloudTrackId": "1929737873",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Bastian Bell",
+          "Aaliyah"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Ray Da Prince & Marti4K",
+        "song": "Manon B (Batida Edit)",
+        "label": "Ray Da Prince & Marti4K (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/raydaprince/tiakola-manon-b-feat-oskow-ryflo-mc-cebezinhobatida-edit-by-raydaprince-x-marti4k",
+        "soundcloud_track_id": "1914425663",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-AoVQYXIyG2s10kI4-myuXkA-large.jpg",
+        "duration_sec": "194",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/raydaprince/tiakola-manon-b-feat-oskow-ryflo-mc-cebezinhobatida-edit-by-raydaprince-x-marti4k",
+        "source_url": "https://soundcloud.com/raydaprince/tiakola-manon-b-feat-oskow-ryflo-mc-cebezinhobatida-edit-by-raydaprince-x-marti4k",
+        "recording_id": "soundcloud:1914425663",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Ray Da Prince & Marti4K",
+        "song": "Manon B (Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/raydaprince/tiakola-manon-b-feat-oskow-ryflo-mc-cebezinhobatida-edit-by-raydaprince-x-marti4k",
+        "evidenceUrl": "https://soundcloud.com/raydaprince/tiakola-manon-b-feat-oskow-ryflo-mc-cebezinhobatida-edit-by-raydaprince-x-marti4k",
+        "recordingId": "soundcloud:1914425663",
+        "provider": "soundcloud",
+        "evidenceLabel": "Ray Da Prince & Marti4K · batida",
+        "soundcloudTrackId": "1914425663",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "MC Cebezinho",
+          "Oskoow",
+          "Ryflo",
+          "Tiakola"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "RICHTANNER®",
+        "song": "KILL 4 THIS SHIT (BATIDA REMIX)",
+        "label": "RICHTANNER® (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/therealrichtanner/kill-4-this-shit-batida-remix",
+        "soundcloud_track_id": "2001319415",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-yPcdT2aERpine3wY-GeLC4g-large.png",
+        "release_date": "2025-01-02",
+        "duration_sec": "213",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/therealrichtanner/kill-4-this-shit-batida-remix",
+        "source_url": "https://soundcloud.com/therealrichtanner/kill-4-this-shit-batida-remix",
+        "recording_id": "soundcloud:2001319415",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "RICHTANNER®",
+        "song": "KILL 4 THIS SHIT (BATIDA REMIX)",
+        "recordingUrl": "https://soundcloud.com/therealrichtanner/kill-4-this-shit-batida-remix",
+        "evidenceUrl": "https://soundcloud.com/therealrichtanner/kill-4-this-shit-batida-remix",
+        "recordingId": "soundcloud:2001319415",
+        "provider": "soundcloud",
+        "evidenceLabel": "RICHTANNER® · batida",
+        "soundcloudTrackId": "2001319415",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "GORDO",
+          "Young Dolph"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Satthy & Isaias",
+        "song": "Dipos Di Sabi Morri E Ka Nada",
+        "label": "Satthy & Isaias (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/satthy/dipos-di-sabi-morri-e-ka-nada",
+        "soundcloud_track_id": "126560231",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000066309453-esoeuz-large.jpg",
+        "duration_sec": "232",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/satthy/dipos-di-sabi-morri-e-ka-nada",
+        "source_url": "https://soundcloud.com/satthy/dipos-di-sabi-morri-e-ka-nada",
+        "recording_id": "soundcloud:126560231",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Satthy & Isaias",
+        "song": "Dipos Di Sabi Morri E Ka Nada",
+        "recordingUrl": "https://soundcloud.com/satthy/dipos-di-sabi-morri-e-ka-nada",
+        "evidenceUrl": "https://soundcloud.com/satthy/dipos-di-sabi-morri-e-ka-nada",
+        "recordingId": "soundcloud:126560231",
+        "provider": "soundcloud",
+        "evidenceLabel": "Satthy & Isaias · batida",
+        "soundcloudTrackId": "126560231",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Satthy Dp",
+          "Isaias",
+          "EdmarBeatz"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "SHAM STEELE",
+        "song": "Relax My Eyes (Sham Steele Batida Remix)",
+        "label": "SHAM STEELE (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/shamsteele/anotr-abel-balder-relax-my-eyes-sham-steele-batida-remix",
+        "soundcloud_track_id": "1934706131",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-A0xg2M3hhYDFzoLN-KmlHtw-large.png",
+        "release_date": "2024-10-14",
+        "duration_sec": "183",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/shamsteele/anotr-abel-balder-relax-my-eyes-sham-steele-batida-remix",
+        "source_url": "https://soundcloud.com/shamsteele/anotr-abel-balder-relax-my-eyes-sham-steele-batida-remix",
+        "recording_id": "soundcloud:1934706131",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "SHAM STEELE",
+        "song": "Relax My Eyes (Sham Steele Batida Remix)",
+        "recordingUrl": "https://soundcloud.com/shamsteele/anotr-abel-balder-relax-my-eyes-sham-steele-batida-remix",
+        "evidenceUrl": "https://soundcloud.com/shamsteele/anotr-abel-balder-relax-my-eyes-sham-steele-batida-remix",
+        "recordingId": "soundcloud:1934706131",
+        "provider": "soundcloud",
+        "evidenceLabel": "SHAM STEELE · batida",
+        "soundcloudTrackId": "1934706131",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "ANOTR",
+          "Abel Balder"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "SHINSHAN SALAZAR",
+        "song": "CLICK CLICK FYE (2024)",
+        "label": "SHINSHAN SALAZAR (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/shinshansalazar/click-click-fye-2024",
+        "soundcloud_track_id": "2131620939",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-QBrzvyykwcNxsFji-w8wt8w-large.jpg",
+        "duration_sec": "180",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/shinshansalazar/click-click-fye-2024",
+        "source_url": "https://soundcloud.com/shinshansalazar/click-click-fye-2024",
+        "recording_id": "soundcloud:2131620939",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "SHINSHAN SALAZAR",
+        "song": "CLICK CLICK FYE (2024)",
+        "recordingUrl": "https://soundcloud.com/shinshansalazar/click-click-fye-2024",
+        "evidenceUrl": "https://soundcloud.com/shinshansalazar/click-click-fye-2024",
+        "recordingId": "soundcloud:2131620939",
+        "provider": "soundcloud",
+        "evidenceLabel": "SHINSHAN SALAZAR · batida",
+        "soundcloudTrackId": "2131620939",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "SMITMEISTER",
+        "song": "Disco Batida (SMITMEISTER .ACHTERWERK Remix)",
+        "label": "SMITMEISTER (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/smitmeisterofficial/disco-batida-smitmeister",
+        "soundcloud_track_id": "2266646867",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-co87KhUp6RcLg3ny-Z1iIXg-large.png",
+        "duration_sec": "123",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/smitmeisterofficial/disco-batida-smitmeister",
+        "source_url": "https://soundcloud.com/smitmeisterofficial/disco-batida-smitmeister",
+        "recording_id": "soundcloud:2266646867",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "SMITMEISTER",
+        "song": "Disco Batida (SMITMEISTER .ACHTERWERK Remix)",
+        "recordingUrl": "https://soundcloud.com/smitmeisterofficial/disco-batida-smitmeister",
+        "evidenceUrl": "https://soundcloud.com/smitmeisterofficial/disco-batida-smitmeister",
+        "recordingId": "soundcloud:2266646867",
+        "provider": "soundcloud",
+        "evidenceLabel": "SMITMEISTER · batida",
+        "soundcloudTrackId": "2266646867",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "KC and the Sunshine Band"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "StressMusik",
+        "song": "Caminho Na Endz",
+        "label": "Love In The Endz",
+        "soundcloud_track_url": "https://soundcloud.com/loveintheendz/stressmusik-caminho-na-endz-1",
+        "soundcloud_track_id": "1262748271",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-0rszaCCKELj50elF-H6MQCg-large.jpg",
+        "release_date": "2022-06-30",
+        "duration_sec": "148",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/loveintheendz/stressmusik-caminho-na-endz-1",
+        "source_url": "https://soundcloud.com/loveintheendz/stressmusik-caminho-na-endz-1",
+        "recording_id": "soundcloud:1262748271",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v478_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "StressMusik",
+        "song": "Caminho Na Endz",
+        "recordingUrl": "https://soundcloud.com/loveintheendz/stressmusik-caminho-na-endz-1",
+        "evidenceUrl": "https://soundcloud.com/loveintheendz/stressmusik-caminho-na-endz-1",
+        "recordingId": "soundcloud:1262748271",
+        "provider": "soundcloud",
+        "evidenceLabel": "Love In The Endz · batida",
+        "soundcloudTrackId": "1262748271",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "TAHLOU",
+        "song": "ME N UR MOMMA",
+        "label": "TAHLOU (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/tahlou/menurmomma",
+        "soundcloud_track_id": "2151880173",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-iiN3YOqppthWF8Pj-gOW0xA-large.png",
+        "release_date": "2025-08-15",
+        "duration_sec": "212",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/tahlou/menurmomma",
+        "source_url": "https://soundcloud.com/tahlou/menurmomma",
+        "recording_id": "soundcloud:2151880173",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "TAHLOU",
+        "song": "ME N UR MOMMA",
+        "recordingUrl": "https://soundcloud.com/tahlou/menurmomma",
+        "evidenceUrl": "https://soundcloud.com/tahlou/menurmomma",
+        "recordingId": "soundcloud:2151880173",
+        "provider": "soundcloud",
+        "evidenceLabel": "TAHLOU · batida",
+        "soundcloudTrackId": "2151880173",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Childish Gambino"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "TYSON",
+        "song": "KOMPASSO MB",
+        "label": "Love In The Endz",
+        "soundcloud_track_url": "https://soundcloud.com/loveintheendz/tyson-kompasso-mb-1",
+        "soundcloud_track_id": "1262748241",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-0rszaCCKELj50elF-H6MQCg-large.jpg",
+        "release_date": "2022-06-30",
+        "duration_sec": "124",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/loveintheendz/tyson-kompasso-mb-1",
+        "source_url": "https://soundcloud.com/loveintheendz/tyson-kompasso-mb-1",
+        "recording_id": "soundcloud:1262748241",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "TYSON",
+        "song": "KOMPASSO MB",
+        "recordingUrl": "https://soundcloud.com/loveintheendz/tyson-kompasso-mb-1",
+        "evidenceUrl": "https://soundcloud.com/loveintheendz/tyson-kompasso-mb-1",
+        "recordingId": "soundcloud:1262748241",
+        "provider": "soundcloud",
+        "evidenceLabel": "Love In The Endz · batida",
+        "soundcloudTrackId": "1262748241",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Yanghi",
+        "song": "Woo (Yanghi Batida Edit)",
+        "label": "Yanghi (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/giovaneyanghi/woobatidaedit",
+        "soundcloud_track_id": "2326233323",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-iAS12gmZ021Awwyj-zfk60A-large.png",
+        "duration_sec": "177",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/giovaneyanghi/woobatidaedit",
+        "source_url": "https://soundcloud.com/giovaneyanghi/woobatidaedit",
+        "recording_id": "soundcloud:2326233323",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Yanghi",
+        "song": "Woo (Yanghi Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/giovaneyanghi/woobatidaedit",
+        "evidenceUrl": "https://soundcloud.com/giovaneyanghi/woobatidaedit",
+        "recordingId": "soundcloud:2326233323",
+        "provider": "soundcloud",
+        "evidenceLabel": "Yanghi · batida",
+        "soundcloudTrackId": "2326233323",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Rihanna"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "YESHUA",
+        "song": "BACK OUTSIDE (Yeshua Batida Edit)",
+        "label": "YESHUA (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/user-678634480/back-outside-jozy-batida-edit",
+        "soundcloud_track_id": "1900597044",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-SDjTQP8GkYc2zazy-lQlRMw-large.jpg",
+        "duration_sec": "118",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/user-678634480/back-outside-jozy-batida-edit",
+        "source_url": "https://soundcloud.com/user-678634480/back-outside-jozy-batida-edit",
+        "recording_id": "soundcloud:1900597044",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "YESHUA",
+        "song": "BACK OUTSIDE (Yeshua Batida Edit)",
+        "recordingUrl": "https://soundcloud.com/user-678634480/back-outside-jozy-batida-edit",
+        "evidenceUrl": "https://soundcloud.com/user-678634480/back-outside-jozy-batida-edit",
+        "recordingId": "soundcloud:1900597044",
+        "provider": "soundcloud",
+        "evidenceLabel": "YESHUA · batida",
+        "soundcloudTrackId": "1900597044",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Anycia",
+          "Latto"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "YO-ZU",
+        "song": "Hips Don't Lie (YO-ZU Batida Club Edit)",
+        "label": "YO-ZU (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/yo-zu/04-hips-dont-lie-yo-zu-batida",
+        "soundcloud_track_id": "2008261639",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-Hv5qzbly5vqdN7A7-59SG8Q-large.jpg",
+        "duration_sec": "161",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/yo-zu/04-hips-dont-lie-yo-zu-batida",
+        "source_url": "https://soundcloud.com/yo-zu/04-hips-dont-lie-yo-zu-batida",
+        "recording_id": "soundcloud:2008261639",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "YO-ZU",
+        "song": "Hips Don't Lie (YO-ZU Batida Club Edit)",
+        "recordingUrl": "https://soundcloud.com/yo-zu/04-hips-dont-lie-yo-zu-batida",
+        "evidenceUrl": "https://soundcloud.com/yo-zu/04-hips-dont-lie-yo-zu-batida",
+        "recordingId": "soundcloud:2008261639",
+        "provider": "soundcloud",
+        "evidenceLabel": "YO-ZU · batida",
+        "soundcloudTrackId": "2008261639",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ],
+        "participants": [
+          "Yoshi Pasto",
+          "Cyr Supengance",
+          "Shakira",
+          "Wyclef Jean"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Yudifox",
+        "song": "Ta Tipo 5",
+        "label": "Yudifox (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/deejay-yudiifox-official/deejay-yudifox-ta-tipo-5-2014",
+        "soundcloud_track_id": "114626139",
+        "cover_art_url": "https://i1.sndcdn.com/artworks-000059750133-udwwi4-large.jpg",
+        "duration_sec": "306",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/deejay-yudiifox-official/deejay-yudifox-ta-tipo-5-2014",
+        "source_url": "https://soundcloud.com/deejay-yudiifox-official/deejay-yudifox-ta-tipo-5-2014",
+        "recording_id": "soundcloud:114626139",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v474_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Yudifox",
+        "song": "Ta Tipo 5",
+        "recordingUrl": "https://soundcloud.com/deejay-yudiifox-official/deejay-yudifox-ta-tipo-5-2014",
+        "evidenceUrl": "https://soundcloud.com/deejay-yudiifox-official/deejay-yudifox-ta-tipo-5-2014",
+        "recordingId": "soundcloud:114626139",
+        "provider": "soundcloud",
+        "evidenceLabel": "Yudifox · batida",
+        "soundcloudTrackId": "114626139",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "DJ Unknown #572",
+        "song": "NAO FICA ASSIM CASSULE",
+        "label": "DJ Unknown #572 (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/djunknown572/dj-unknown-nao-fica-assim-cassule",
+        "soundcloud_track_id": "2248832663",
+        "duration_sec": "186",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/djunknown572/dj-unknown-nao-fica-assim-cassule",
+        "source_url": "https://soundcloud.com/djunknown572/dj-unknown-nao-fica-assim-cassule",
+        "recording_id": "soundcloud:2248832663",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v475_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "DJ Unknown #572",
+        "song": "NAO FICA ASSIM CASSULE",
+        "recordingUrl": "https://soundcloud.com/djunknown572/dj-unknown-nao-fica-assim-cassule",
+        "evidenceUrl": "https://soundcloud.com/djunknown572/dj-unknown-nao-fica-assim-cassule",
+        "recordingId": "soundcloud:2248832663",
+        "provider": "soundcloud",
+        "evidenceLabel": "DJ Unknown #572 · batida",
+        "soundcloudTrackId": "2248832663",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "Dj-Odá Semedo",
+        "song": "Puro Piano (2012)",
+        "label": "Dj-Odá Semedo (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/dj-od-semedo/dj-od-prod-batida-puro-piano",
+        "soundcloud_track_id": "48389745",
+        "duration_sec": "213",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/dj-od-semedo/dj-od-prod-batida-puro-piano",
+        "source_url": "https://soundcloud.com/dj-od-semedo/dj-od-prod-batida-puro-piano",
+        "recording_id": "soundcloud:48389745",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v476_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "Dj-Odá Semedo",
+        "song": "Puro Piano (2012)",
+        "recordingUrl": "https://soundcloud.com/dj-od-semedo/dj-od-prod-batida-puro-piano",
+        "evidenceUrl": "https://soundcloud.com/dj-od-semedo/dj-od-prod-batida-puro-piano",
+        "recordingId": "soundcloud:48389745",
+        "provider": "soundcloud",
+        "evidenceLabel": "Dj-Odá Semedo · batida",
+        "soundcloudTrackId": "48389745",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    },
+    {
+      "row": {
+        "style": "batida",
+        "artist": "LUKINU",
+        "song": "DILIGENT",
+        "label": "LUKINU (independente)",
+        "soundcloud_track_url": "https://soundcloud.com/lukinu/lukinu-diligent",
+        "soundcloud_track_id": "1968586927",
+        "release_date": "2024-11-27",
+        "duration_sec": "176",
+        "artist_genre": "Batida — evidência desta gravação",
+        "confidence": "high",
+        "genre_evidence_url": "https://soundcloud.com/lukinu/lukinu-diligent",
+        "source_url": "https://soundcloud.com/lukinu/lukinu-diligent",
+        "recording_id": "soundcloud:1968586927",
+        "source_tags": "recording_identity_verified;audio_browser_verified;reviewed_recording_style_v27;publisher_recording_genre_verified;bpm_unknown;vocals_unknown",
+        "source": "batida_soundcloud_publisher_recordings_v477_20261115"
+      },
+      "proof": {
+        "style": "batida",
+        "artist": "LUKINU",
+        "song": "DILIGENT",
+        "recordingUrl": "https://soundcloud.com/lukinu/lukinu-diligent",
+        "evidenceUrl": "https://soundcloud.com/lukinu/lukinu-diligent",
+        "recordingId": "soundcloud:1968586927",
+        "provider": "soundcloud",
+        "evidenceLabel": "LUKINU · batida",
+        "soundcloudTrackId": "1968586927",
+        "requiredTags": [
+          "recording_identity_verified",
+          "audio_browser_verified",
+          "reviewed_recording_style_v27",
+          "publisher_recording_genre_verified"
+        ]
+      }
+    }
+  ],
+  "identityAliases": [
+    {
+      "artist": "Helviofox",
+      "canonicalArtist": "Dj Helviofox",
+      "evidenceUrl": "https://www.flur.pt/pt/collections/portugal/products/dj-helviofox-rodeado-de-batida-p065"
+    },
+    {
+      "artist": "Deejay Yudifox",
+      "canonicalArtist": "Yudifox",
+      "evidenceUrl": "https://soundcloud.com/deejay-yudiifox-official/deejay-yudifox-ta-tipo-5-2014"
+    },
+    {
+      "artist": "White Eristoff",
+      "canonicalArtist": "Deejay WE",
+      "evidenceUrl": "https://soundcloud.com/whiteeristoff/white-eristoff-minha-queen-2016"
+    },
+    {
+      "artist": "Jozy",
+      "canonicalArtist": "YESHUA",
+      "evidenceUrl": "https://soundcloud.com/user-678634480/back-outside-jozy-batida-edit"
+    },
+    {
+      "artist": "OLLIE DES",
+      "canonicalArtist": "ORIFURI EDITS",
+      "evidenceUrl": "https://soundcloud.com/olliedes/one-in-a-million-batida-orifuri-edit"
+    },
+    {
+      "artist": "STRAYDOG SALAZAR",
+      "canonicalArtist": "SHINSHAN SALAZAR",
+      "evidenceUrl": "https://soundcloud.com/shinshansalazar/click-click-fye-2024"
+    },
+    {
+      "artist": "STRAYDOG//SHINSHAN SALAZAR",
+      "canonicalArtist": "SHINSHAN SALAZAR",
+      "evidenceUrl": "https://soundcloud.com/shinshansalazar/click-click-fye-2024"
+    }
+  ],
+  "performerMemberships": [
+    {
+      "artist": "Tia Maria Produções",
+      "member": "DJ Lycox",
+      "evidenceUrl": "https://djmag.com/features/recognise-092-dj-lycox"
+    },
+    {
+      "artist": "DJs Di Guetto",
+      "member": "DJ Marfox",
+      "evidenceUrl": "https://djmag.com/features/recognise-092-dj-lycox"
+    }
+  ],
+  "recordingParticipants": [
+    {
+      "artist": "dkay.wav",
+      "song": "1.5 LITROS ft Zino",
+      "recordingId": "bandcamp:3113344786",
+      "participants": [
+        "Zino",
+        "Prodzino"
+      ]
+    },
+    {
+      "artist": "WULFFLUW XCIV",
+      "song": "TBT Batida | 140BPM",
+      "recordingId": "bandcamp:2187332916",
+      "participants": [
+        "MC Mayah"
+      ]
+    },
+    {
+      "artist": "||ALA|MEDA||",
+      "song": "dom os (feat. Marek Pospieszalski)",
+      "recordingId": "bandcamp:3896282604",
+      "participants": [
+        "Marek Pospieszalski",
+        "Jakub Ziołek",
+        "Łukasz Jędrzejczak",
+        "Jacek Buhl",
+        "Rafał Iwański",
+        "Piotr Michalski"
+      ]
+    },
+    {
+      "artist": "Bate1 Prod",
+      "song": "Lambreta",
+      "recordingId": "bandcamp:1195277937",
+      "participants": [
+        "DJ Doraemon",
+        "Lokowat"
+      ]
+    },
+    {
+      "artist": "Blacksea Não Maya",
+      "song": "Prala",
+      "recordingId": "bandcamp:2265812455",
+      "participants": [
+        "DJ Kolt"
+      ]
+    },
+    {
+      "artist": "Lorkestra & Mr. Meyz",
+      "song": "KALIMBAZ",
+      "recordingId": "bandcamp:275532277",
+      "participants": [
+        "Lorkestra",
+        "Mr. Meyz"
+      ]
+    },
+    {
+      "artist": "Marla Kether",
+      "song": "Blessing (feat. Mez)",
+      "recordingId": "bandcamp:1890925054",
+      "participants": [
+        "Mez"
+      ]
+    },
+    {
+      "artist": "RS PRODUÇÕES",
+      "song": "Caipirinha",
+      "recordingId": "bandcamp:1935018940",
+      "participants": [
+        "DJ Narciso",
+        "Nuno Beats"
+      ]
+    },
+    {
+      "artist": "Utility, DJ Plead",
+      "song": "Flooot - DJ Plead Rework",
+      "recordingId": "bandcamp:822547541",
+      "participants": [
+        "Utility",
+        "DJ Plead"
+      ]
+    },
+    {
+      "artist": "$hneaky",
+      "song": "Whole Lotta Choppas (Batida Remix)",
+      "recordingId": "soundcloud:2359606217",
+      "participants": [
+        "Sada Baby"
+      ]
+    },
+    {
+      "artist": "BW_Producer",
+      "song": "Dama Na Fassi Fama (Batida Flip)",
+      "recordingId": "soundcloud:2186265953",
+      "participants": [
+        "MC Tchabaco"
+      ]
+    },
+    {
+      "artist": "Bxcks & Miimii KDS",
+      "song": "Sé Miimii x ZAGGA DAT (Batida Edit)",
+      "recordingId": "soundcloud:2343123863",
+      "participants": [
+        "DJ SKYCEE"
+      ]
+    },
+    {
+      "artist": "Cheetah!",
+      "song": "MULTIPLY (Batida edit by Cheetah)",
+      "recordingId": "soundcloud:2193090583",
+      "participants": [
+        "A$AP Rocky",
+        "Juicy J"
+      ]
+    },
+    {
+      "artist": "Dann SSV",
+      "song": "SOME COMMAS (Future) Batida Edit",
+      "recordingId": "soundcloud:2086138374",
+      "participants": [
+        "Future"
+      ]
+    },
+    {
+      "artist": "Dimension[Klub]",
+      "song": "Fashion Designa (Batida Remix)",
+      "recordingId": "soundcloud:2293410503",
+      "participants": [
+        "Theodora"
+      ]
+    },
+    {
+      "artist": "Dj Cabos",
+      "song": "Halem Bate (Harlem Shake remix Batida)",
+      "recordingId": "soundcloud:82384639",
+      "participants": [
+        "Baauer"
+      ]
+    },
+    {
+      "artist": "DJ N.K. & DJ Pausas",
+      "song": "Intro Di Guetto",
+      "recordingId": "soundcloud:84433279",
+      "participants": [
+        "DJ N.K.",
+        "DJ Pausas"
+      ]
+    },
+    {
+      "artist": "DJ Zont",
+      "song": "IN DA CLUB (BATIDA EDIT)",
+      "recordingId": "soundcloud:2326603928",
+      "participants": [
+        "Timati",
+        "DJ Dlee"
+      ]
+    },
+    {
+      "artist": "FRAN G",
+      "song": "Depois Do Eclipse (FRAN G Batida Edit)",
+      "recordingId": "soundcloud:2121414771",
+      "participants": [
+        "Shaka Lion",
+        "Singularis"
+      ]
+    },
+    {
+      "artist": "GRIZZY",
+      "song": "Folded (Grizzy Batida Edit)",
+      "recordingId": "soundcloud:2202623711",
+      "participants": [
+        "Kehlani"
+      ]
+    },
+    {
+      "artist": "KIING",
+      "song": "Candy Shop (KIING Batida Remix)",
+      "recordingId": "soundcloud:2412607113",
+      "participants": [
+        "50 Cent",
+        "Olivia"
+      ]
+    },
+    {
+      "artist": "Maxvll",
+      "song": "Cannonball [Maxvll Batida Edit]",
+      "recordingId": "soundcloud:2231231540",
+      "participants": [
+        "Lithe",
+        "Don Toliver"
+      ]
+    },
+    {
+      "artist": "NAYEH",
+      "song": "AHLELELAS (NAYEH BATIDA REMIX)",
+      "recordingId": "soundcloud:2269767143",
+      "participants": [
+        "Vanco",
+        "AYA.SYSTEM",
+        "Kanye West"
+      ]
+    },
+    {
+      "artist": "Neïte",
+      "song": "Can I Have It Like That (Batida edit)",
+      "recordingId": "soundcloud:1892309100",
+      "participants": [
+        "Skepta",
+        "Pharrell Williams",
+        "Gwen Stefani"
+      ]
+    },
+    {
+      "artist": "ORIFURI EDITS",
+      "song": "One In A Million Batida (ORIFURI EDIT)",
+      "recordingId": "soundcloud:1929737873",
+      "participants": [
+        "Bastian Bell",
+        "Aaliyah"
+      ]
+    },
+    {
+      "artist": "Ray Da Prince & Marti4K",
+      "song": "Manon B (Batida Edit)",
+      "recordingId": "soundcloud:1914425663",
+      "participants": [
+        "MC Cebezinho",
+        "Oskoow",
+        "Ryflo",
+        "Tiakola"
+      ]
+    },
+    {
+      "artist": "RICHTANNER®",
+      "song": "KILL 4 THIS SHIT (BATIDA REMIX)",
+      "recordingId": "soundcloud:2001319415",
+      "participants": [
+        "GORDO",
+        "Young Dolph"
+      ]
+    },
+    {
+      "artist": "Satthy & Isaias",
+      "song": "Dipos Di Sabi Morri E Ka Nada",
+      "recordingId": "soundcloud:126560231",
+      "participants": [
+        "Satthy Dp",
+        "Isaias",
+        "EdmarBeatz"
+      ]
+    },
+    {
+      "artist": "SHAM STEELE",
+      "song": "Relax My Eyes (Sham Steele Batida Remix)",
+      "recordingId": "soundcloud:1934706131",
+      "participants": [
+        "ANOTR",
+        "Abel Balder"
+      ]
+    },
+    {
+      "artist": "SMITMEISTER",
+      "song": "Disco Batida (SMITMEISTER .ACHTERWERK Remix)",
+      "recordingId": "soundcloud:2266646867",
+      "participants": [
+        "KC and the Sunshine Band"
+      ]
+    },
+    {
+      "artist": "TAHLOU",
+      "song": "ME N UR MOMMA",
+      "recordingId": "soundcloud:2151880173",
+      "participants": [
+        "Childish Gambino"
+      ]
+    },
+    {
+      "artist": "Yanghi",
+      "song": "Woo (Yanghi Batida Edit)",
+      "recordingId": "soundcloud:2326233323",
+      "participants": [
+        "Rihanna"
+      ]
+    },
+    {
+      "artist": "YESHUA",
+      "song": "BACK OUTSIDE (Yeshua Batida Edit)",
+      "recordingId": "soundcloud:1900597044",
+      "participants": [
+        "Anycia",
+        "Latto"
+      ]
+    },
+    {
+      "artist": "YO-ZU",
+      "song": "Hips Don't Lie (YO-ZU Batida Club Edit)",
+      "recordingId": "soundcloud:2008261639",
+      "participants": [
+        "Yoshi Pasto",
+        "Cyr Supengance",
+        "Shakira",
+        "Wyclef Jean"
+      ]
+    }
+  ]
+}
