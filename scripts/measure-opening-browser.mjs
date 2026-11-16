@@ -83,6 +83,9 @@ async function boot(context, scenario, targetUrl) {
     const request = route.request();
     const target = new URL(request.url());
     if (target.origin !== targetUrl.origin) return route.continue();
+    if (compareControlled && target.pathname === '/api/soundcloud-search' && request.method() === 'POST') {
+      return route.fulfill({ status: 503, json: { ok: false, tracks: [] } });
+    }
     if (!['GET','HEAD','OPTIONS'].includes(request.method())) return route.abort();
     if (compareControlled && target.pathname.startsWith('/api/')) return route.fulfill({ json: { ok: true, enabled: false, items: [], tracks: [], count: 0 } });
     return route.continue();
@@ -199,7 +202,7 @@ async function runScenario([scenario, visitor], targetUrl = url, variant = '') {
     const exhaust = scenario === 'full_on_night_exhaust';
     const fullOnBpm = exhaust || scenario === 'full_on_night_bpm' || scenario === 'full_on_night_reload';
     const focusStyle = fullOnBpm ? 'full_on_night' : scenario;
-    const focused = focusStyle === 'full_on_night' || focusStyle === 'batida';
+    const focused = ['full_on_night', 'batida', 'french_house', 'bleep_techno'].includes(focusStyle);
     if (focused) await selectStyle(page, focusStyle, fullOnBpm ? '145-155' : '');
     const before = await page.evaluate(snapshot);
     const buttons = scenario === 'first' ? feedbackButtons.slice(0, 1) : [...feedbackButtons];
