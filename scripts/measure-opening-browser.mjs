@@ -10,13 +10,19 @@ const audioLimit = Number(process.env.SONIC_BROWSER_AUDIO_LIMIT || 4500);
 const searchLimit = Number(process.env.SONIC_BROWSER_SEARCH_LIMIT || 14000);
 const systemChrome = process.env.SONIC_CHROMIUM_EXECUTABLE;
 const desktop = process.env.SONIC_BROWSER_VIEWPORT === 'desktop';
-const sequenceLength = Number(process.env.SONIC_BROWSER_SEQUENCE_LENGTH || 5);
+const authorizedTarget = Number(process.env.SONIC_BROWSER_FULL_ON_NIGHT_AUTHORIZED_TARGET || 0);
+const sequenceLength = Number(process.env.SONIC_BROWSER_SEQUENCE_LENGTH || (authorizedTarget ? 20 : 5));
 const reentryVisits = Number(process.env.SONIC_BROWSER_REENTRY_VISITS || 3);
-const filteredFeedback = process.env.SONIC_BROWSER_FILTERED_FEEDBACK === '1';
+const filteredFeedback = authorizedTarget > 0 || process.env.SONIC_BROWSER_FILTERED_FEEDBACK === '1';
 const requireNoRepeat = process.env.SONIC_BROWSER_REQUIRE_NO_REPEAT === '1';
 const reportFreshOverlap = process.env.SONIC_BROWSER_FRESH_OVERLAP === '1';
 if (!Number.isInteger(sequenceLength) || sequenceLength < 1 || sequenceLength > 30) throw new Error('Sequence length must be 1–30');
 if (!Number.isInteger(reentryVisits) || reentryVisits < 2 || reentryVisits > 10) throw new Error('Reentry visits must be 2–10');
+if (!Number.isInteger(authorizedTarget) || authorizedTarget < 0 || authorizedTarget > 20) throw new Error('Authorized target must be 0–20');
+if (authorizedTarget && (sequenceLength !== 20 || compareUrl || !['127.0.0.1', 'localhost'].includes(url.hostname) ||
+    !parseScenarios().length || parseScenarios().some(([scenario]) => !['full_on_night_bpm', 'full_on_night_reload'].includes(scenario)))) {
+  throw new Error('Authorized playback acceptance requires 20 actions, a loopback preview and a Full-On Night BPM scenario');
+}
 const browser = await playwright[engine].launch({
   headless: true,
   ...(engine === 'chromium' && systemChrome ? { executablePath: systemChrome } : {})
@@ -48,11 +54,15 @@ function summarizeSequence(sequence) {
   const cards = actions.filter(entry => entry.key);
   const seenKeys = new Set();
   const seenIds = new Set();
+  const seenArtists = new Set();
   let repeatedRecordings = 0;
+  let repeatedArtists = 0;
   for (const card of cards) {
     if (hasPriorRecording(card, seenKeys, seenIds)) repeatedRecordings++;
     seenKeys.add(card.key);
     for (const identity of card.recordingIds) seenIds.add(identity);
+    if (card.artistKeys.some(key => seenArtists.has(key))) repeatedArtists++;
+    for (const artist of card.artistKeys) seenArtists.add(artist);
   }
   return {
     attempts: actions.length,
@@ -62,7 +72,9 @@ function summarizeSequence(sequence) {
     distinctFamilies: new Set(cards.map(card => card.family).filter(Boolean)).size,
     distinctLabels: new Set(cards.map(card => card.label).filter(Boolean)).size,
     repeatedRecordings,
+    repeatedArtists,
     directAudio: cards.filter(card => card.audioEvidence === 'direct-progress').length,
+    authorizedDirectAudio: cards.filter(card => card.source === 'authorized_web_preview' && card.audioEvidence === 'direct-progress').length,
     widgetAudio: cards.filter(card => /^(bandcamp|soundcloud|youtube)-progress$/.test(card.audioEvidence)).length,
     widgetLoadedOnly: cards.filter(card => !card.audioEvidence && /-frame-load$/.test(card.playerEvidence)).length,
     endedWithRecovery: Boolean(actions.at(-1)?.recovered && !actions.at(-1)?.key)
@@ -109,7 +121,9 @@ function snapshot() {
     build: SONIC_APP_BUILD_ID,
     key,
     recordingIds: [...new Set(recordingIds)],
-    artist: rec?.artist || '', artistKey: rec ? artistMatchKey(rec.artist || '') : '', song: rec?.song || '', style: rec?.style || '',
+    artist: rec?.artist || '', artistKey: rec ? artistMatchKey(rec.artist || '') : '',
+    artistKeys: rec && typeof artistMatchingKeys === 'function' ? [...artistMatchingKeys(rec.artist || '')] : [],
+    song: rec?.song || '', style: rec?.style || '', source: rec?.source || '',
     family: rec?.style && typeof familyOf === 'function' ? familyOf(rec.style) : '',
     label: rec?.label || '',
     preferredStyle: style, context: contextEl.value, energy: energyEl.value,
@@ -154,6 +168,7 @@ async function boot(context, scenario, targetUrl) {
       return route.fulfill({ status: 503, json: { ok: false, tracks: [] } });
     }
     if (!['GET','HEAD','OPTIONS'].includes(request.method())) return route.abort();
+    if (authorizedTarget && ['/api/authorized-catalog', '/api/authorized-audio'].includes(target.pathname)) return route.continue();
     if (compareControlled && target.pathname.startsWith('/api/')) return route.fulfill({ json: { ok: true, enabled: false, items: [], tracks: [], count: 0 } });
     return route.continue();
   });
@@ -178,6 +193,7 @@ async function boot(context, scenario, targetUrl) {
     goalUrl.searchParams.set('tasteCalibrationQa','1');
   }
   if (scenario === 'visitor' || scenario === 'visitor-reentry') goalUrl.searchParams.set('visitor','1');
+  if (authorizedTarget) goalUrl.searchParams.set('authorizedPreview', '1');
   await page.goto(goalUrl.href, { waitUntil: 'domcontentloaded' });
   await waitForEntry(page, scenario);
   return page;
@@ -252,6 +268,7 @@ async function runAction(page, selector, before = null) {
     tapToAudioProgressMs: shown ? heardAt : null, audioEvidence: shown ? heardVia : '',
     status: report.media.status, recovered: report.recovery, retainedPrior: Boolean(previous.key && report.key === previous.key),
     key: shown ? report.key : '', artist: shown ? report.artist : '', artistKey: shown ? report.artistKey : '',
+    artistKeys: shown ? report.artistKeys : [], source: shown ? report.source : '',
     recordingIds: shown ? report.recordingIds : [],
     song: shown ? report.song : '', style: shown ? report.style : '', filter: report.preferredStyle,
     family: shown ? report.family : '', label: shown ? report.label : '',
@@ -374,7 +391,14 @@ async function runScenario([scenario, visitor], targetUrl = url, variant = '') {
       ((fullOnBpm || bpmOnly) && !(Number(card.trackBpm) >= 145 && Number(card.trackBpm) <= 155))
     ));
     if (requireNoRepeat && (summary.repeatedRecordings || wrongFilter)) process.exitCode = 1;
-    const result = { engine, viewport: desktop ? 'desktop' : 'mobile', scenario, visitor, ...(variant ? { variant } : {}), before: entryState(before), summary, wrongFilter, sequence };
+    const acceptance = authorizedTarget ? {
+      minimumAuthorized: authorizedTarget,
+      passed: summary.cards === 20 && summary.distinctArtists === 20 && summary.directAudio === 20 &&
+        summary.authorizedDirectAudio >= authorizedTarget && !summary.repeatedRecordings && !summary.repeatedArtists &&
+        !wrongFilter && sequence.filter(entry => entry.key).every(card => card.recordingIds.length > 0)
+    } : null;
+    if (acceptance && !acceptance.passed) process.exitCode = 1;
+    const result = { engine, viewport: desktop ? 'desktop' : 'mobile', scenario, visitor, ...(variant ? { variant } : {}), before: entryState(before), summary, wrongFilter, ...(acceptance ? { acceptance } : {}), sequence };
     console.log(JSON.stringify(result));
     return result;
   } catch (error) {
