@@ -24859,24 +24859,18 @@ async function warmupCatalogInBackground() {
     .filter((style, index, list) => list.indexOf(style) === index)
     .slice(0, BACKGROUND_WARMUP_STYLE_LIMIT);
 
-  for (const style of styles) {
-    if (swipeInteractionActive() || recommendationRunBusy) {
+  try {
+    for (const style of styles) {
+      if (swipeInteractionActive() || recommendationRunBusy) {
+        await waitForExternalDatasetIdleSlot();
+        if (swipeInteractionActive() || recommendationRunBusy) continue;
+      }
+      await hydrateCatalogUntilCoverage(style, 2);
       await waitForExternalDatasetIdleSlot();
-      if (swipeInteractionActive() || recommendationRunBusy) continue;
     }
-    const stats = await hydrateCatalogUntilCoverage(style, 2);
-    if (feedbackMessage && style === (styleEl?.value || "")) {
-      feedbackMessage.textContent = t("catalogUpdateProgress", {
-        style: styleLabelByValue(style),
-        tracks: stats.tracks,
-        artists: stats.artists
-      });
-    }
-    await waitForExternalDatasetIdleSlot();
+  } finally {
+    catalogWarmupRunning = false;
   }
-
-  catalogWarmupRunning = false;
-  showToast(t("warmupCatalogToast"));
 }
 
 function soundCloudPreviewUrlFromRow(row) {
@@ -57931,9 +57925,8 @@ async function completeSwipeFeedback(direction, triggerEl = swipeTrackCard) {
   animatedEl.classList.remove("is-dragging", "is-returning");
   animateSwipeCommit(animatedEl, direction);
   animatedEl.classList.add(direction === "like" ? "is-accepted" : "is-rejected");
-  const decisionMessage = direction === "like" ? t("toastSongLiked") : t("swipePassedNext");
+  const decisionMessage = direction === "like" ? t("toastSongLiked") : t("swipeStartBusy");
   if (feedbackMessage && decisionMessage) feedbackMessage.textContent = decisionMessage;
-  if (direction === "pass" && decisionMessage) showToast(decisionMessage);
   if (swipeLikeBtn) swipeLikeBtn.disabled = true;
   if (swipePassBtn) swipePassBtn.disabled = true;
   if (topSwipeLikeBtn) topSwipeLikeBtn.disabled = true;

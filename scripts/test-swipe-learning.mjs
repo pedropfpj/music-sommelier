@@ -187,4 +187,42 @@ function testContext() {
   assert.equal(context.swipeFeedbackBusy, true, "An old finally block may not unlock the next profile's swipe");
 }
 
-console.log("Swipe learning passed: immediate queued reranking, neutral unheard pass, cloud restore, and stale swipe isolation.");
+{
+  const { context } = testContext();
+  context.styleEl = { value: "house" };
+  context.getAllSelectableStyles = () => ["house"];
+  context.swipeInteractionActive = () => false;
+  context.waitForExternalDatasetIdleSlot = async () => {};
+  context.feedbackMessage = { textContent: "" };
+  let finishHydration;
+  context.hydrateCatalogUntilCoverage = () => new Promise(resolve => { finishHydration = resolve; });
+  context.showToast = () => assert.fail("Automatic catalog warmup must preserve the user's result message");
+  const pending = context.warmupCatalogInBackground();
+  context.feedbackMessage.textContent = "No playable replacement";
+  finishHydration({ tracks: 20, artists: 20 });
+  await pending;
+  assert.equal(context.feedbackMessage.textContent, "No playable replacement",
+    "Late background hydration cannot overwrite a swipe failure");
+  assert.equal(context.catalogWarmupRunning, false);
+  context.hydrateCatalogUntilCoverage = async () => { throw new Error("offline"); };
+  await assert.rejects(context.warmupCatalogInBackground(), /offline/);
+  assert.equal(context.catalogWarmupRunning, false, "A failed background request can be retried");
+}
+
+{
+  const { context } = testContext();
+  const animatedEl = { classList: { add: noop, remove: noop }, style: { setProperty: noop } };
+  context.swipeAnimationElement = () => animatedEl;
+  context.animateSwipeCommit = noop;
+  context.resetSwipeCardPosition = noop;
+  context.feedbackMessage = { textContent: "" };
+  let finishPass;
+  context.passCurrentTrackFromSwipe = () => new Promise(resolve => { finishPass = resolve; });
+  context.showToast = () => assert.fail("A swipe cannot announce a replacement before selection finishes");
+  const pending = context.completeSwipeFeedback("pass", animatedEl);
+  assert.equal(context.feedbackMessage.textContent, "swipeStartBusy");
+  finishPass(false);
+  await pending;
+}
+
+console.log("Swipe learning passed: immediate queued reranking, neutral unheard pass, cloud restore, stale swipe isolation, and honest feedback during background updates.");
