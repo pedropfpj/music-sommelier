@@ -1,6 +1,7 @@
 export const FULL_ON_NIGHT_PUBLISHER_SOURCES = [
   "full_on_night_nightfusion_v70_20261111",
-  "full_on_night_sectar_v73_20261111"
+  "full_on_night_sectar_v73_20261111",
+  "full_on_night_revalidated_20261117"
 ];
 export const HOUSE_OPENING_SOURCE = "house_opening_editorial_v31_20261110";
 

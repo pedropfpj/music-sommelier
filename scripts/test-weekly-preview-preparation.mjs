@@ -257,7 +257,9 @@ try {
   });
   const renderStart = app.indexOf("async function renderPreview(");
   const renderEnd = app.indexOf("function visiblePreviewFrameHasSource(", renderStart);
-  await deferred.addScriptTag({ content: `${app.slice(renderStart, renderEnd)}\nconst actualRenderPreviewForPreparation = renderPreview; renderPreview = (...args) => { renderCount++; return actualRenderPreviewForPreparation(...args); };` });
+  const authorizedSource = app.match(/^const AUTHORIZED_PREVIEW_SOURCE = .+;$/m)?.[0];
+  assert.ok(authorizedSource, "The renderer fixture needs the runtime's authorized preview source constant");
+  await deferred.addScriptTag({ content: `${authorizedSource}\nlet authorizedPreviewExpiryTimer = null;\n${app.slice(renderStart, renderEnd)}\nconst actualRenderPreviewForPreparation = renderPreview; renderPreview = (...args) => { renderCount++; return actualRenderPreviewForPreparation(...args); };` });
   assert.equal(await deferred.evaluate(() => renderPreview(currentRecommendation, { fast: true, exactRecordingOnly: true, autoplay: false, deferRetry: false })), false);
   await deferred.waitForTimeout(650);
   assert.equal(await deferred.evaluate(() => renderCount), 1, "The actual renderer must honor disabled deferred retries, preventing an unobserved late success or failure");

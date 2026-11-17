@@ -1,8 +1,7 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import vm from "node:vm";
+import discovery from "../discovery-experience.js";
+import { createAppRuntimeTestContext } from "./app-runtime-test-harness.mjs";
 
-const source = readFileSync(new URL("../app.js", import.meta.url), "utf8");
 const values = new Map();
 const classes = new Set(["hidden"]);
 const entry = {
@@ -16,8 +15,18 @@ const storage = {
   setItem: (key, value) => values.set(key, value),
   removeItem: key => values.delete(key)
 };
-const track = { artist: "Test artist", song: "Test recording", style: "house", previewUrl: "https://audio.example.test/preview.mp3" };
-const context = vm.createContext({
+const track = {
+  artist: "Test artist", song: "Test recording", style: "house",
+  previewUrl: "https://audio.example.test/preview.mp3",
+  catalogMetadata: { recording_id: "apple_music:1234567" }
+};
+const earlierEdition = {
+  ...track, previewUrl: "https://audio.example.test/earlier-preview.mp3",
+  catalogMetadata: { recording_id: "apple_music:1234568" }
+};
+const context = createAppRuntimeTestContext();
+context.window.SonicDiscoveryExperience = discovery;
+Object.assign(context, {
   console, Date, Object, JSON, Number,
   document: { getElementById: id => id === "trackDiscussionEntry" ? entry : label, createTextNode: value => value },
   sessionStorage: storage,
@@ -28,7 +37,7 @@ const context = vm.createContext({
   ensureSocialMvpReady: async () => { context.socialState.ready = true; context.readinessCalls++; },
   readinessCalls: 0,
   currentRecommendation: null,
-  catalog: [track], STYLE_BPM_RULES: { house: {} },
+  catalog: [earlierEdition, track], STYLE_BPM_RULES: { house: {} },
   socialCommentsState: { targetType: "track" },
   socialDiscussionDialog: { open: false, showModal() { this.open = true; } },
   disabled: false, signed: false, loaded: "", stopped: false,
@@ -38,7 +47,6 @@ const context = vm.createContext({
   socialDiscussionCopy: () => "Comentários e curtidas",
   currentSocialCommentTarget() { return { targetType: context.socialCommentsState.targetType, targetKey: context.socialCommentsState.targetType === "video" ? "youtube:abcdefghijk" : "track" }; },
   authHasOnlineSession: () => context.signed,
-  recommendationTrackKey: value => `${value.artist}:${value.song}`,
   isTrackEligibleForRecommendation: value => value.style === "house",
   stopAllActivePlayback: () => { context.stopped = true; },
   restoreRecommendationSurfaceSnapshot: ({ track: value }) => { context.currentRecommendation = value; },
@@ -46,8 +54,8 @@ const context = vm.createContext({
   setActiveAppTab: tab => { assert.equal(tab, "discover"); },
   loadSocialComments: async ({ targetType }) => { context.loaded = targetType; }
 });
-// Run the actual transition helpers; fixtures replace only browser/player boundaries.
-vm.runInContext(source.slice(source.indexOf("function renderSocialDiscussionEntry"), source.indexOf("function openSocialDiscussion")), context);
+// Real transition and catalog identity helpers share the app's lazy runtime.
+// Fixtures replace only the browser, account and player boundaries.
 context.shouldDisableSocialCommentsForAppStore = () => context.disabled;
 context.renderSocialDiscussionEntry();
 assert.equal(entry.hidden, true, "No comments dead end before the first track");
@@ -69,6 +77,8 @@ context.currentRecommendation = null;
 context.signed = true;
 assert.equal(await context.resumeSocialDiscussionAfterLogin(), true);
 assert.equal(context.currentRecommendation.song, track.song);
+assert.equal(context.currentRecommendation.recordingId, "apple_music:1234567", "OAuth return preserves the exact edition despite an earlier same-title catalog entry");
+assert.equal(context.currentRecommendation.previewUrl, track.previewUrl);
 assert.equal(context.loaded, "track");
 assert.equal(context.socialDiscussionDialog.open, true);
 assert.equal(context.stopped, true);

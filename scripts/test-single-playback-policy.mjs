@@ -312,6 +312,7 @@ function createPreviewHarness() {
     primeAudioFromUserGesture() {},
     trackPreview: audio
   });
+  vm.runInContext(appSource.match(/^const AUTHORIZED_PREVIEW_SOURCE = .+;$/m)[0], context);
   vm.runInContext(`
     var playbackGeneration = 0;
     var activePlayback = { type: "none", trackKey: "", generation: 0, player: null, state: "stopped" };

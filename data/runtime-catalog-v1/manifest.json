@@ -2,7 +2,7 @@
   "version": 1,
   "core": "core.json",
   "catalogSummary": {
-    "titleCount": 9187,
+    "titleCount": 9215,
     "styleCount": 169,
     "countingMethod": "distinct_artist_and_title_including_named_versions",
     "scope": "bundled_catalog_metadata_not_audio_availability"
@@ -247,7 +247,7 @@
     "frenchcore": 132,
     "full_on": 456,
     "full_on_morning": 79,
-    "full_on_night": 95,
+    "full_on_night": 123,
     "funky_house": 29,
     "future_bass": 34,
     "future_garage": 97,

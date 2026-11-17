@@ -14744,6 +14744,314 @@ const REVIEWED_RECORDING_STYLE_PROOFS_V26 = [
     appleTrackId: "6783303219",
     applePreviewAsset: "/itunes-assets/AudioPreview211/v4/85/c7/4d/85c74d7a-3bdd-fd11-5730-859318c5bc04/",
     bpmExact: null
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Afhgany",
+    "song": "Alto Control (U-Rak Remix)",
+    "recordingUrl": "https://music.apple.com/ng/album/alto-control-u-rak-remix/1546030553?i=1546030636",
+    "evidenceUrl": "https://www.neurotrance.org/va-paranormal-effect/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1546030636",
+    "applePreviewAsset": "/itunes-assets/AudioPreview114/v4/6b/02/9d/6b029d7b-f194-9d99-7211-b2a658a3b9dd/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Atech",
+    "song": "The Night of the Wolf",
+    "recordingUrl": "https://music.apple.com/us/album/the-night-of-the-wolf/1536932685?i=1536932687",
+    "evidenceUrl": "https://dacrurecords.bandcamp.com/album/the-night-of-the-wolf",
+    "publisherLabel": "Dacru Records",
+    "appleTrackId": "1536932687",
+    "applePreviewAsset": "/itunes-assets/AudioPreview125/v4/f9/52/1e/f9521e31-424a-e065-202f-48b5134735d3/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Axial Tilt",
+    "song": "Uaiyoo",
+    "recordingUrl": "https://music.apple.com/mx/album/uaiyoo/1735753641?i=1735753652",
+    "evidenceUrl": "https://repositorio.unesp.br/server/api/core/bitstreams/ca2846f7-9f25-49df-8667-906444a5fb43/content#page=19",
+    "publisherLabel": "Mosaico Records",
+    "appleTrackId": "1735753652",
+    "applePreviewAsset": "/itunes-assets/AudioPreview112/v4/72/a2/b2/72a2b24b-a1b2-c194-6c8d-49e49615cc2e/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Azax Syndrom",
+    "song": "Evil Force",
+    "recordingUrl": "https://music.apple.com/us/album/evil-force/205871162?i=205871222",
+    "evidenceUrl": "https://inpsyde-media.bandcamp.com/album/there-is-no-tomorrow-v-a-inpsyde-media",
+    "publisherLabel": "Inpsyde Media",
+    "appleTrackId": "205871222",
+    "applePreviewAsset": "/itunes-assets/AudioPreview115/v4/c9/de/fb/c9defbd0-0a41-1dd9-048a-de92b0649da2/",
+    "bpmExact": 147
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Biokinetix",
+    "song": "Virtual Combat (PsychoSocial RMX)",
+    "recordingUrl": "https://music.apple.com/mx/album/virtual-combat-psychosocial-rmx/1704239056?i=1704239062",
+    "evidenceUrl": "https://www.neurotrance.org/va-night-of-murder/",
+    "publisherLabel": "Ataxia Corp",
+    "appleTrackId": "1704239062",
+    "applePreviewAsset": "/itunes-assets/AudioPreview126/v4/16/d0/71/16d071c0-9758-2fe6-6683-a270bc7c0f81/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "D-ther",
+    "song": "Dark Spells",
+    "recordingUrl": "https://music.apple.com/us/album/dark-spells/1673983571?i=1673983572",
+    "evidenceUrl": "https://digitalnomadsrecords.bandcamp.com/album/d-ther-dark-spells",
+    "publisherLabel": "Digital Nomads Records",
+    "appleTrackId": "1673983572",
+    "applePreviewAsset": "/itunes-assets/AudioPreview116/v4/9f/25/3c/9f253c8f-a5e0-4e4f-676c-40110a71b583/",
+    "bpmExact": 150
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Digital Murders",
+    "song": "Fall of Murders",
+    "recordingUrl": "https://music.apple.com/us/album/fall-of-murders/1323914816?i=1323914825",
+    "evidenceUrl": "https://www.mixcloud.com/lylearchive/archive-dj-set-trance-mexico-2021/",
+    "publisherLabel": "Maya Shakti Records",
+    "appleTrackId": "1323914825",
+    "applePreviewAsset": "/itunes-assets/AudioPreview118/v4/28/89/74/2889749c-4f3e-aa45-2123-ebf73d28ffb6/",
+    "bpmExact": 146
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Disintegrated Circuits",
+    "song": "Sabotage",
+    "recordingUrl": "https://music.apple.com/ng/album/sabotage/1546030553?i=1546030641",
+    "evidenceUrl": "https://www.neurotrance.org/va-paranormal-effect/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1546030641",
+    "applePreviewAsset": "/itunes-assets/AudioPreview124/v4/e5/fb/b5/e5fbb5b4-e4a0-b41a-c3a4-259bbcdd0b42/",
+    "bpmExact": 150
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Dr3x",
+    "song": "Revolution",
+    "recordingUrl": "https://music.apple.com/us/album/revolution/1572034604?i=1572034611",
+    "evidenceUrl": "https://www.neurotrance.org/va-night-lines/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1572034611",
+    "applePreviewAsset": "/itunes-assets/AudioPreview125/v4/26/6c/78/266c78d8-8e16-6a53-ac38-09ee6e89a69c/",
+    "bpmExact": 150
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Hysteria",
+    "song": "Lust",
+    "recordingUrl": "https://music.apple.com/us/album/lust/1704658195?i=1704658196",
+    "evidenceUrl": "https://www.neurotrance.org/va-deadly-sins/",
+    "publisherLabel": "Ataxia Corp",
+    "appleTrackId": "1704658196",
+    "applePreviewAsset": "/itunes-assets/AudioPreview126/v4/20/2d/0f/202d0f1f-4f26-446f-d798-079ee1fbc96c/",
+    "bpmExact": 146
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Jhesha",
+    "song": "Sinful Reactions - Our Music (feat. Sinful Reactions) [Jhesha Remix]",
+    "recordingUrl": "https://music.apple.com/us/album/sinful-reactions-our-music-feat-sinful-reactions-jhesha/1438447682?i=1438447689",
+    "evidenceUrl": "https://mmdrecords.bandcamp.com/album/carpe-diem",
+    "publisherLabel": "MMD Records",
+    "appleTrackId": "1438447689",
+    "applePreviewAsset": "/itunes-assets/AudioPreview118/v4/eb/7d/0c/eb7d0c31-f1b2-bfab-c1d8-e7d257712cca/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Kontrol Z",
+    "song": "Recycle",
+    "recordingUrl": "https://music.apple.com/us/album/recycle/1572034604?i=1572034608",
+    "evidenceUrl": "https://www.neurotrance.org/va-night-lines/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1572034608",
+    "applePreviewAsset": "/itunes-assets/AudioPreview125/v4/c3/3c/b0/c33cb037-90d5-21cd-9f97-b6bb8aafa69a/",
+    "bpmExact": 147
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Luxbuna & Systematic Audio",
+    "song": "Industrial Machinery",
+    "recordingUrl": "https://music.apple.com/ng/album/industrial-machinery/1546030553?i=1546030635",
+    "evidenceUrl": "https://www.neurotrance.org/va-paranormal-effect/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1546030635",
+    "applePreviewAsset": "/itunes-assets/AudioPreview124/v4/a2/f3/d0/a2f3d039-3256-3a6a-583f-c4254423914c/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Mega",
+    "song": "Hidden Dimension",
+    "recordingUrl": "https://music.apple.com/us/album/hidden-dimension/1575545419?i=1575546142",
+    "evidenceUrl": "https://mmdrecords.bandcamp.com/album/no-mercy-vol-3-selected-by-kosmic-eyes",
+    "publisherLabel": "MMD Records",
+    "appleTrackId": "1575546142",
+    "applePreviewAsset": "/itunes-assets/AudioPreview125/v4/90/b4/90/90b490ee-8393-52be-6de3-2c30c9402751/",
+    "bpmExact": 147
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Mental Chip",
+    "song": "Space Science",
+    "recordingUrl": "https://music.apple.com/us/album/space-science/1572034604?i=1572034814",
+    "evidenceUrl": "https://www.neurotrance.org/va-night-lines/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1572034814",
+    "applePreviewAsset": "/itunes-assets/AudioPreview125/v4/e2/3e/77/e23e7782-a06b-d2ff-e4d7-5b81ec75121a/",
+    "bpmExact": 146
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Noctum",
+    "song": "Warriors",
+    "recordingUrl": "https://music.apple.com/us/album/warriors/1674835142?i=1674835145",
+    "evidenceUrl": "https://www.beatport.com/chart/psytrance-full-on-night-by-noctum/864458",
+    "publisherLabel": "Antu Records",
+    "appleTrackId": "1674835145",
+    "applePreviewAsset": "/itunes-assets/AudioPreview126/v4/12/01/20/1201200a-2fbb-e563-9e4e-aa8c8378bca7/",
+    "bpmExact": 147
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Outer Connection",
+    "song": "Night of Murder",
+    "recordingUrl": "https://music.apple.com/mx/album/night-of-murder/1704239056?i=1704239064",
+    "evidenceUrl": "https://www.neurotrance.org/va-night-of-murder/",
+    "publisherLabel": "Ataxia Corp",
+    "appleTrackId": "1704239064",
+    "applePreviewAsset": "/itunes-assets/AudioPreview126/v4/8d/27/57/8d2757d5-2687-f671-6e2d-a9d70f9c6aa5/",
+    "bpmExact": 149
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Phatmatix",
+    "song": "Vertigo",
+    "recordingUrl": "https://music.apple.com/us/album/vertigo/1238337105?i=1238337116",
+    "evidenceUrl": "https://www.psynews.org/forums/topic/41990-phatmatix-sorcery/",
+    "publisherLabel": "Yabai Records",
+    "appleTrackId": "1238337116",
+    "applePreviewAsset": "/itunes-assets/AudioPreview127/v4/e5/df/62/e5df62f8-8523-9e01-a132-7bfa6e08b7d0/",
+    "bpmExact": 147
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Pragmatix & -GROOVEBOX-",
+    "song": "Game On",
+    "recordingUrl": "https://music.apple.com/us/album/game-on/1729649949?i=1729649951",
+    "evidenceUrl": "https://psynopticz.bandcamp.com/album/game-on",
+    "publisherLabel": "PsynOpticz Records",
+    "appleTrackId": "1729649951",
+    "applePreviewAsset": "/itunes-assets/AudioPreview116/v4/35/fa/2e/35fa2e25-ccc4-327e-0285-956261227425/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Pzyshow",
+    "song": "Talking Trees",
+    "recordingUrl": "https://music.apple.com/us/album/talking-trees/1855805452?i=1855805461",
+    "evidenceUrl": "https://soundofnaturerecords.bandcamp.com/album/v-a-neurodust",
+    "publisherLabel": "Sound Of Nature",
+    "appleTrackId": "1855805461",
+    "applePreviewAsset": "/itunes-assets/AudioPreview211/v4/d1/07/a8/d107a8c0-bd32-1d86-7f55-57eb4aaf2487/",
+    "bpmExact": 154
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Roby",
+    "song": "Comando Armado (feat. Kontrax)",
+    "recordingUrl": "https://music.apple.com/mx/album/comando-armado-feat-kontrax/1704239056?i=1704239058",
+    "evidenceUrl": "https://www.neurotrance.org/va-night-of-murder/",
+    "publisherLabel": "Ataxia Corp",
+    "appleTrackId": "1704239058",
+    "applePreviewAsset": "/itunes-assets/AudioPreview126/v4/64/1f/cc/641fcc0a-699b-0156-f7c5-fa421d7251c8/",
+    "bpmExact": 147
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Sodom",
+    "song": "Real Life",
+    "recordingUrl": "https://music.apple.com/us/album/real-life/1728383695?i=1728383704",
+    "evidenceUrl": "https://www.psynews.org/forums/profile/75248-spacewarp-records/content/?change_section=1&type=forums_topic_post",
+    "publisherLabel": "SpaceWarp Records",
+    "appleTrackId": "1728383704",
+    "applePreviewAsset": "/itunes-assets/AudioPreview126/v4/37/70/dd/3770dd64-d967-47da-ab92-d277db4df113/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Spookyhertz",
+    "song": "Computer Musik",
+    "recordingUrl": "https://music.apple.com/us/album/computer-musik/1572034604?i=1572034833",
+    "evidenceUrl": "https://www.neurotrance.org/va-night-lines/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1572034833",
+    "applePreviewAsset": "/itunes-assets/AudioPreview115/v4/e8/3d/c4/e83dc4db-9d84-e806-5775-12ef3e7bce0f/",
+    "bpmExact": 148
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Terraformers",
+    "song": "The Oracle",
+    "recordingUrl": "https://music.apple.com/jp/album/the-oracle/1732739695?i=1732739697",
+    "evidenceUrl": "https://geomagneticrecords.bandcamp.com/album/terraformers-no-rules-geocd072-geomagnetic-tv-darkstar",
+    "publisherLabel": "GOA Records",
+    "appleTrackId": "1732739697",
+    "applePreviewAsset": "/itunes-assets/AudioPreview122/v4/77/a0/7e/77a07e63-bb68-c150-9718-1f21d215fe36/",
+    "bpmExact": 146
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Tryambaka",
+    "song": "No Mercy",
+    "recordingUrl": "https://music.apple.com/us/album/no-mercy/1575545419?i=1575546681",
+    "evidenceUrl": "https://mmdrecords.bandcamp.com/album/no-mercy-vol-3-selected-by-kosmic-eyes",
+    "publisherLabel": "MMD Records",
+    "appleTrackId": "1575546681",
+    "applePreviewAsset": "/itunes-assets/AudioPreview125/v4/38/8e/7f/388e7f27-3f0a-1295-cbe6-ebcf3e129bf7/",
+    "bpmExact": 146
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Zabot",
+    "song": "Back To Isness",
+    "recordingUrl": "https://music.apple.com/ng/album/back-to-isness/1546030553?i=1546030639",
+    "evidenceUrl": "https://www.neurotrance.org/va-paranormal-effect/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1546030639",
+    "applePreviewAsset": "/itunes-assets/AudioPreview114/v4/ba/c2/51/bac251ee-ae70-383e-d38a-25f4b142f388/",
+    "bpmExact": 146
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Zeazea",
+    "song": "Full Power",
+    "recordingUrl": "https://music.apple.com/us/album/full-power/1546031816?i=1546031817",
+    "evidenceUrl": "https://www.neurotrance.org/zeazea-chaos/",
+    "publisherLabel": "Neurotrance",
+    "appleTrackId": "1546031817",
+    "applePreviewAsset": "/itunes-assets/AudioPreview124/v4/e5/cf/36/e5cf36ce-af5a-95b5-9c9e-4fa401446a44/",
+    "bpmExact": 146
+  },
+  {
+    "style": "full_on_night",
+    "artist": "Zinx & Demosys",
+    "song": "Bunjee Jumping [Zinx vs. Demosys]",
+    "recordingUrl": "https://music.apple.com/us/album/bunjee-jumping-zinx-vs-demosys/577461043?i=577461331",
+    "evidenceUrl": "https://replicantrecords.bandcamp.com/album/carpe-noctem",
+    "publisherLabel": "Replicant Records",
+    "appleTrackId": "577461331",
+    "applePreviewAsset": "/itunes-assets/AudioPreview115/v4/6c/e0/ba/6ce0ba43-ea61-03a0-ab05-2f36f2298e41/",
+    "bpmExact": 148
   }
 ];
 
@@ -19722,7 +20030,7 @@ function isLikelyGeneratedTrackTitle(value) {
   if (/^(ambient|ambient electronic|electronic ambient|chill out|chillout|ambient chill|ambient relax|sleep ambient|meditation ambient)$/.test(normalized)) return true;
   if (/^(psy|psytrance|psy trance|trance|techno|house|electro|electronic|edm|dnb|dubstep|hitech|hi tech|psycore)\s+(single|ep|album)$/.test(normalized)) return true;
   if (/\[\s*(psy|psytrance|trance|techno|house|electro|bass|dnb|dubstep|hitech|psycore|edm)\s*\]/.test(rawLower)) return true;
-  if (/\((psy|psytrance|trance|techno|house|edm|fullon|full on|rave|club).*\)/.test(raw)) return true;
+  if (/\((psy|psytrance|trance|techno|house|edm|fullon|full on|rave|club)\b.*\)/.test(raw)) return true;
   if (/\(([^)]*(festival|hits|radio|rave dj|electronic dance music)[^)]*)\)/.test(raw)) return true;
   if (isLikelyDjMixOrSetTitle(raw)) return true;
   if (/^de\s+[a-z0-9 ]{2,32}\s+a\s+[a-z0-9 ]{2,32}$/.test(normalized)) return true;
