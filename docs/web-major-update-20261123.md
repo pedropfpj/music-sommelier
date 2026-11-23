@@ -63,3 +63,9 @@ No bundle `20261123major2` (`app.min.js` SHA-256 `84f92448b21ccea26072c4a0db84b3
 A recuperação de início e de buffer passou nos dois motores no primeiro bundle integrado; o código desse monitor não mudou na revisão que acrescentou afinidade de BPM. O pacote final também confirmou áudio real, preservação de identidade e navegação nas jornadas acima.
 
 Capturas da atualização: [Biblioteca móvel](/Users/pedrofreire/.codex/visualizations/2026/11/23/01a20931-0a89-78e2-a6a5-ac6147c9a858/sonic-major/library-mobile.png) e [filtros](/Users/pedrofreire/.codex/visualizations/2026/11/23/01a20931-0a89-78e2-a6a5-ac6147c9a858/sonic-major/discovery-filters.png).
+
+## Prévia para avaliação
+
+[Abrir a atualização protegida](https://music-sommelier1-g1iv0qvha-cbklabs.vercel.app/), commit de código `84ea3005`. A Vercel concluiu a implantação como prévia, sem destino de produção. O acesso anônimo respondeu HTTP 302; a proteção existente foi mantida. O bundle, `discovery-experience.js` e `discovery-experience.css` hospedados coincidiram por SHA-256 com os arquivos testados. O HTML hospedado confirmou o build `20261123major2`, a Biblioteca, o resumo dos filtros e as versões novas de JS/CSS.
+
+O domínio `sonicsearch.app` continuou servindo `20261115batida101` na conferência final. Não houve um novo teste de conta real na hospedagem. A pasta principal e as candidatas anteriores foram preservadas.
