@@ -4,7 +4,7 @@
 #topSwipeCard.is-empty ~ .listening-platforms { display:none; }
 #swipeStartPanel .swipe-hero-actions button { border-radius:12px; font-family:'Chakra Petch',sans-serif; font-weight:600; box-shadow:none; }
 #topSwipeCard:not(.is-empty) + .swipe-hero-actions #topSwipeSurpriseBtn { background:#203537; border:1px solid #537375; color:#e4f1ed; }
-#swipeStartPanel #previewPanel[data-direct-audio="true"] #previewPlayBtn { display:none; }
+#swipeStartPanel #previewPanel[data-direct-audio="true"] #previewPlayBtn:not([data-playback-state="retry"]) { display:none; }
 #swipeStartPanel #previewPanel[data-direct-audio="true"] #youtubePreviewActions { display:none; }
 #swipeStartPanel #previewPanel[data-direct-audio="false"] #trackPreview { display:none; }
 #swipeStartPanel #previewPanel { width:100%; box-sizing:border-box; border-radius:16px; background:#0c191d; border:1px solid #344b50; padding:16px; margin-top:16px; text-align:left; }
@@ -12,6 +12,7 @@
 #swipeStartPanel #previewStatus { font-size:14px; line-height:1.5; color:#c5d8d9; margin:0 0 12px; }
 #swipeStartPanel #trackPreview { width:100%; margin-bottom:10px; }
 #swipeStartPanel #previewPlayBtn { width:100%; min-height:48px; border-radius:10px; font-family:inherit; }
+#swipeStartPanel #previewPlayBtn[data-playback-state="retry"] { display:block; background:#baf3d8; color:#10231e; border:1px solid #baf3d8; font-weight:700; }
 #swipeStartPanel #listeningPrompt > p, #swipeStartPanel #previewLikeBtn, #swipeStartPanel #previewDislikeBtn { display:none; }
 #swipeStartPanel #listeningPrompt { border:0; margin:8px 0 0; padding:0; background:transparent; }
 #swipeStartPanel #previewIssueBtn { font-size:13px; min-height:44px; background:transparent; color:#c5d8d9; border-color:#456369; }
@@ -206,7 +207,7 @@ html[data-web-audience="true"] #swipeStartPanel #previewPanel > :not(#previewSta
   margin: 0;
 }
 
-html[data-web-audience="true"] #swipeStartPanel #previewPanel:has(> :is(.youtube-preview, .soundcloud-preview, .bandcamp-preview):not(.hidden)) #previewPlayBtn {
+html[data-web-audience="true"] #swipeStartPanel #previewPanel:has(> :is(.youtube-preview, .soundcloud-preview, .bandcamp-preview):not(.hidden)) #previewPlayBtn:not([data-playback-state="retry"]) {
   display: none;
 }
 

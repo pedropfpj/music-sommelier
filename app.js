@@ -4822,6 +4822,7 @@ const FAST_DATASET_WAIT_MS = 120;
 const FAST_SUPABASE_WAIT_MS = 360;
 const FAST_COVERAGE_WAIT_MS = 420;
 const PREVIEW_PROBE_TIMEOUT_MS = 1800;
+const DIRECT_PREVIEW_START_TIMEOUT_MS = 8000;
 const FAST_PREVIEW_PROBE_TIMEOUT_MS = 620;
 const FAST_PREVIEW_PROBE_LIMIT = 2;
 // User-triggered discovery actions must present the next card well before the
@@ -4846,7 +4847,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261117unified1";
+const SONIC_APP_BUILD_ID = "20261123listening1";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10537,6 +10538,7 @@ let youtubePreviewTrackKey = "";
 let previewRecoveryBusy = false;
 let previewRecoveryToken = 0;
 let playbackGeneration = 0;
+let directPreviewStartWatch = null;
 let activePlayback = {
   type: "none",
   trackKey: "",
@@ -26364,6 +26366,7 @@ const I18N = {
     previewLoaded: "Tocando prévia.",
     previewPlayingMuted: "Prévia em reprodução sem som.",
     previewStarting: "Iniciando prévia…",
+    previewStartTimedOut: "A prévia demorou para iniciar. Tente novamente ou escolha Outra faixa.",
     previewPaused: "Prévia pausada.",
     previewEnded: "Prévia concluída.",
     previewPlayFailed: "A prévia falhou. Use “Não tocou” para tentar outra fonte ou faixa.",
@@ -27296,6 +27299,7 @@ const I18N = {
     previewLoaded: "Preview playing.",
     previewPlayingMuted: "Preview playing with sound off.",
     previewStarting: "Starting preview…",
+    previewStartTimedOut: "The preview took too long to start. Try again or choose Another track.",
     previewPaused: "Preview paused.",
     previewEnded: "Preview finished.",
     previewPlayFailed: "Playback failed. Use “Didn’t play” to try another source or track.",
@@ -28228,6 +28232,7 @@ const I18N = {
     previewLoaded: "Reproduciendo la vista previa.",
     previewPlayingMuted: "Vista previa en reproducción sin sonido.",
     previewStarting: "Iniciando la vista previa…",
+    previewStartTimedOut: "La vista previa tardó en comenzar. Intenta de nuevo o elige Otra pista.",
     previewPaused: "Vista previa en pausa.",
     previewEnded: "Vista previa finalizada.",
     previewPlayFailed: "Falló la reproducción. Usa «No sonó» para probar otra fuente o pista.",
@@ -33312,6 +33317,64 @@ function prepareExplicitPreviewAudio() {
   return audioEnabled;
 }
 
+function cancelDirectPreviewStartWatch() {
+  directPreviewStartWatch?.finish({ ok: false, reason: "stale_playback" });
+}
+
+function watchDirectPreviewStart(audioEl, generation) {
+  if (audioEl !== trackPreview) return null;
+  if (directPreviewStartWatch?.generation === generation && directPreviewStartWatch.player === audioEl) {
+    return directPreviewStartWatch;
+  }
+  cancelDirectPreviewStartWatch();
+  const track = currentRecommendation;
+  const trackKey = recommendationTrackKey(track);
+  const renderToken = recommendationPreviewRenderToken;
+  const source = ownedTrackPreviewSource(track, audioEl);
+  let resolveStart;
+  let settled = false;
+  let timer = 0;
+  const watch = {
+    generation,
+    player: audioEl,
+    promise: new Promise(resolve => { resolveStart = resolve; }),
+    finish(result) {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      audioEl.removeEventListener("playing", onStarted);
+      if (directPreviewStartWatch === watch) directPreviewStartWatch = null;
+      resolveStart(result);
+    }
+  };
+  const onStarted = () => watch.finish({ ok: true, generation });
+  audioEl.addEventListener("playing", onStarted);
+  directPreviewStartWatch = watch;
+  timer = window.setTimeout(() => {
+    watch.finish({ ok: false, reason: "preview_start_timeout" });
+    if (!activePlaybackMatches({ type: "preview", generation, player: audioEl }) ||
+        renderToken !== recommendationPreviewRenderToken ||
+        trackKey !== recommendationTrackKey(currentRecommendation) || !source) return;
+    // Cancel the old network/play request before offering an explicit retry.
+    // A slow response must never start playing behind a later card or tab.
+    stopAllActivePlayback({ reason: "preview_start_timeout" });
+    audioEl.dataset.previewTrackKey = trackKey;
+    audioEl.dataset.previewRenderToken = String(renderToken);
+    audioEl.src = source;
+    restorePreviewSourceActions(track);
+    previewPlayBtn?.classList.remove("hidden");
+    setPreviewPrimaryPlaybackState("retry");
+    setTrackPreviewVisualState("ready");
+    updateDirectPreviewStatus("previewStartTimedOut");
+    listeningPrompt?.classList.remove("hidden");
+    trackPlaybackLifecycleEvent("preview_play_failed", "audio_preview", {
+      previewKind: "direct_audio",
+      reason: "preview_start_timeout"
+    });
+  }, DIRECT_PREVIEW_START_TIMEOUT_MS);
+  return watch;
+}
+
 async function startTrackPreviewPlayback(audioEl = trackPreview, {
   userInitiated = false,
   automatic = false
@@ -33358,8 +33421,11 @@ async function startTrackPreviewPlayback(audioEl = trackPreview, {
   });
   syncPreviewAudioState();
 
+  const startWatch = watchDirectPreviewStart(audioEl, generation);
   try {
-    await audioEl.play();
+    const playing = Promise.resolve(audioEl.play()).then(() => ({ ok: true, generation }));
+    const started = await (startWatch ? Promise.race([playing, startWatch.promise]) : playing);
+    if (!started.ok) return started;
     if (!activePlaybackMatches({ type: "preview", generation, player: audioEl })) {
       try {
         audioEl.pause();
@@ -33388,6 +33454,8 @@ async function startTrackPreviewPlayback(audioEl = trackPreview, {
       } catch (_err) {}
     }
     throw error;
+  } finally {
+    startWatch?.finish({ ok: false, reason: "stale_playback" });
   }
 }
 
@@ -39968,6 +40036,7 @@ function activePlaybackMatches({ type = "", generation = 0, player = null } = {}
 
 function clearActivePlayback(generation = 0) {
   if (generation && activePlayback?.generation !== generation) return false;
+  cancelDirectPreviewStartWatch();
   setActivePlayback({
     type: "none",
     trackKey: "",
@@ -39991,18 +40060,23 @@ function trackPlaybackLifecycleEvent(eventName = "", source = "", extra = {}) {
 
 function setPreviewPrimaryPlaybackState(state = "ready") {
   if (!previewPlayBtn) return;
-  const normalized = ["ready", "loading", "playing"].includes(state) ? state : "ready";
+  const normalized = ["ready", "loading", "playing", "retry"].includes(state) ? state : "ready";
   if (previewPanel) previewPanel.dataset.directAudio = String(Boolean(ownedTrackPreviewSource(currentRecommendation, trackPreview)));
   previewPlayBtn.dataset.playbackState = normalized;
   previewPlayBtn.disabled = normalized === "loading";
+  previewPlayBtn.setAttribute("aria-busy", String(normalized === "loading"));
   previewPlayBtn.textContent = normalized === "playing"
     ? sonicTinyCopy("Parar", "Stop", "Parar")
     : normalized === "loading"
       ? sonicTinyCopy("Iniciando...", "Starting...", "Iniciando...")
-      : sonicTinyCopy("Ouvir faixa", "Listen to track", "Escuchar tema");
+      : normalized === "retry"
+        ? sonicTinyCopy("Tentar novamente", "Try again", "Intentar de nuevo")
+        : sonicTinyCopy("Ouvir faixa", "Listen to track", "Escuchar tema");
+  if (normalized === "retry") updateDirectPreviewStatus("previewStartTimedOut");
 }
 
 function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
+  cancelDirectPreviewStartWatch();
   if (typeof window.dispatchEvent === "function" && typeof window.CustomEvent === "function") {
     window.dispatchEvent(new window.CustomEvent("sonic:stop-universal-playback"));
   }
@@ -40722,7 +40796,7 @@ async function attemptRenderedPreviewAutoplay(track, { hasDirectPreview = false 
     const playback = await playbackAttempt;
     if (!isStillCurrentAttempt()) return false;
     if (!playback?.ok) {
-      if (playback?.reason === "stale_playback") return false;
+      if (["stale_playback", "preview_start_timeout"].includes(playback?.reason)) return false;
       return startPreferredEmbeddedPreviewAutoplay(track).opened;
     }
     return true;
@@ -67502,7 +67576,7 @@ function updateDirectPreviewStatus(status) {
   const track = currentRecommendation;
   const fallback = track?.artistPreviewFallback;
   const message = t(status);
-  const text = fallback && status !== "previewPlayFailed"
+  const text = fallback && !["previewPlayFailed", "previewStartTimedOut"].includes(status)
     ? `${message} ${t("previewArtistFallbackLoaded", {
       song: fallback.song,
       artist: fallback.artist || track.artist,
@@ -67549,6 +67623,7 @@ bind(trackPreview, "play", () => {
     player: trackPreview,
     state: "loading"
   });
+  watchDirectPreviewStart(trackPreview, generation);
   setPreviewPrimaryPlaybackState("loading");
   setTrackPreviewVisualState("searching");
   updateDirectPreviewStatus("previewStarting");
@@ -67663,7 +67738,7 @@ bind(previewPlayBtn, "click", async () => {
   } catch (_err) {}
   try {
     const playback = await startTrackPreviewPlayback(trackPreview, { userInitiated: true });
-    if (!playback?.ok && playback?.reason !== "stale_playback") {
+    if (!playback?.ok && !["stale_playback", "preview_start_timeout"].includes(playback?.reason)) {
       throw new Error(playback?.reason || "preview_not_started");
     }
   } catch (error) {

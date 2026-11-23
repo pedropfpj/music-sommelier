@@ -210,7 +210,9 @@ function createStopHarness({ throwSource = "" } = {}) {
 
   vm.runInContext(`
     var playbackGeneration = 0;
+    var directPreviewStartWatch = null;
     var activePlayback = { type: "none", trackKey: "", generation: 0, player: null, state: "stopped" };
+    ${extractFunction("cancelDirectPreviewStartWatch")}
     ${extractFunction("setActivePlayback")}
     ${extractFunction("activePlaybackMatches")}
     ${extractFunction("clearActivePlayback")}
@@ -283,6 +285,7 @@ function testNegativeFeedbackInvalidatesRejectedPreviewWork() {
 
 function createPreviewHarness() {
   const playResolvers = [];
+  const listeners = new Map();
   const audio = {
     dataset: {},
     currentSrc: "https://audio.example/stale-previous.m4a",
@@ -291,6 +294,11 @@ function createPreviewHarness() {
     playCalls: 0,
     pauseCalls: 0,
     getAttribute() { return this.src; },
+    addEventListener(type, listener) {
+      if (!listeners.has(type)) listeners.set(type, new Set());
+      listeners.get(type).add(listener);
+    },
+    removeEventListener(type, listener) { listeners.get(type)?.delete(listener); },
     load() {},
     pause() { this.pauseCalls += 1; },
     play() {
@@ -301,6 +309,7 @@ function createPreviewHarness() {
   const context = vm.createContext({
     Promise,
     String,
+    window: { setTimeout, clearTimeout },
     currentRecommendation: { artist: "Fixture", song: "Track", previewUrl: audio.src },
     recommendationPreviewRenderToken: 1,
     recommendationTrackKey: () => "fixture::track",
@@ -313,24 +322,49 @@ function createPreviewHarness() {
     trackPreview: audio
   });
   vm.runInContext(appSource.match(/^const AUTHORIZED_PREVIEW_SOURCE = .+;$/m)[0], context);
+  vm.runInContext(appSource.match(/^const DIRECT_PREVIEW_START_TIMEOUT_MS = .+;$/m)[0], context);
   vm.runInContext(`
     var playbackGeneration = 0;
+    var directPreviewStartWatch = null;
     var activePlayback = { type: "none", trackKey: "", generation: 0, player: null, state: "stopped" };
     ${extractFunction("setActivePlayback")}
     ${extractFunction("activePlaybackMatches")}
     ${extractFunction("clearActivePlayback")}
+    ${extractFunction("cancelDirectPreviewStartWatch")}
+    ${extractFunction("watchDirectPreviewStart")}
     ${extractFunction("declaredMediaElementSource")}
     ${extractFunction("ownedTrackPreviewSource")}
     ${extractFunction("syncPreviewAudioState")}
     ${extractFunction("prepareExplicitPreviewAudio")}
     function stopAllActivePlayback() {
+      cancelDirectPreviewStartWatch();
       playbackGeneration += 1;
       setActivePlayback({ type: "none", generation: playbackGeneration, state: "stopped" });
       return playbackGeneration;
     }
     ${extractFunction("startTrackPreviewPlayback")}
   `, context);
-  return { context, audio, playResolvers };
+  return { context, audio, playResolvers, listeners };
+}
+
+async function testLateDirectPlayCannotPauseNewPlayback() {
+  const { context, audio, playResolvers, listeners } = createPreviewHarness();
+  const first = context.startTrackPreviewPlayback(audio, { userInitiated: true });
+  const second = context.startTrackPreviewPlayback(audio, { userInitiated: true });
+  const cancelled = await first;
+  assert.equal(cancelled.ok, false);
+  assert.equal(cancelled.reason, "stale_playback", "The superseded request must settle without waiting for its media promise");
+  playResolvers[1].resolve();
+  assert.equal((await second).ok, true);
+  const pauses = audio.pauseCalls;
+  playResolvers[0].resolve();
+  await Promise.resolve();
+  await Promise.resolve();
+  assert.equal(audio.pauseCalls, pauses, "A late success from the first request must not pause the second playback");
+  assert.equal(context.activePlayback.generation, 2);
+  assert.equal(context.activePlayback.state, "playing");
+  assert.equal(context.directPreviewStartWatch, null, "The completed request must release its timer and listener");
+  assert.equal(listeners.get("playing")?.size, 0, "No listener from the completed or cancelled request may remain");
 }
 
 async function testAutomaticPlaybackAndRapidRequests() {
@@ -408,6 +442,7 @@ const tests = [
   ["all source transitions keep one active authority", testEveryTransitionKeepsOneAuthority],
   ["negative feedback invalidates rejected preview work", testNegativeFeedbackInvalidatesRejectedPreviewWork],
   ["automatic playback works and rapid requests stay singular", testAutomaticPlaybackAndRapidRequests],
+  ["late direct play success cannot pause the current recording", testLateDirectPlayCannotPauseNewPlayback],
   ["stale SoundCloud READY callback cannot restart playback", testStaleSoundCloudReadyCannotPlay]
 ];
 
