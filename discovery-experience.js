@@ -5,6 +5,9 @@
     en: { search: "Search your tracks", placeholder: "Track, artist or style", sort: "Sort tracks", recent: "Most recent", title: "Track name", artist: "Artist", empty: "No tracks found. Try another name or style.", play: "Listen here", opening: "Opening…", unavailable: "No preview found for this track. Use the links in your library to listen.", details: "About this track and more options", library: "My tracks", outside: "Listen on other platforms", preview: "Preview and audio sources", count: (n, total) => `${n} of ${total} ${total === 1 ? "track" : "tracks"}` },
     es: { search: "Buscar en tus pistas", placeholder: "Pista, artista o estilo", sort: "Ordenar pistas", recent: "Más recientes", title: "Nombre de la pista", artist: "Artista", empty: "No se encontraron pistas. Prueba otro nombre o estilo.", play: "Escuchar aquí", opening: "Abriendo…", unavailable: "No encontré un preview de esta pista. Usa los enlaces de tu biblioteca para escuchar.", details: "Sobre esta pista y más opciones", library: "Mis pistas", outside: "Escuchar en otras plataformas", preview: "Preview y fuentes de audio", count: (n, total) => `${n} de ${total} ${total === 1 ? "pista" : "pistas"}` }
   };
+  Object.assign(copy.pt, { liked: "Curtidas", disliked: "Descartadas", style: "Filtrar por estilo", allStyles: "Todos os estilos", clearFilters: "Limpar busca e filtros", undo: "Desfazer", views: "Seções da biblioteca" });
+  Object.assign(copy.en, { liked: "Liked", disliked: "Dismissed", style: "Filter by style", allStyles: "All styles", clearFilters: "Clear search and filters", undo: "Undo", views: "Library sections" });
+  Object.assign(copy.es, { liked: "Me gustan", disliked: "Descartadas", style: "Filtrar por estilo", allStyles: "Todos los estilos", clearFilters: "Limpiar búsqueda y filtros", undo: "Deshacer", views: "Secciones de la biblioteca" });
   function normalize(value) {
     return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
   }
@@ -41,9 +44,10 @@
     if (!parsed || parsed.invalid) throw new Error("Invalid catalog identity");
     return url.href;
   }
-  function selectTracks(entries, query = "", order = "recent", locale = "pt", labelStyle = value => value) {
+  function selectTracks(entries, query = "", order = "recent", locale = "pt", labelStyle = value => value, style = "") {
     const terms = normalize(query).split(/\s+/).filter(Boolean);
     const matches = entries.filter(entry => {
+      if (style && entry.style !== style) return false;
       const text = normalize([entry.song, entry.artist, entry.style, labelStyle(entry.style)].join(" "));
       return terms.every(term => text.includes(term));
     });
@@ -52,6 +56,17 @@
       matches.sort((a, b) => String(a[key] || "").localeCompare(String(b[key] || ""), locale, { sensitivity: "base" }));
     } else matches.sort((a, b) => (Date.parse(b.likedAt) || 0) - (Date.parse(a.likedAt) || 0));
     return matches;
+  }
+  function syncLibraryView(doc = root.document) {
+    const section = doc?.querySelector?.(".profile-library-section");
+    if (!section) return;
+    const view = section.dataset.libraryView === "disliked" ? "disliked" : "liked";
+    section.querySelectorAll("[data-library-view]").forEach(button => {
+      const active = button.dataset.libraryView === view;
+      button.setAttribute("aria-pressed", String(active));
+      button.classList.toggle("active", active);
+    });
+    section.querySelectorAll("[data-library-kind]").forEach(panel => { panel.hidden = panel.dataset.libraryKind !== view; });
   }
   function mount(adapter) {
     const doc = root.document;
@@ -64,10 +79,29 @@
       if (hint) hint.textContent = web.libraryHint;
       const search = doc.getElementById("librarySearch");
       if (search) search.placeholder = c().placeholder;
+      const views = doc.getElementById("libraryViews");
+      if (views) views.setAttribute("aria-label", c().views);
       adapter.renderLibrary();
+      syncLibraryView(doc);
     }
     doc.getElementById("librarySearch")?.addEventListener("input", () => adapter.renderLibrary());
     doc.getElementById("libraryOrder")?.addEventListener("change", () => adapter.renderLibrary());
+    doc.getElementById("libraryStyle")?.addEventListener("change", () => adapter.renderLibrary());
+    doc.getElementById("libraryFiltersClear")?.addEventListener("click", () => {
+      for (const [id, value] of [["librarySearch", ""], ["libraryStyle", ""], ["libraryOrder", "recent"]]) {
+        const input = doc.getElementById(id);
+        if (input) input.value = value;
+      }
+      adapter.renderLibrary();
+      doc.getElementById("librarySearch")?.focus({ preventScroll: true });
+    });
+    doc.getElementById("libraryViews")?.addEventListener("click", event => {
+      const target = event.target.closest?.("[data-library-view]");
+      const section = doc.querySelector(".profile-library-section");
+      if (!target || !section) return;
+      section.dataset.libraryView = target.dataset.libraryView;
+      syncLibraryView(doc);
+    });
     doc.getElementById("discoveryLibraryBtn")?.addEventListener("click", () => {
       adapter.openLibrary();
       root.requestAnimationFrame(() => {
@@ -77,9 +111,20 @@
     });
     root.addEventListener("sonic:language-changed", render);
     root.addEventListener("sonic:online-session-changed", render);
+    root.addEventListener("sonic:profile-changed", () => {
+      for (const [id, value] of [["librarySearch", ""], ["libraryStyle", ""], ["libraryOrder", "recent"]]) {
+        const input = doc.getElementById(id);
+        if (input) input.value = value;
+      }
+      const section = doc.querySelector(".profile-library-section");
+      if (section) section.dataset.libraryView = "liked";
+      const status = doc.getElementById("libraryReplayStatus");
+      if (status) { status.textContent = ""; status.hidden = true; }
+      root.queueMicrotask(render);
+    });
     render();
   }
-  const api = { copy, webCopy, normalize, normalizeRecordingId, selectTracks, parseTrackLink, buildTrackLink, mount };
+  const api = { copy, webCopy, normalize, normalizeRecordingId, selectTracks, syncLibraryView, parseTrackLink, buildTrackLink, mount };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.SonicDiscoveryExperience = api;
 })(typeof window !== "undefined" ? window : globalThis);

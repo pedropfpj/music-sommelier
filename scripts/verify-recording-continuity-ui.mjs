@@ -130,7 +130,7 @@ async function openLibrary(page, { warmCore = false } = {}) {
   if (await page.locator('#tasteCalibrationSkipBtn').isVisible()) await page.locator('#tasteCalibrationSkipBtn').click();
   const menu = page.locator('#appMenuBtn');
   if (await menu.isVisible() && await menu.getAttribute('aria-expanded') !== 'true') await menu.click();
-  await page.locator('[data-app-tab-target="profile"]').click();
+  await page.locator('[data-app-tab-target="library"]').click();
   await libraryItem(page).waitFor({ state: 'visible', timeout: 15000 });
 }
 

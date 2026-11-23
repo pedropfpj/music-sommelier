@@ -20,7 +20,9 @@ assert.match(indexSource, /<a class="skip-link" href="#appContent">/, "App needs
 assert.match(indexSource, /<main id="appContent"[^>]*tabindex="-1"/, "Main content must be a focus target");
 assert.match(indexSource, /<h1 id="heroTitle">/, "Visible app hero must be the main heading");
 const webPrimaryTabs = [...indexSource.matchAll(/<button[^>]*data-app-tab-target="([^"]+)"[^>]*data-primary-app-tab\b/g)].map(([, name]) => name);
-assert.deepEqual(webPrimaryTabs, ["discover", "djs", "news", "friends", "profile"], "Web navigation must keep its five primary destinations");
+assert.deepEqual(webPrimaryTabs, ["discover", "library", "djs", "news", "profile"], "Web navigation must keep five primary destinations, with saved music directly reachable");
+assert.match(indexSource, /id="profileFriendsBtn"/, "Friends must stay reachable from Profile");
+assert.match(appSource, /if \(requestedTab === "library" && \(isNativeAppRuntime\(\) \|\| isAppStoreRuntimeMode\(\)\)\) return "profile";/, "Native keeps its existing Profile library");
 assert.match(indexSource, /<section[^>]*id="profileSocialShortcuts"[^>]*data-app-tab="profile"[^>]*>[\s\S]*?<button id="profileMoreBtn"[^>]*>[\s\S]*?<\/section>/, "More must be reachable from the Web Profile");
 assert.match(appSource, /bind\(document\.getElementById\("profileMoreBtn"\), "click", \(\) => setActiveAppTab\("more"/, "The Profile shortcut must open More");
 assert.match(indexSource, /id="morePanel"[\s\S]*?data-more-tab-target="about"[\s\S]*?data-more-tab-target="support"[\s\S]*?data-more-tab-target="legal"/, "Institutional areas must live inside More");

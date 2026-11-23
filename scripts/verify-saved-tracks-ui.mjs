@@ -21,10 +21,10 @@ try {
     return route.fulfill({json:cloud[table] || []});
   });
   await page.addInitScript(()=>localStorage.setItem('sonic_search:privacy:analytics:v1','no'));
-  await page.goto(`${preview.baseUrl}/?qa=1&lang=pt&screenshot=1&recommendation=0&tab=profile`,{waitUntil:'domcontentloaded'});
+  await page.goto(`${preview.baseUrl}/?qa=1&lang=pt&screenshot=1&recommendation=0&tab=library`,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>typeof renderLibrarySyncStatus==='function');
   await page.evaluate(()=>{
-    setActiveAppTab('profile'); socialState.ready=true;socialState.enabled=true;socialState.config={supabaseUrl:'https://sync.test',supabaseAnonKey:'public-mock'};
+    setActiveAppTab('library'); socialState.ready=true;socialState.enabled=true;socialState.config={supabaseUrl:'https://sync.test',supabaseAnonKey:'public-mock'};
     socialStoreSession({access_token:'local-test-only',refresh_token:'local-test-refresh',expires_at:Math.floor(Date.now()/1000)+3600,user:{id:'11111111-1111-4111-8111-111111111111',email:'test@example.test',app_metadata:{provider:'google'},user_metadata:{full_name:'Test Listener'}}});
     activateUserSession(onlineSocialUserSession());
     likedTrackHistory=[likedTrackHistoryEntry({artist:'Michael Bibi',song:'Hanging Tree',style:'tech_house',bpm:126},'liked','2026-11-09T12:00:00.000Z')];

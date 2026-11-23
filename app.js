@@ -4847,7 +4847,7 @@ const SURPRISE_FAST_TRACKS_PER_STYLE = 12;
 const SURPRISE_FAST_POOL_LIMIT = 96;
 const SURPRISE_SEARCH_BUDGET_MS = 8000;
 const SURPRISE_PREVIEW_LOOKUP_MS = 1200;
-const SONIC_APP_BUILD_ID = "20261123listening1";
+const SONIC_APP_BUILD_ID = "20261123major2";
 
 if (typeof window !== "undefined") {
   window.__sonicAppBuild = SONIC_APP_BUILD_ID;
@@ -10511,6 +10511,7 @@ let legacyKnownTrackTitlesMemory = new Set();
 let discoveredArtistsInApp = new Set();
 let seenArtistsMemory = new Set();
 let recentPresentedArtists = [];
+let recentPresentedLabels = [];
 let seenTrackKeysMemory = new Set();
 let seenRecordingIdsMemory = new Set();
 let blockedArtistsMemory = new Set();
@@ -10657,7 +10658,7 @@ const SWIPE_AFFINITY_MIN_STYLE_LIKES = 2;
 const SWIPE_AFFINITY_MIN_NET_SCORE = 1.55;
 const SWIPE_AFFINITY_NEIGHBOR_CHANCE = 0.32;
 const RECENT_PRESENTED_ARTIST_LIMIT = 12;
-const RECOMMENDATION_MODEL_VERSION = "hybrid-hierarchical-v3-history-variety";
+const RECOMMENDATION_MODEL_VERSION = "hybrid-hierarchical-v4-neutral-tempo-variety";
 const SWIPE_CROSS_FAMILY_EXPLORATION_MIN_SIGNALS = 6;
 const SWIPE_CROSS_FAMILY_EXPLORATION_STEP = 4;
 const SWIPE_CROSS_FAMILY_EXPLORATION_LIMIT = 4;
@@ -11813,6 +11814,7 @@ function styleTasteSignal(style = "") {
     else if (familyOf(entryStyle) === styleFamily) like += 0.12;
   });
   dislikedTrackHistory.forEach((entry) => {
+    if (!isTasteDislike(entry)) return;
     const entryStyle = styleHistoryEntryStyle(entry);
     if (!entryStyle) return;
     if (entryStyle === styleKey) dislike += 0.95;
@@ -11840,6 +11842,7 @@ function styleFamilyTasteSignal(targetFamily = "") {
     if (familyOf(styleHistoryEntryStyle(entry)) === targetFamily) like += 0.42;
   });
   dislikedTrackHistory.forEach((entry) => {
+    if (!isTasteDislike(entry)) return;
     if (familyOf(styleHistoryEntryStyle(entry)) === targetFamily) dislike += 0.48;
   });
   return like * 0.72 - dislike * 0.92;
@@ -21228,6 +21231,41 @@ function rememberRecentlyPresentedArtist(artistName = "") {
   ]);
 }
 
+function recommendationLabelKey(track = {}) {
+  const label = sanitizeLabel(track.label, track.artist, track.song);
+  if (!isCountableLabel(label) || isUnknownLabel(label)) return "";
+  return normalize(label).slice(0, 120);
+}
+
+function sanitizeRecentPresentedLabels(values = []) {
+  return (Array.isArray(values) ? values : [])
+    .filter(entry => entry && typeof entry.key === "string" && typeof entry.label === "string" && typeof entry.style === "string")
+    .map(entry => ({ key: normalize(entry.key).slice(0, 300), label: normalize(entry.label).slice(0, 120), style: normalizeDatasetStyle(entry.style) }))
+    .filter(entry => entry.key && entry.label && STYLE_BPM_RULES[entry.style])
+    .slice(-6);
+}
+
+function rememberRecentlyPresentedLabel(track) {
+  const key = recommendationTrackKey(track);
+  const label = recommendationLabelKey(track);
+  if (!key || !label || recentPresentedLabels.at(-1)?.key === key) return;
+  recentPresentedLabels = sanitizeRecentPresentedLabels([
+    ...recentPresentedLabels, { key, label, style: track.style }
+  ]);
+}
+
+function recentLabelDiversityPenalty(track, prefs = {}) {
+  const label = recommendationLabelKey(track);
+  if (!label) return 0;
+  let penalty = 0;
+  recentPresentedLabels.forEach((entry, index) => {
+    if (entry.label !== label || (prefs.style && entry.style !== prefs.style)) return;
+    penalty += Math.max(0.3, 1.5 - (recentPresentedLabels.length - index - 1) * 0.3);
+  });
+  // A preference among comparable candidates, never an eligibility rule.
+  return Math.min(3.6, penalty);
+}
+
 function buildRecentArtistExclusionSet(extraArtists = [], windowSize = RECENT_PRESENTED_ARTIST_LIMIT) {
   const excluded = new Set();
   const safeWindow = Math.max(
@@ -21854,6 +21892,32 @@ function appendSwipeLearningMessage(message = "") {
   return [message, learningMessage].filter(Boolean).join(" ");
 }
 
+function tempoAffinityExactBpm(track) {
+  const bpm = Number(track?.bpmExact);
+  if (!Number.isFinite(bpm) || bpm <= 0 || !STYLE_BPM_RULES[track?.style] ||
+      !bpmFitsStyle(track.style, bpm) || perceivedHalfTimeBpm(track, bpm)) return 0;
+  return bpm;
+}
+
+function recentTempoAffinityScore(track) {
+  const bpm = tempoAffinityExactBpm(track);
+  if (!bpm) return 0;
+  const recent = likedTrackHistory
+    .filter(entry => entry.style === track.style && tempoAffinityExactBpm(entry) > 0)
+    .slice(0, 8);
+  if (recent.length < 2) return 0;
+  let totalWeight = 0;
+  let affinity = 0;
+  recent.forEach((entry, index) => {
+    const weight = 1 / (1 + index * 0.2);
+    affinity += Math.max(0, 1 - Math.abs(bpm - tempoAffinityExactBpm(entry)) / 6) * weight;
+    totalWeight += weight;
+  });
+  // Exact tempo is a bounded tie-breaker within the same subgenre. It never
+  // infers BPM from an interval or relaxes the listener's explicit filters.
+  return affinity / totalWeight * Math.min(2, recent.length * 0.5);
+}
+
 function getAdaptiveScore(track) {
   const styleKey = normalize(track.style);
   const artistKeys = artistMatchingKeys(track.artist);
@@ -21875,7 +21939,7 @@ function getAdaptiveScore(track) {
     artistDislike * 2 +
     (adaptiveModel.dislikedEnergies.get(energyKey) || 0) * 0.9;
 
-  return (like - dislike) * adaptiveLearningMultiplier();
+  return (like - dislike) * adaptiveLearningMultiplier() + recentTempoAffinityScore(track);
 }
 
 function registerTrackPreferenceSignal(track, delta = 0) {
@@ -25078,6 +25142,7 @@ function swipeDiscoveryRailStyles({ expanded = swipeStyleRailExpanded } = {}) {
 }
 
 function renderSwipeStyleRail() {
+  renderDiscoveryFilterSummary();
   const selectedStyle = styleEl?.value || "";
   renderStyleSelectionCoverage(selectedStyle);
   if (!swipeStyleRail) return;
@@ -25148,6 +25213,109 @@ function renderSwipeStyleRail() {
 function swipeStyleSearchKey(value = "") {
   return String(value).normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+}
+
+function discoveryFilterControls() {
+  return { style: styleEl, context: contextEl, energy: energyEl, bpm: bpmEl, vocals: vocalsEl };
+}
+
+function discoveryFilterSummaryCopy() {
+  return {
+    title: sonicTinyCopy("Filtros da próxima faixa", "Next track filters", "Filtros de la próxima pista"),
+    clear: sonicTinyCopy("Limpar filtros", "Clear filters", "Limpiar filtros"),
+    empty: sonicTinyCopy("Exploração livre. Ajuste a descoberta quando quiser uma direção.", "Open discovery. Tune your filters whenever you want a direction.", "Exploración libre. Ajusta los filtros cuando quieras una dirección."),
+    hint: sonicTinyCopy("Você escolhe o que manter para a próxima faixa.", "Choose what to keep for your next track.", "Elige qué mantener para la próxima pista."),
+    removed: sonicTinyCopy("Filtro removido. A mudança vale para a próxima faixa.", "Filter removed. The change applies to your next track.", "Filtro eliminado. El cambio se aplica a la próxima pista."),
+    cleared: sonicTinyCopy("Filtros limpos. Seu histórico e aprendizado continuam guardados.", "Filters cleared. Your history and learned preferences are kept.", "Filtros borrados. Tu historial y tus preferencias aprendidas se conservan."),
+    remove: sonicTinyCopy("Remover", "Remove", "Quitar"),
+    fields: {
+      style: sonicTinyCopy("Subgênero", "Subgenre", "Subgénero"),
+      context: sonicTinyCopy("Momento", "Moment", "Momento"),
+      energy: sonicTinyCopy("Energia", "Energy", "Energía"),
+      bpm: "BPM",
+      vocals: sonicTinyCopy("Vocal", "Vocals", "Voz")
+    }
+  };
+}
+
+function renderDiscoveryFilterSummary() {
+  const summary = document.getElementById("discoveryFilterSummary");
+  const chips = document.getElementById("discoveryFilterChips");
+  if (!summary || !chips) return;
+  const copy = discoveryFilterSummaryCopy();
+  const controls = discoveryFilterControls();
+  const busy = Boolean(recommendationRunBusy || firstRecommendationBusy || swipeFeedbackBusy);
+  const focusedField = chips.contains(document.activeElement)
+    ? document.activeElement.closest("[data-discovery-filter]")?.dataset.discoveryFilter : "";
+  const fragment = document.createDocumentFragment();
+  let count = 0;
+  for (const [field, control] of Object.entries(controls)) {
+    const value = String(control?.value || "");
+    if (!value) continue;
+    const label = field === "style" ? styleLabelByValue(value)
+      : field === "bpm" ? value.replace(/-/g, "–")
+      : Array.from(control.options || []).find(option => option.value === value)?.textContent || value;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "discovery-filter-chip";
+    button.dataset.discoveryFilter = field;
+    button.disabled = busy;
+    button.setAttribute("aria-label", `${copy.remove} ${copy.fields[field]}: ${label}`);
+    const fieldLabel = document.createElement("small");
+    fieldLabel.textContent = copy.fields[field];
+    const valueLabel = document.createElement("span");
+    valueLabel.textContent = label;
+    const dismiss = document.createElement("span");
+    dismiss.className = "discovery-filter-dismiss";
+    dismiss.setAttribute("aria-hidden", "true");
+    dismiss.textContent = "×";
+    button.append(fieldLabel, valueLabel, dismiss);
+    fragment.appendChild(button);
+    count += 1;
+  }
+  chips.replaceChildren(fragment);
+  chips.hidden = count === 0;
+  summary.dataset.hasFilters = String(count > 0);
+  summary.setAttribute("aria-busy", String(busy));
+  setText("#discoveryFilterTitle", copy.title);
+  setText("#discoveryFilterHint", count ? copy.hint : copy.empty);
+  const clear = document.getElementById("discoveryFilterClear");
+  if (clear) {
+    clear.textContent = copy.clear;
+    clear.hidden = count === 0;
+    clear.disabled = busy;
+  }
+  if (focusedField) chips.querySelector(`[data-discovery-filter="${focusedField}"]`)?.focus({ preventScroll: true });
+}
+
+function removeDiscoveryFilter(field = "") {
+  if (recommendationRunBusy || firstRecommendationBusy || swipeFeedbackBusy) return false;
+  const controls = discoveryFilterControls();
+  const fields = field === "all" ? Object.keys(controls) : Object.hasOwn(controls, field) ? [field] : [];
+  if (!fields.length || !fields.some(key => controls[key]?.value)) return false;
+  const summary = document.getElementById("discoveryFilterSummary");
+  const restoreFocus = summary?.contains(document.activeElement);
+  const activeFields = Object.keys(controls).filter(key => controls[key]?.value);
+  const removedIndex = activeFields.indexOf(field);
+  fields.forEach(key => {
+    if (!controls[key]) return;
+    controls[key].value = "";
+    controls[key].dispatchEvent(new Event("change", { bubbles: true }));
+  });
+  // Feedback and "another similar" must use the remaining explicit filters,
+  // while the current recording and its audio continue unchanged.
+  if (lastPrefs) lastPrefs = prefsFromManualControls();
+  savePreferences();
+  renderDiscoveryFilterSummary();
+  const status = document.getElementById("discoveryFilterStatus");
+  if (status) status.textContent = discoveryFilterSummaryCopy()[field === "all" ? "cleared" : "removed"];
+  if (restoreFocus) {
+    const remaining = activeFields.filter(key => controls[key]?.value);
+    const nextField = remaining[Math.min(Math.max(removedIndex, 0), remaining.length - 1)];
+    const next = nextField && document.querySelector(`[data-discovery-filter="${nextField}"]`);
+    (next || document.getElementById("discoverFiltersBtn"))?.focus({ preventScroll: true });
+  }
+  return true;
 }
 
 async function hydrateCatalogUntilCoverage(style, maxPasses = COVERAGE_MAX_PASSES) {
@@ -26367,6 +26535,8 @@ const I18N = {
     previewPlayingMuted: "Prévia em reprodução sem som.",
     previewStarting: "Iniciando prévia…",
     previewStartTimedOut: "A prévia demorou para iniciar. Tente novamente ou escolha Outra faixa.",
+    previewBuffering: "Aguardando áudio para continuar…",
+    previewBufferTimedOut: "A prévia foi interrompida. Tente novamente ou escolha Outra faixa.",
     previewPaused: "Prévia pausada.",
     previewEnded: "Prévia concluída.",
     previewPlayFailed: "A prévia falhou. Use “Não tocou” para tentar outra fonte ou faixa.",
@@ -27300,6 +27470,8 @@ const I18N = {
     previewPlayingMuted: "Preview playing with sound off.",
     previewStarting: "Starting preview…",
     previewStartTimedOut: "The preview took too long to start. Try again or choose Another track.",
+    previewBuffering: "Waiting for audio to continue…",
+    previewBufferTimedOut: "The preview was interrupted. Try again or choose Another track.",
     previewPaused: "Preview paused.",
     previewEnded: "Preview finished.",
     previewPlayFailed: "Playback failed. Use “Didn’t play” to try another source or track.",
@@ -28233,6 +28405,8 @@ const I18N = {
     previewPlayingMuted: "Vista previa en reproducción sin sonido.",
     previewStarting: "Iniciando la vista previa…",
     previewStartTimedOut: "La vista previa tardó en comenzar. Intenta de nuevo o elige Otra pista.",
+    previewBuffering: "Esperando audio para continuar…",
+    previewBufferTimedOut: "La vista previa se interrumpió. Intenta de nuevo o elige Otra pista.",
     previewPaused: "Vista previa en pausa.",
     previewEnded: "Vista previa finalizada.",
     previewPlayFailed: "Falló la reproducción. Usa «No sonó» para probar otra fuente o pista.",
@@ -29558,6 +29732,8 @@ function applyLanguage() {
   setText("#heroSlogan", t("appSlogan"));
   setText("#heroMission", t("appMission"));
   setText("[data-app-tab-target='discover']", t("tabDiscover"));
+  setText("[data-app-tab-target='library']", sonicTinyCopy("Biblioteca", "Library", "Biblioteca"));
+  document.getElementById("libraryPanel")?.setAttribute("aria-label", sonicTinyCopy("Biblioteca", "Library", "Biblioteca"));
   setText("[data-app-tab-target='djs']", t("tabDjs"));
   setText("[data-app-tab-target='news']", t("tabNews"));
   setText("[data-app-tab-target='friends']", t("tabFriends"));
@@ -32277,6 +32453,7 @@ function resetSessionStateInMemory() {
   seenTrackKeysMemory = new Set();
   seenRecordingIdsMemory = new Set();
   recentPresentedArtists = [];
+  recentPresentedLabels = [];
   blockedArtistsMemory = new Set();
   rejectedArtists = new Set();
   recommendationMemory = new Set();
@@ -33321,7 +33498,7 @@ function cancelDirectPreviewStartWatch() {
   directPreviewStartWatch?.finish({ ok: false, reason: "stale_playback" });
 }
 
-function watchDirectPreviewStart(audioEl, generation) {
+function watchDirectPreviewStart(audioEl, generation, { buffering = false } = {}) {
   if (audioEl !== trackPreview) return null;
   if (directPreviewStartWatch?.generation === generation && directPreviewStartWatch.player === audioEl) {
     return directPreviewStartWatch;
@@ -33331,13 +33508,24 @@ function watchDirectPreviewStart(audioEl, generation) {
   const trackKey = recommendationTrackKey(track);
   const renderToken = recommendationPreviewRenderToken;
   const source = ownedTrackPreviewSource(track, audioEl);
+  const position = Number(audioEl.currentTime) || 0;
+  const stillCurrent = () => activePlaybackMatches({ type: "preview", generation, player: audioEl }) &&
+    renderToken === recommendationPreviewRenderToken &&
+    audioEl.dataset.previewRenderToken === String(renderToken) &&
+    trackKey === recommendationTrackKey(currentRecommendation) &&
+    source === ownedTrackPreviewSource(currentRecommendation, audioEl);
   let resolveStart;
   let settled = false;
   let timer = 0;
   const watch = {
     generation,
     player: audioEl,
+    kind: buffering ? "buffer" : "start",
     promise: new Promise(resolve => { resolveStart = resolve; }),
+    checkProgress() {
+      if (buffering && stillCurrent() && !audioEl.paused && !audioEl.seeking &&
+          audioEl.readyState >= 3 && audioEl.currentTime > position + 0.05) onStarted();
+    },
     finish(result) {
       if (settled) return;
       settled = true;
@@ -33347,32 +33535,55 @@ function watchDirectPreviewStart(audioEl, generation) {
       resolveStart(result);
     }
   };
-  const onStarted = () => watch.finish({ ok: true, generation });
+  const onStarted = () => {
+    watch.finish({ ok: true, generation });
+    if (buffering && stillCurrent()) {
+      setActivePlayback({ ...activePlayback, state: "playing" });
+      setPreviewPrimaryPlaybackState("playing");
+      setTrackPreviewVisualState("playing");
+      updatePlayingDirectPreviewStatus();
+    }
+  };
   audioEl.addEventListener("playing", onStarted);
   directPreviewStartWatch = watch;
   timer = window.setTimeout(() => {
+    watch.checkProgress();
+    if (settled) return;
     watch.finish({ ok: false, reason: "preview_start_timeout" });
-    if (!activePlaybackMatches({ type: "preview", generation, player: audioEl }) ||
-        renderToken !== recommendationPreviewRenderToken ||
-        trackKey !== recommendationTrackKey(currentRecommendation) || !source) return;
+    if (!stillCurrent() || !source) return;
     // Cancel the old network/play request before offering an explicit retry.
     // A slow response must never start playing behind a later card or tab.
-    stopAllActivePlayback({ reason: "preview_start_timeout" });
+    stopAllActivePlayback({ reason: buffering ? "preview_buffer_timeout" : "preview_start_timeout" });
     audioEl.dataset.previewTrackKey = trackKey;
     audioEl.dataset.previewRenderToken = String(renderToken);
     audioEl.src = source;
     restorePreviewSourceActions(track);
     previewPlayBtn?.classList.remove("hidden");
+    if (previewPlayBtn) previewPlayBtn.dataset.retryReason = buffering ? "buffer" : "start";
     setPreviewPrimaryPlaybackState("retry");
     setTrackPreviewVisualState("ready");
-    updateDirectPreviewStatus("previewStartTimedOut");
+    updateDirectPreviewStatus(buffering ? "previewBufferTimedOut" : "previewStartTimedOut");
     listeningPrompt?.classList.remove("hidden");
     trackPlaybackLifecycleEvent("preview_play_failed", "audio_preview", {
       previewKind: "direct_audio",
-      reason: "preview_start_timeout"
+      reason: buffering ? "preview_buffer_timeout" : "preview_start_timeout"
     });
   }, DIRECT_PREVIEW_START_TIMEOUT_MS);
   return watch;
+}
+
+function handleDirectPreviewBuffering() {
+  if (!trackPreview || trackPreview.paused || trackPreview.seeking || trackPreview.readyState >= 3 ||
+      !trackPreviewElementMatchesTrack(currentRecommendation) ||
+      trackPreview.dataset.previewRenderToken !== String(recommendationPreviewRenderToken) ||
+      !activePlaybackMatches({ type: "preview", player: trackPreview }) ||
+      !["playing", "buffering"].includes(activePlayback.state)) return;
+  watchDirectPreviewStart(trackPreview, activePlayback.generation, { buffering: true });
+  setActivePlayback({ ...activePlayback, state: "buffering" });
+  resetDirectPreviewListeningInterval();
+  setPreviewPrimaryPlaybackState("loading");
+  setTrackPreviewVisualState("searching");
+  updateDirectPreviewStatus("previewBuffering");
 }
 
 async function startTrackPreviewPlayback(audioEl = trackPreview, {
@@ -35321,6 +35532,7 @@ function primaryRecommendationActionLabel({ hasTrack = Boolean(currentRecommenda
 function setInitialRecommendationBusy(isBusy) {
   firstRecommendationBusy = Boolean(isBusy);
   renderRecommendationRecovery();
+  renderDiscoveryFilterSummary();
   const actionLabel = primaryRecommendationActionLabel({ isBusy });
   [topSwipeSurpriseBtn, swipeHeroSurpriseBtn].forEach((button) => {
     if (!button) return;
@@ -35332,6 +35544,7 @@ function setInitialRecommendationBusy(isBusy) {
 
 function setRecommendationRunBusy(isBusy) {
   renderRecommendationRecovery();
+  renderDiscoveryFilterSummary();
   document.body.classList.toggle("is-recommending", Boolean(isBusy));
   if (appContent) appContent.setAttribute("aria-busy", isBusy ? "true" : "false");
   const hasTrack = Boolean(currentRecommendation);
@@ -36069,11 +36282,25 @@ function panelMatchesAppTab(panel, tabName = "discover") {
   return tabNamesForPanel(panel).includes(tabName);
 }
 
+function mountWebLibraryPanel() {
+  const library = document.querySelector?.(".profile-library-section");
+  const panel = document.getElementById("libraryPanel");
+  const summary = document.getElementById("summaryPanel");
+  if (!library || !panel || !summary) return;
+  const native = isNativeAppRuntime() || isAppStoreRuntimeMode();
+  if (native && library.parentElement !== summary) {
+    summary.insertBefore(library, document.getElementById("premiumPromoShowBtn"));
+  } else if (!native && library.parentElement !== panel) {
+    panel.appendChild(library);
+  }
+}
+
 function safeAppTabName(tabName = "discover") {
   const requestedTab = String(tabName || "discover");
   if (requestedTab === "admin") return hasAdminAccess() ? "admin" : "discover";
   if (requestedTab === "friends" && (isNativeAppRuntime() || isAppStoreRuntimeMode())) return "profile";
-  return ["discover", "djs", "filters", "news", "profile", "friends", "more", "about", "support", "legal", "recommends"].includes(requestedTab)
+  if (requestedTab === "library" && (isNativeAppRuntime() || isAppStoreRuntimeMode())) return "profile";
+  return ["discover", "library", "djs", "filters", "news", "profile", "friends", "more", "about", "support", "legal", "recommends"].includes(requestedTab)
     ? requestedTab
     : "discover";
 }
@@ -36088,6 +36315,7 @@ function primaryAppTabName(tabName = "discover") {
   const safeTab = safeAppTabName(tabName);
   if (safeTab === "filters") return "discover";
   if (safeTab === "recommends") return "discover";
+  if (safeTab === "friends") return "profile";
   if (["more", "about", "support", "legal", "admin"].includes(safeTab)) return isNativeAppRuntime() || isAppStoreRuntimeMode() ? "more" : "profile";
   return safeTab;
 }
@@ -36106,6 +36334,8 @@ function toggleAppMenu() {
 function syncAppMenuLabel(activeButton = null, tabName = "discover") {
   if (!appMenuLabel) return;
   const secondaryLabels = {
+    library: sonicTinyCopy("Biblioteca", "Library", "Biblioteca"),
+    friends: t("tabFriends"),
     more: t("tabMore"),
     recommends: sonicTinyCopy("SonicSearch Recomenda", "SonicSearch Recommends", "SonicSearch Recomienda"),
     filters: t("tabFilters"),
@@ -36207,6 +36437,7 @@ function ensureEventsPanelActive() {
 }
 
 function setActiveAppTab(tabName = "discover", options = {}) {
+  mountWebLibraryPanel();
   const openDailyReminder = dailyDjReminderLaunchPending && !appContent?.classList.contains("hidden");
   const openWeeklyReminder = weeklyHighlightsReminderLaunchPending && !appContent?.classList.contains("hidden");
   const safeTab = safeAppTabName(openDailyReminder ? "djs" : openWeeklyReminder ? "profile" : tabName);
@@ -36244,7 +36475,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
       const targetTab = button.getAttribute("data-app-tab-target") || "";
       const privateForAdmin = targetTab === "admin" && !hasAdminAccess();
       const native = isNativeAppRuntime() || isAppStoreRuntimeMode();
-      const disabled = privateForAdmin || (targetTab === "friends" && native) || (targetTab === "more" && !native);
+      const disabled = privateForAdmin || targetTab === "friends" || (targetTab === "library" && native) || (targetTab === "more" && !native);
       button.hidden = disabled;
       button.classList.toggle("hidden", disabled);
       button.setAttribute("aria-hidden", disabled ? "true" : "false");
@@ -36258,7 +36489,7 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   }
   appTabPanels.forEach((panel) => {
     const privateForAdmin = panelMatchesAppTab(panel, "admin") && !hasAdminAccess();
-    const disabled = privateForAdmin || ((isNativeAppRuntime() || isAppStoreRuntimeMode()) && ["friendsPanel", "profileSocialShortcuts"].includes(panel.id));
+    const disabled = privateForAdmin || ((isNativeAppRuntime() || isAppStoreRuntimeMode()) && ["friendsPanel", "profileSocialShortcuts", "libraryPanel"].includes(panel.id));
     const isActive = !disabled && panelMatchesAppTab(panel, safeTab);
     panel.hidden = disabled;
     panel.setAttribute("aria-hidden", isActive ? "false" : "true");
@@ -36268,6 +36499,11 @@ function setActiveAppTab(tabName = "discover", options = {}) {
   scrollActiveAppTabIntoView(activeTabButton);
   if (focusPanel) scrollActiveAppPanelIntoView(safeTab);
   updateSignatureBarForTab(safeTab);
+  if (safeTab === "library") {
+    renderLikedTrackHistory();
+    renderDislikedTrackHistory();
+    renderLibrarySyncStatus();
+  }
   if (safeTab === "profile") {
     renderWeeklyHighlights();
     void refreshWeeklyHighlightsReminder();
@@ -36454,6 +36690,7 @@ function buildProgressSnapshot() {
     discoveredArtistsInApp: setValuesForStorage(discoveredArtistsInApp),
     seenArtistsMemory: recommendationHistoryValues(seenArtistsMemory),
     recentPresentedArtists: recentPresentedArtists.slice(-RECENT_PRESENTED_ARTIST_LIMIT),
+    recentPresentedLabels: recentPresentedLabels.slice(-6),
     seenTrackKeysMemory: recommendationHistoryValues(seenTrackKeysMemory),
     seenRecordingIdsMemory: recommendationHistoryValues(seenRecordingIdsMemory),
     recordingIdentityVersion: 2,
@@ -36521,6 +36758,7 @@ function loadProgress() {
   discoveredArtistsInApp = new Set();
   seenArtistsMemory = new Set();
   recentPresentedArtists = [];
+  recentPresentedLabels = [];
   seenTrackKeysMemory = new Set();
   seenRecordingIdsMemory = new Set();
   knownTrackTitlesMemory = new Set();
@@ -36575,6 +36813,7 @@ function loadProgress() {
         hydrateSetFromStorage(discoveredArtistsInApp, parsed?.discoveredArtistsInApp);
         hydrateSetFromStorage(seenArtistsMemory, recommendationHistoryValues(parsed?.seenArtistsMemory), RECOMMENDATION_HISTORY_LIMIT);
         recentPresentedArtists = sanitizeRecentPresentedArtists(parsed?.recentPresentedArtists);
+        recentPresentedLabels = sanitizeRecentPresentedLabels(parsed?.recentPresentedLabels);
         hydrateSetFromStorage(seenTrackKeysMemory, recommendationHistoryValues(parsed?.seenTrackKeysMemory), RECOMMENDATION_HISTORY_LIMIT);
         hydrateSetFromStorage(seenRecordingIdsMemory, recommendationHistoryValues(parsed?.seenRecordingIdsMemory), RECOMMENDATION_HISTORY_LIMIT);
         hydrateSetFromStorage(knownTrackTitlesMemory, migrateExplicitKnownTrackTitles(parsed));
@@ -36933,6 +37172,7 @@ function buildPreferencesSnapshot() {
 }
 
 function savePreferences() {
+  renderDiscoveryFilterSummary();
   const preferencesKey = storageKeyForSession(STORAGE_KEY);
   if (!preferencesKey) return;
   try {
@@ -36974,6 +37214,7 @@ function loadPreferences() {
     // ignore parsing failures
   }
   updateBpmOptionsForSelectedStyle();
+  renderDiscoveryFilterSummary();
 }
 
 function clearFilters() {
@@ -36992,9 +37233,9 @@ function clearFilters() {
   if (weightBpmEl) weightBpmEl.value = String(DEFAULT_WEIGHTS.bpm);
   if (weightVocalsEl) weightVocalsEl.value = String(DEFAULT_WEIGHTS.vocals);
 
-  knownArtistsMemory = new Set();
-  knownTrackTitlesMemory = new Set();
-  legacyKnownTrackTitlesMemory = new Set();
+  // Clearing the form must not erase artists/tracks learned from earlier
+  // listening. The explicit profile reset owns that separate operation.
+  if (lastPrefs) lastPrefs = prefsFromManualControls();
   swipeUserAnchoredStyle = "";
   recommendationStyleFallbackInfo = null;
   updateBpmOptionsForSelectedStyle();
@@ -40072,7 +40313,10 @@ function setPreviewPrimaryPlaybackState(state = "ready") {
       : normalized === "retry"
         ? sonicTinyCopy("Tentar novamente", "Try again", "Intentar de nuevo")
         : sonicTinyCopy("Ouvir faixa", "Listen to track", "Escuchar tema");
-  if (normalized === "retry") updateDirectPreviewStatus("previewStartTimedOut");
+  if (normalized === "retry") updateDirectPreviewStatus(previewPlayBtn.dataset.retryReason === "buffer"
+    ? "previewBufferTimedOut" : "previewStartTimedOut");
+  else delete previewPlayBtn.dataset.retryReason;
+  if (normalized === "loading" && activePlayback?.state === "buffering") updateDirectPreviewStatus("previewBuffering");
 }
 
 function stopAllActivePlayback({ reason = "", preserve = "" } = {}) {
@@ -52696,6 +52940,7 @@ function curationDiversityScore(track, prefs = {}, rawIndex = 0) {
   if (artistKey && seenArtistsMemory.has(artistKey)) score -= 4.6;
   if (artistKey && !seenArtistsMemory.has(artistKey) && !discoveredArtistsInApp.has(artistKey)) score += 3.6;
   score -= anonymousExposurePenalty(track);
+  score -= recentLabelDiversityPenalty(track, prefs);
 
   score += trackReleaseFreshnessScore(track) * 1.85;
   if (trackHasPlayablePreviewExperience(track)) score += 0.45;
@@ -53749,6 +53994,13 @@ function recommendationMicroReason(track, prefs = lastPrefs) {
       `Lectura cautelosa: queda como ${familyText}; el subgenero fino solo aparece cuando fuente, artista y pulso coinciden.`
     );
     return truncateByWordBoundary(reason, 154);
+  }
+  if (recentTempoAffinityScore(track) >= 0.65) {
+    return truncateByWordBoundary(sonicTinyCopy(
+      `Pulso próximo das suas curtidas recentes dentro de ${styleText}.`,
+      `A tempo close to your recent likes within ${styleText}.`,
+      `Un pulso cercano a tus likes recientes dentro de ${styleText}.`
+    ), 154);
   }
   if (currentLanguage === "en") {
     if (isKnownArtist) {
@@ -55772,6 +56024,7 @@ function markRecommendationPresented(track) {
     for (const key of reviewedCatalogArtistKeys(track)) seenArtistsMemory.add(key);
   }
   rememberRecentlyPresentedArtist(track.artist);
+  rememberRecentlyPresentedLabel(track);
   const normalizedTrackKey = recommendationTrackKey(track);
   if (normalizedTrackKey) seenTrackKeysMemory.add(normalizedTrackKey);
   rememberRecordingIdentity(track);
@@ -56915,7 +57168,8 @@ function pickInstantSwipeTrack({ sourceTrack = null, positive = true, avoidArtis
       const queuedStyle = selectableSwipeStyle(queuedTrack?.style || "");
       const queuedPrefs = swipeInstantPrefsForStyle(basePrefs, plan, queuedStyle || basePrefs.style);
       if (!candidateAllowed(queuedTrack, queuedPrefs)) continue;
-      const score = getAdaptiveScore(queuedTrack) + (prewarmedSwipeTrackKeys.has(recommendationTrackKey(queuedTrack)) ? 0.75 : 0);
+      const score = getAdaptiveScore(queuedTrack) - recentLabelDiversityPenalty(queuedTrack, queuedPrefs) * 0.25 +
+        (prewarmedSwipeTrackKeys.has(recommendationTrackKey(queuedTrack)) ? 0.75 : 0);
       if (score > bestQueuedScore) {
         bestQueued = { track: queuedTrack, prefs: queuedPrefs, plan };
         bestQueuedScore = score;
@@ -60316,6 +60570,7 @@ function profileArtistRecommendationStyleEntries(limit = 5) {
     boostStyle(entry?.style, 1.35 * recency);
   });
   dislikedTrackHistory.forEach((entry, index) => {
+    if (!isTasteDislike(entry)) return;
     const recency = 1 / (1 + index * 0.12);
     boostStyle(entry?.style, -0.85 * recency);
   });
@@ -60688,6 +60943,7 @@ function likedTrackHistoryEntry(track, source = "liked", likedAt = new Date().to
     label: normalizeInlineText(base.label || "")
   };
   const parsedDate = likedAt ? new Date(likedAt) : null;
+  const bpmExact = tempoAffinityExactBpm(normalizedTrack);
   return {
     key,
     artist,
@@ -60695,6 +60951,7 @@ function likedTrackHistoryEntry(track, source = "liked", likedAt = new Date().to
     universe: musicUniverseOfTrack(base),
     style: normalizedTrack.style,
     bpm: normalizedTrack.bpm,
+    ...(bpmExact ? { bpmExact } : {}),
     energy: normalizedTrack.energy,
     label: normalizedTrack.label,
     recordingId: catalogRecordingPlayback.get(track) || portableCatalogRecordingId(track.recordingId) ||
@@ -61248,7 +61505,115 @@ function selectLibraryTracks(entries) {
   return window.SonicDiscoveryExperience.selectTracks(entries,
     document.getElementById("librarySearch")?.value || "",
     document.getElementById("libraryOrder")?.value || "recent",
-    currentLocale(), styleLabelByValue);
+    currentLocale(), styleLabelByValue, document.getElementById("libraryStyle")?.value || "");
+}
+
+let libraryRemovalUndoState = null;
+
+function setLibraryReplayStatus(tone = "", entry = {}) {
+  const status = document.getElementById("libraryReplayStatus");
+  if (!status) return;
+  const title = [entry.song, entry.artist].filter(Boolean).join(" — ");
+  status.textContent = tone === "busy"
+    ? sonicTinyCopy("Uma faixa está sendo preparada. Aguarde um instante e tente de novo.", "A track is being prepared. Wait a moment and try again.", "Se está preparando una pista. Espera un momento e inténtalo de nuevo.")
+    : tone === "loading"
+      ? sonicTinyCopy(`Buscando a gravação de ${title}…`, `Finding the recording of ${title}…`, `Buscando la grabación de ${title}…`)
+      : tone === "error" ? discoveryExperienceCopy().unavailable
+        : tone === "ready" ? sonicTinyCopy("Faixa aberta no player em Descobrir.", "Track opened in the Discover player.", "Pista abierta en el reproductor de Descubrir.") : "";
+  status.hidden = !tone;
+  if (status.dataset) {
+    status.dataset.tone = tone;
+    status.dataset.song = entry.song || "";
+    status.dataset.artist = entry.artist || "";
+  }
+}
+
+function renderLibraryControls() {
+  const select = document.getElementById("libraryStyle");
+  if (select && typeof select.replaceChildren === "function") {
+    const selected = select.value;
+    const styles = [...new Set([...likedTrackHistory, ...dislikedTrackHistory].map(entry => entry.style).concat(selected).filter(Boolean))]
+      .sort((a, b) => styleLabelByValue(a).localeCompare(styleLabelByValue(b), currentLocale()));
+    const options = ["", ...styles].map(style => {
+      const option = document.createElement("option");
+      option.value = style;
+      option.textContent = style ? styleLabelByValue(style) : discoveryExperienceCopy().allStyles;
+      return option;
+    });
+    select.replaceChildren(...options);
+    select.value = selected;
+  }
+  const clear = document.getElementById("libraryFiltersClear");
+  if (clear) clear.disabled = !(document.getElementById("librarySearch")?.value || select?.value ||
+    (document.getElementById("libraryOrder")?.value || "recent") !== "recent");
+  window.SonicDiscoveryExperience?.syncLibraryView?.(document);
+  const replay = document.getElementById("libraryReplayStatus");
+  if (replay && !replay.hidden && replay.dataset) setLibraryReplayStatus(replay.dataset.tone, { song: replay.dataset.song, artist: replay.dataset.artist });
+  renderLibraryUndo();
+}
+
+function renderLibraryUndo() {
+  if (libraryRemovalUndoState && (libraryRemovalUndoState.profileKey !== sessionProfileKey() ||
+      libraryRemovalUndoState.generation !== recommendationSessionGeneration)) libraryRemovalUndoState = null;
+  const panel = document.getElementById("libraryUndo");
+  if (!panel) return;
+  panel.hidden = !libraryRemovalUndoState;
+  if (!libraryRemovalUndoState) return;
+  const text = document.getElementById("libraryUndoText");
+  const count = libraryRemovalUndoState.entries.length;
+  if (text) text.textContent = count === 1
+    ? sonicTinyCopy("Faixa removida da biblioteca.", "Track removed from your library.", "Pista eliminada de tu biblioteca.")
+    : sonicTinyCopy(`${count} faixas removidas da biblioteca.`, `${count} tracks removed from your library.`, `${count} pistas eliminadas de tu biblioteca.`);
+  const button = document.getElementById("libraryUndoBtn");
+  if (button && !button.dataset.libraryUndoBound) {
+    button.dataset.libraryUndoBound = "true";
+    button.addEventListener("click", undoLastLibraryRemoval);
+  }
+}
+
+function offerLibraryRemovalUndo(entries, sentiment) {
+  libraryRemovalUndoState = {
+    profileKey: sessionProfileKey(), generation: recommendationSessionGeneration, sentiment,
+    entries: entries.map(entry => ({ entry: { ...entry }, removedAt: libraryRemovedTrackHistory.find(item =>
+      likedTrackKeyFromEntry(item) === likedTrackKeyFromEntry(entry))?.likedAt || "" }))
+  };
+  renderLibraryUndo();
+}
+
+function undoLastLibraryRemoval() {
+  const pending = libraryRemovalUndoState;
+  libraryRemovalUndoState = null;
+  if (!pending || pending.profileKey !== sessionProfileKey() || pending.generation !== recommendationSessionGeneration) {
+    renderLibraryUndo();
+    return false;
+  }
+  const restored = pending.entries.filter(({ entry, removedAt }) => removedAt && libraryRemovedTrackHistory.some(item =>
+    likedTrackKeyFromEntry(item) === likedTrackKeyFromEntry(entry) && item.likedAt === removedAt) &&
+    ![...likedTrackHistory, ...dislikedTrackHistory].some(item => likedTrackKeyFromEntry(item) === likedTrackKeyFromEntry(entry)))
+    .slice(0, Math.max(0, LIKED_TRACK_HISTORY_LIMIT - (pending.sentiment === "liked" ? likedTrackHistory.length : dislikedTrackHistory.length)))
+    .map(({ entry, removedAt }) => ({ ...entry, likedAt: new Date(Math.max(Date.now(), Date.parse(removedAt) + 1)).toISOString() }));
+  if (restored.length) {
+    mergeCloudLibraryEntries(restored, pending.sentiment);
+    saveProgress();
+    queueSocialSync("library_undo");
+  }
+  renderLikedTrackHistory();
+  renderDislikedTrackHistory();
+  renderWeeklyHighlights();
+  renderLibraryUndo();
+  showToast(restored.length
+    ? restored.length < pending.entries.length
+      ? sonicTinyCopy(`${restored.length} faixas restauradas. Suas escolhas mais recentes foram mantidas.`, `${restored.length} tracks restored. Your newer choices were kept.`, `${restored.length} pistas restauradas. Se conservaron tus decisiones más recientes.`)
+      : sonicTinyCopy("Remoção desfeita.", "Removal undone.", "Eliminación deshecha.")
+    : sonicTinyCopy("A biblioteca mudou. Mantive suas escolhas mais recentes.", "Your library changed. Your newer choices were kept.", "La biblioteca cambió. Se conservaron tus decisiones más recientes."));
+  return restored.length > 0;
+}
+
+function confirmLibraryClear(sentiment, count) {
+  const message = sentiment === "liked"
+    ? sonicTinyCopy(`Remover as ${count} faixas curtidas da biblioteca? Você poderá desfazer esta ação.`, `Remove all ${count} liked tracks from your library? You can undo this action.`, `¿Eliminar las ${count} pistas que te gustan de la biblioteca? Podrás deshacer esta acción.`)
+    : sonicTinyCopy(`Limpar os ${count} descartes da biblioteca? Você poderá desfazer esta ação.`, `Clear all ${count} dismissed tracks from your library? You can undo this action.`, `¿Borrar las ${count} pistas descartadas de la biblioteca? Podrás deshacer esta acción.`);
+  return typeof window.confirm === "function" && window.confirm(message);
 }
 
 const weeklyEditionPreviewCache = new Map();
@@ -61426,7 +61791,10 @@ async function openWeeklyEditionTrack(item = {}, context = {}) {
 }
 
 async function openSavedLibraryTrack(entry, button) {
-  if (recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) return;
+  if (recommendationRunBusy || swipeFeedbackBusy || firstRecommendationBusy) {
+    setLibraryReplayStatus("busy");
+    return;
+  }
   const profileKey = sessionProfileKey();
   const sessionGeneration = recommendationSessionGeneration;
   const previousTrack = currentRecommendation;
@@ -61435,12 +61803,15 @@ async function openSavedLibraryTrack(entry, button) {
     previousTrack === currentRecommendation && previousTab === currentActiveAppTabName();
   recommendationRunBusy = true;
   button.disabled = true;
+  button.setAttribute?.("aria-busy", "true");
   button.textContent = discoveryExperienceCopy().opening;
+  setLibraryReplayStatus("loading", entry);
   prepareExplicitPreviewAudio();
   try {
     const found = await resolveCatalogReplayTrack(entry);
     if (!isCurrent()) return;
     if (!found) {
+      setLibraryReplayStatus("error");
       showToast(discoveryExperienceCopy().unavailable);
       return;
     }
@@ -61455,19 +61826,25 @@ async function openSavedLibraryTrack(entry, button) {
     stopAllActivePlayback({ reason: "saved_library_replay" });
     setActiveAppTab("discover");
     restoreRecommendationSurfaceSnapshot({ track, prefs: { style: track.style }, discovery: null });
+    setLibraryReplayStatus("ready");
     trackRecommendationEvent("saved_track_replayed", track, lastPrefs || {}, { source: "library" });
     document.getElementById("swipeStartPanel")?.scrollIntoView({ block: "start", behavior: "auto" });
   } catch (_) {
-    if (isCurrent()) showToast(discoveryExperienceCopy().unavailable);
+    if (isCurrent()) {
+      setLibraryReplayStatus("error");
+      showToast(discoveryExperienceCopy().unavailable);
+    }
   } finally {
     if (recommendationSessionIsCurrent(sessionGeneration)) recommendationRunBusy = false;
     button.disabled = false;
+    button.removeAttribute?.("aria-busy");
     button.textContent = discoveryExperienceCopy().play;
   }
 }
 
 function renderLikedTrackHistory() {
   if (!summaryLikedTracksList) return;
+  renderLibraryControls();
   summaryLikedTracksList.innerHTML = "";
   if (summaryLikedTracksClearBtn) summaryLikedTracksClearBtn.disabled = likedTrackHistory.length <= 0;
 
@@ -61568,6 +61945,7 @@ function removeLikedTrackFromHistory(trackKey = "", options = {}) {
   likedTrackHistory = likedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
   if (likedTrackHistory.length === before) return false;
   if (options.save !== false) rememberLibraryRemoval(removed);
+  if (options.save !== false && !options.silent) offerLibraryRemovalUndo([removed], "liked");
   if (options.render !== false) renderLikedTrackHistory();
   if (options.render !== false) renderWeeklyHighlights();
   if (options.save !== false) saveProgress();
@@ -61576,14 +61954,17 @@ function removeLikedTrackFromHistory(trackKey = "", options = {}) {
 }
 
 function clearLikedTrackHistory() {
-  if (!likedTrackHistory.length) return;
+  if (!likedTrackHistory.length || !confirmLibraryClear("liked", likedTrackHistory.length)) return false;
+  const removed = [...likedTrackHistory];
   likedTrackHistory.forEach(rememberLibraryRemoval);
   likedTrackHistory = [];
+  offerLibraryRemovalUndo(removed, "liked");
   renderLikedTrackHistory();
   renderWeeklyHighlights();
   saveProgress();
   queueSocialSync("profile");
   showToast(t("summaryLikedTracksCleared"));
+  return true;
 }
 
 function dislikedTrackDateLabel(value = "") {
@@ -61598,6 +61979,7 @@ function dislikedTrackDateLabel(value = "") {
 
 function renderDislikedTrackHistory() {
   if (!summaryDislikedTracksList) return;
+  renderLibraryControls();
   summaryDislikedTracksList.innerHTML = "";
   if (summaryDislikedTracksClearBtn) summaryDislikedTracksClearBtn.disabled = dislikedTrackHistory.length <= 0;
 
@@ -61642,6 +62024,15 @@ function renderDislikedTrackHistory() {
     saved.textContent = dislikedTrackDateLabel(entry.likedAt);
     body.appendChild(saved);
 
+    const reason = document.createElement("span");
+    reason.className = "library-dismiss-reason";
+    reason.textContent = entry.source === "unheard_pass"
+      ? sonicTinyCopy("Pulou sem ouvir", "Skipped without listening", "Saltó sin escuchar")
+      : ["preview_issue", "preview_issue_button"].includes(entry.source)
+        ? sonicTinyCopy("Problema no áudio", "Audio problem", "Problema de audio")
+        : sonicTinyCopy("Não curti", "Disliked", "No me gustó");
+    body.appendChild(reason);
+
     const actions = document.createElement("div");
     actions.className = "liked-track-actions";
     [
@@ -61685,6 +62076,7 @@ function removeDislikedTrackFromHistory(trackKey = "", options = {}) {
   dislikedTrackHistory = dislikedTrackHistory.filter((entry) => likedTrackKeyFromEntry(entry) !== normalizedKey);
   if (dislikedTrackHistory.length === before) return false;
   if (options.save !== false) rememberLibraryRemoval(removed);
+  if (options.save !== false && !options.silent) offerLibraryRemovalUndo([removed], "disliked");
   if (options.render !== false) renderDislikedTrackHistory();
   if (options.render !== false) renderWeeklyHighlights();
   if (options.save !== false) saveProgress();
@@ -61693,13 +62085,16 @@ function removeDislikedTrackFromHistory(trackKey = "", options = {}) {
 }
 
 function clearDislikedTrackHistory() {
-  if (!dislikedTrackHistory.length) return;
+  if (!dislikedTrackHistory.length || !confirmLibraryClear("disliked", dislikedTrackHistory.length)) return false;
+  const removed = [...dislikedTrackHistory];
   dislikedTrackHistory.forEach(rememberLibraryRemoval);
   dislikedTrackHistory = [];
+  offerLibraryRemovalUndo(removed, "disliked");
   renderDislikedTrackHistory();
   renderWeeklyHighlights();
   saveProgress();
   showToast(t("summaryDislikedTracksCleared"));
+  return true;
 }
 
 function socialStandbyMessage() {
@@ -62694,6 +63089,7 @@ function socialTrackRowsForSync() {
     metadata: {
       universe: musicUniverseOfTrack(entry),
       bpm: entry.bpm || "",
+      ...(tempoAffinityExactBpm(entry) ? { bpmExact: tempoAffinityExactBpm(entry) } : {}),
       energy: entry.energy || "",
       label: entry.label || "",
       spotifyUrl: entry.spotifyUrl || "",
@@ -62724,6 +63120,7 @@ function socialDislikedTrackRowsForSync() {
     metadata: {
       universe: musicUniverseOfTrack(entry),
       bpm: entry.bpm || "",
+      ...(tempoAffinityExactBpm(entry) ? { bpmExact: tempoAffinityExactBpm(entry) } : {}),
       energy: entry.energy || "",
       label: entry.label || "",
       spotifyUrl: entry.spotifyUrl || "",
@@ -62759,6 +63156,7 @@ function socialLikedTrackFromRow(row = {}) {
     style: row.style || metadata.style || "",
     universe: metadata.universe || "electronic",
     bpm: metadata.bpm || "",
+    bpmExact: metadata.bpmExact,
     energy: metadata.energy || "",
     label: metadata.label || "",
     spotifyUrl: metadata.spotifyUrl || "",
@@ -62780,6 +63178,7 @@ function socialDislikedTrackFromRow(row = {}) {
     style: row.style || metadata.style || "",
     universe: metadata.universe || "electronic",
     bpm: metadata.bpm || "",
+    bpmExact: metadata.bpmExact,
     energy: metadata.energy || "",
     label: metadata.label || "",
     spotifyUrl: metadata.spotifyUrl || "",
@@ -63068,6 +63467,9 @@ function librarySyncCopy() {
 
 function libraryStorageUiCopy() {
   const state = librarySyncCopy();
+  const destination = isNativeAppRuntime() || isAppStoreRuntimeMode()
+    ? sonicTinyCopy("Perfil", "Profile", "Perfil")
+    : sonicTinyCopy("Biblioteca", "Library", "Biblioteca");
   let saveHint;
   if (isEphemeralSession(normalizeUserSession(currentAuthUser))) {
     saveHint = sonicTinyCopy("Curta para guardar nesta sessão. Exporte um backup no Perfil para manter estas faixas depois de sair.", "Like to save in this session. Export a backup in Profile to keep these tracks after leaving.", "Dale me gusta para guardar en esta sesión. Exporta una copia en Perfil para conservar estas pistas al salir.");
@@ -63076,9 +63478,9 @@ function libraryStorageUiCopy() {
   } else if (state.phase === "syncing") {
     saveHint = sonicTinyCopy("Curta para guardar. Sincronizando sua biblioteca…", "Like to save. Syncing your library…", "Dale me gusta para guardar. Sincronizando tu biblioteca…");
   } else if (socialState.localSaveState === "unavailable") {
-    saveHint = sonicTinyCopy("Confira no Perfil: ainda não foi possível guardar uma cópia neste aparelho.", "Check Profile: a copy could not be saved on this device yet.", "Comprueba Perfil: aún no se pudo guardar una copia en este dispositivo.");
+    saveHint = sonicTinyCopy(`Confira em ${destination}: ainda não foi possível guardar uma cópia neste aparelho.`, `Check ${destination}: a copy could not be saved on this device yet.`, `Comprueba ${destination}: aún no se pudo guardar una copia en este dispositivo.`);
   } else {
-    saveHint = sonicTinyCopy("Curta para guardar neste aparelho. Confira a sincronização no Perfil.", "Like to save on this device. Check sync status in Profile.", "Dale me gusta para guardar en este dispositivo. Comprueba la sincronización en Perfil.");
+    saveHint = sonicTinyCopy(`Curta para guardar neste aparelho. Confira a sincronização em ${destination}.`, `Like to save on this device. Check sync status in ${destination}.`, `Dale me gusta para guardar en este dispositivo. Comprueba la sincronización en ${destination}.`);
   }
   return { saveHint, libraryHint: t("profileLibraryHint") };
 }
@@ -67576,7 +67978,7 @@ function updateDirectPreviewStatus(status) {
   const track = currentRecommendation;
   const fallback = track?.artistPreviewFallback;
   const message = t(status);
-  const text = fallback && !["previewPlayFailed", "previewStartTimedOut"].includes(status)
+  const text = fallback && !["previewPlayFailed", "previewStartTimedOut", "previewBufferTimedOut"].includes(status)
     ? `${message} ${t("previewArtistFallbackLoaded", {
       song: fallback.song,
       artist: fallback.artist || track.artist,
@@ -67653,9 +68055,16 @@ bind(trackPreview, "timeupdate", () => {
     markAuthorizedPreviewUnavailable(currentRecommendation, "authorization_ended");
     return;
   }
+  directPreviewStartWatch?.checkProgress?.();
   sampleDirectPreviewListening();
 });
-bind(trackPreview, "seeking", resetDirectPreviewListeningInterval);
+bind(trackPreview, "waiting", handleDirectPreviewBuffering);
+bind(trackPreview, "stalled", handleDirectPreviewBuffering);
+bind(trackPreview, "seeking", () => {
+  if (directPreviewStartWatch?.kind === "buffer") cancelDirectPreviewStartWatch();
+  resetDirectPreviewListeningInterval();
+});
+bind(trackPreview, "seeked", handleDirectPreviewBuffering);
 bind(trackPreview, "volumechange", () => {
   resetDirectPreviewListeningInterval();
   if (trackPreview?.paused || !trackPreviewElementMatchesTrack(currentRecommendation)) return;
@@ -68559,6 +68968,11 @@ bind(swipeHeroSurpriseBtn, "click", async () => {
 
 const swipeStyleSearch = document.getElementById("swipeStyleSearch");
 const swipeStyleToggle = document.getElementById("swipeStyleToggle");
+bind(document.getElementById("discoveryFilterChips"), "click", event => {
+  const button = event.target instanceof Element ? event.target.closest("[data-discovery-filter]") : null;
+  if (button) removeDiscoveryFilter(button.dataset.discoveryFilter || "");
+});
+bind(document.getElementById("discoveryFilterClear"), "click", () => removeDiscoveryFilter("all"));
 bind(swipeStyleSearch, "input", () => {
   renderSwipeStyleRail();
   if (swipeStyleRail) swipeStyleRail.scrollTop = 0;
@@ -69318,7 +69732,7 @@ async function bootSonicSearch() {
     online: () => authHasOnlineSession(),
     storageState: () => libraryStorageUiCopy(),
     renderLibrary: () => { renderLikedTrackHistory(); renderDislikedTrackHistory(); },
-    openLibrary: () => { trackBetaEvent("saved_library_opened", { count: likedTrackHistory.length }, { source: "library" }); setActiveAppTab("profile", { focusPanel: true }); }
+    openLibrary: () => { trackBetaEvent("saved_library_opened", { count: likedTrackHistory.length }, { source: "library" }); setActiveAppTab("library", { focusPanel: true }); }
   });
   bind(document.getElementById("shareTrackBtn"), "click", () => void shareCatalogTrack(currentRecommendation, document.getElementById("shareTrackBtn")));
   bind(document.getElementById("shareTrackWithFriendsBtn"), "click", () => void shareCurrentTrackWithFriends());

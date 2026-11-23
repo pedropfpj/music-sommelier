@@ -60,7 +60,7 @@ function functionSource(name) {
 }
 
 
-const functions = ["sanitizedTrackDataIssueReports", "recommendationHistoryValues", "validProfileBackupPayload", "restoreProfileBackupPayload", "librarySessionMatchesOnlineAccount", "readPendingLocalLibraryTransfer", "storePendingLocalLibraryTransfer", "capturePendingLocalLibraryTransfer", "bindPendingLibraryTransferToAccount", "renderPendingLibraryTransfer", "importPendingLocalLibraryTransfer", "buildPendingLibraryTransferBackup", "buildProgressSnapshot", "buildPreferencesSnapshot", "savePreferences", "safeReadJsonStorage", "buildProfileBackupPayload", "saveProgress", "loadProgress", "resetLibrarySyncState", "libraryHistorySignature", "librarySessionIdentity", "rememberLibraryRemoval", "mergeCloudLibraryEntries", "socialLibraryFeedbackRowsForSync", "librarySyncCopy", "libraryStorageUiCopy", "renderLibrarySyncStatus", "socialLibraryRowsFromCloud", "restoreSocialLikedTracksFromCloud", "restoreSocialDislikedTracksFromCloud", "socialTrackRowsForSync", "socialDislikedTrackRowsForSync", "socialParseMetadata", "socialLikedTrackFromRow", "socialDislikedTrackFromRow", "syncSocialLikedTracks", "queueSocialSync", "socialRequest", "socialHeaders", "socialRefreshSession", "socialSessionExpiresAt", "socialSessionExpiresSoon", "socialStoredRefreshToken", "removeLikedTrackFromHistory", "removeDislikedTrackFromHistory", "clearLikedTrackHistory", "clearDislikedTrackHistory"];
+const functions = ["tempoAffinityExactBpm", "sanitizedTrackDataIssueReports", "recommendationHistoryValues", "validProfileBackupPayload", "restoreProfileBackupPayload", "librarySessionMatchesOnlineAccount", "readPendingLocalLibraryTransfer", "storePendingLocalLibraryTransfer", "capturePendingLocalLibraryTransfer", "bindPendingLibraryTransferToAccount", "renderPendingLibraryTransfer", "importPendingLocalLibraryTransfer", "buildPendingLibraryTransferBackup", "buildProgressSnapshot", "buildPreferencesSnapshot", "savePreferences", "safeReadJsonStorage", "buildProfileBackupPayload", "saveProgress", "loadProgress", "resetLibrarySyncState", "libraryHistorySignature", "librarySessionIdentity", "rememberLibraryRemoval", "mergeCloudLibraryEntries", "socialLibraryFeedbackRowsForSync", "librarySyncCopy", "libraryStorageUiCopy", "renderLibrarySyncStatus", "socialLibraryRowsFromCloud", "restoreSocialLikedTracksFromCloud", "restoreSocialDislikedTracksFromCloud", "socialTrackRowsForSync", "socialDislikedTrackRowsForSync", "socialParseMetadata", "socialLikedTrackFromRow", "socialDislikedTrackFromRow", "syncSocialLikedTracks", "queueSocialSync", "socialRequest", "socialHeaders", "socialRefreshSession", "socialSessionExpiresAt", "socialSessionExpiresSoon", "socialStoredRefreshToken", "renderLibraryUndo", "offerLibraryRemovalUndo", "undoLastLibraryRemoval", "confirmLibraryClear", "removeLikedTrackFromHistory", "removeDislikedTrackFromHistory", "clearLikedTrackHistory", "clearDislikedTrackHistory"];
 const values = new Map();
 const sessionValues = new Map();
 const readGates = new Map();
@@ -105,6 +105,10 @@ const ctx = vm.createContext({
 vm.runInContext(`
   var socialState = {session:{access_token:"token-a",refresh_token:"refresh-a",expires_at:4102444800,user:{id:"a"}},config:{supabaseAnonKey:"anon"},enabled:true,lastSyncAt:0,librarySyncPhase:"idle",librarySyncedSignature:"",localSaveState:"saved"};
   var currentAuthUser = {id:"a",mode:"google"};
+  var recommendationSessionGeneration=0, libraryRemovalUndoState=null;
+  var document={getElementById:()=>null}, window={confirm:()=>true};
+  function isNativeAppRuntime(){return false;}
+  function isAppStoreRuntimeMode(){return false;}
   var navigator = {onLine:true};
   var configured = true;
   var storageFailure = false;
@@ -120,7 +124,7 @@ vm.runInContext(`
   var adaptiveModel = {likedStyles:new Map(),dislikedStyles:new Map(),likedArtists:new Map(),dislikedArtists:new Map(),likedEnergies:new Map(),dislikedEnergies:new Map()};
   var spiritSignalsByStyle = new Map(), currentSpiritId = "", spiritLastReviewedSongLikes = 0, spiritUnlocked = false;
   var blockedArtistsMemory = new Set(), discoveredArtistsInApp = new Set(), seenArtistsMemory = new Set(), seenTrackKeysMemory = new Set(), seenRecordingIdsMemory = new Set(), knownTrackTitlesMemory = new Set(), legacyKnownTrackTitlesMemory = new Set();
-  var recentPresentedArtists = [], trackRatings = new Map(), trackRatingSignals = new Map(), trackPreferenceSignals = new Map(),trackPreviewIssueSignals = new Map(),trackRecommendationIssueSignals = new Map(),previewReliabilityByStyle = new Map();
+  var recentPresentedArtists = [], recentPresentedLabels = [], trackRatings = new Map(), trackRatingSignals = new Map(), trackPreferenceSignals = new Map(),trackPreviewIssueSignals = new Map(),trackRecommendationIssueSignals = new Map(),previewReliabilityByStyle = new Map();
   var quizAttemptsByStyle = new Map(),quizBestScoreByStyle = new Map(),quizNextOfferCountByStyle = new Map();
   var styleEl={value:"house"},contextEl=null,energyEl=null,bpmEl=null,vocalsEl=null,discoveryModeEl=null,knownArtistsEl=null;
   var currentRecommendation = null;
@@ -155,6 +159,7 @@ vm.runInContext(`
   function renderSocialUi() { renderLibrarySyncStatus(); }
   function socialSetStatus(message) { socialState.status=message; }
   function updateStats() { saveProgress(); }
+  function renderDiscoveryFilterSummary() {}
   function renderLikedTrackHistory() {}
   function renderDislikedTrackHistory() {}
   function renderWeeklyHighlights() {}
@@ -174,6 +179,7 @@ vm.runInContext(`
   function spiritById() { return null; }
   function spiritReviewCheckpointFromSongLikes() { return 0; }
   function sanitizeRecentPresentedArtists(items=[]) { return items; }
+  function sanitizeRecentPresentedLabels(items=[]) { return items; }
   function migrateExplicitKnownTrackTitles() { return []; }
   function compactArtistIdentitySet() {}
   function backfillLikedTrackHistoryFromSignals() { return [{key:"removed",artist:"Artist",song:"Removed",likedAt:""}]; }
